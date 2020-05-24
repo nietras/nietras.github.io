@@ -1,0 +1,129 @@
+﻿---
+layout: post
+title: Microsoft Build 2020
+---
+
+Random notes for the virtual event at https://mybuild.microsoft.com/home
+
+1. TOC
+{:toc}
+
+## Announcements and Blog Posts
+
+***
+**[Welcome to C# 9.0](https://devblogs.microsoft.com/dotnet/welcome-to-c-9-0/)**\
+**Summary:** Must read! A preview of C# 9.0 features e.g. a full C# program (maybe! don't have it yet, but `Main` code comes between `using`s and type/method declarations):
+```csharp
+var p = new Point2D<int> { X = 1, Y = 2 };
+var q = p with { X = 3 };
+Point2D<int>? r = q > p ? p : null;
+System.Console.WriteLine(r);
+
+public data struct Point2D<T>(T X, T Y);
+```
+
+***
+**[Announcing .NET 5 Preview 4 and our journey to one .NET](https://devblogs.microsoft.com/dotnet/announcing-net-5-preview-4-and-our-journey-to-one-net/)**\
+**Summary:** Great (long) post with lots of info including details of roadmap for .NET 5 and beyond. Below the roadmap from the old post [Introducing .NET 5](https://devblogs.microsoft.com/dotnet/introducing-net-5/). Schedule is pretty much the same, but .NET 6 will probably be the first "unified" version of .NET.\
+![Dotnet Roadmap](https://devblogs.microsoft.com/dotnet/wp-content/uploads/sites/10/2019/05/dotnet_schedule.png)
+
+***
+
+**[Introducing .NET Multi-platform App UI](https://devblogs.microsoft.com/dotnet/introducing-net-multi-platform-app-ui/)**\
+**Summary:** Short post on Xamarin.Forms evolved. MVVM or MVU. Go to https://github.com/dotnet/maui \
+![MAUI](https://devblogs.microsoft.com/dotnet/wp-content/uploads/sites/10/2020/05/maui-01-overview-1536x864.png) \
+![One project](https://devblogs.microsoft.com/dotnet/wp-content/uploads/sites/10/2020/05/maui-02-1536x864.png)
+
+***
+
+**[Visual Studio 2019 v16.6 & v16.7 Preview 1](https://devblogs.microsoft.com/visualstudio/visual-studio-2019-v16-6-and-v16-7-preview-1-ship-today/)**\
+**Summary:** Revamped git tooling and loads more.
+TODO SHOW HOW TO ENABLE NEW GIT TOOLING
+
+***
+
+**[Windows Forms Designer for .NET Core Released](https://devblogs.microsoft.com/dotnet/windows-forms-designer-for-net-core-released/)**\
+**Summary:** Yay!
+
+***
+
+**[Blazor WebAssembly 3.2.0 now available](https://devblogs.microsoft.com/aspnet/blazor-webassembly-3-2-0-now-available/)**\
+**Summary:** Cross-platform silverlight... ah no moonlight ;) MSIL from WASM!
+
+![Blazor WebAssembly Hello World](https://devblogs.microsoft.com/aspnet/wp-content/uploads/sites/16/2020/05/BlazorApp1-1.png)
+
+***
+**[TODO]()**\
+**Summary:** 
+
+https://devblogs.microsoft.com/visualstudio/improvements-to-xaml-tooling-in-visual-studio-2019-version-16-7-preview-1/
+
+https://devblogs.microsoft.com/cosmosdb/csharp-notebooks/
+
+## Videos
+
+***
+**The Journey to One .NET**
+**[![The Journey to One .NET](https://mediusprodstatic.studios.ms/video-28844/thumbnail.jpg?sv=2018-03-28&sr=c&sig=eeLVrHGtaa9V9h%2F%2BKiwureWTVoYa8Nc0cs2O9tJ5l6s%3D&se=2025-05-15T12%3A10%3A58Z&sp=r)](https://channel9.msdn.com/Events/Build/2020/BOD106)**\
+**Summary:** The "Lesser" Scotts talk about many .NET related 
+things. Blazor, ML.NET, .NET 5 and 6, tye. **In place** single file 
+publish looks to solve the main issues around this right now, 
+I hope :)\
+PS: Love the black background slides. For those of us with 
+"sensitive" eyes. VS could have been dark mode, though.
+
+***
+**C# Today & Tomorrow**
+**[![C# Today & Tomorrow](https://mediusprodstatic.studios.ms/video-28908/thumbnail.jpg?sv=2018-03-28&sr=c&sig=BO%2FwlUmCp8H%2BPnbsVOr8Ae5d4fraQ21G%2FBiMG5NRU5w%3D&se=2025-05-18T13%3A58%3A53Z&sp=r)](https://channel9.msdn.com/Events/Build/2020/BOD108)**\
+**Summary:** C# 8 summarized and a preview of C# 9 (see
+current proposals considered for this at https://github.com/dotnet/csharplang/milestone/15):
+
+* `nint/nuint` the final nail in the coffin for [DotNetCross.NativeInts](https://github.com/DotNetCross/NativeInts)
+* Records
+* More pattern matching. Relational patterns. `switch` on everything etc. ;)
+
+Everything is work-in-progress (WIP).
+
+***
+**Visual Studio .NET Productivity on PC and Mac**
+**[![Visual Studio .NET Productivity on PC and Mac](https://mediusprodstatic.studios.ms/asset-db36c2f9-4861-4d59-a01f-a500d36f8e53/Thumbnail000001.jpg?sv=2018-03-28&sr=b&sig=RQl%2FI5puZvebUumz1GSNK4E3D7s81JaNkN7hBwl3OZU%3D&st=2020-05-15T11%3A06%3A09Z&se=2025-05-15T11%3A11%3A09Z&sp=r&rscd=filename%3DThumbnail000001.jpg)](https://channel9.msdn.com/Events/Build/2020/BOD112)**\
+**Summary:** As always productivity tips almost always have the
+biggest impact on your everyday work, if you like me spent most of
+your time in Visual Studio 😁, so definitely recommended.
+Often there is something you did not know before and sometimes
+not even related to VS... e.g. `Windows key + .` brings up
+the Windows emoji keyboard. Did not know that or remember it.
+
+![Windows Emoji Keyboard](images/2020-05-Microsoft-build-2020/windows-emoji-keyboard.png)
+
+Lots of good tips, although I often feel that some of the 
+refactorings result in worse code than before or at 
+the very least need to be cleaned up after. 
+So as long as you treat these as a help *towards* the end goal of
+clean and readable code and not *the end* itself that's good.
+
+**Visual Studio Code** has a nice `pdf` file with short cuts.
+
+https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf
+
+**Visual Studio** needs a similar one page up-to-date one. 😉 
+Note there is a list for VS but it's not as "nice".
+
+https://docs.microsoft.com/en-us/visualstudio/ide/default-keyboard-shortcuts-for-frequently-used-commands-in-visual-studio?view=vs-2019
+
+
+
+***
+
+
+**[![TITLE](IMAGE.jpg)](videourl)**\
+**Summary:** .
+
+
+## Download Videos for Offline Viewing
+A great site in general for downloading and getting an overview of
+ channel9 videos is: https://dayngo.com/channel9 Not all videos 
+from build are there, but most can be found at:
+https://dayngo.com/channel9/events/4c9262b67d02462caa94abad0181140c/2020
+
+![Download Videos Dayngo](images/2020-05-Microsoft-build-2020/download-videos-dayngo.png)
