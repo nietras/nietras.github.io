@@ -25,7 +25,7 @@ A few more points about me 😀:
 ![Commodore 64 similar to mine ;)]({{ site.baseurl }}/images/about/commodore-64.png)
 * I love reading about CPU, GPU, TPU (xPUs) architectures and
   ISAs (❤ Agner Fogs [ForwardCom](https://github.com/forwardcom)).
-  Always looking forward to new CPU/GPU/SOC reviews on [Anandtech](www.anandtech.com).
+  Always looking forward to new CPU/GPU/SOC reviews on [Anandtech](https://www.anandtech.com).
 * Listed as "Inspiring Open Source Contributor" on Adam Sitnick's
 [awesome .NET performance list](https://github.com/adamsitnik/awesome-dot-net-performance) 👍.
 * I have contributed a bit to a few different repositories. 
