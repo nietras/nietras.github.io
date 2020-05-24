@@ -1,0 +1,32 @@
+
+//
+// VARIABLES
+//
+
+$background: #000;
+
+// Colors
+$blue: #4183C4;
+
+// Grays
+// INVERTED COLORS, SINCE NAMES FROM BRIGHT THEME
+$black: #fff;
+$darkerGray: #eee;
+$darkGray: #ccc;
+$gray: #aaa;
+$lightGray: #666;
+$white: #111;
+
+$header-footer-background: #1D1D1D;
+
+// Font stacks
+$helvetica: Helvetica, Arial, sans-serif;
+$helveticaNeue: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$georgia: Georgia, serif;
+
+// Mobile breakpoints
+@mixin mobile {
+  @media screen and (max-width: 640px) {
+    @content;
+  }
+}
