@@ -7,7 +7,7 @@ Digest of the free virtual event at [https://mybuild.microsoft.com/home](https:/
 
 ## Announcements and Blog Posts
 A few great announcements and blog posts can be found below.
-Looking forward .NET 5 (`net5.0`) and C# 9. 👍
+Looking forward to .NET 5 (`net5.0`) and C# 9 due November 2020. 👍
 
 ***
 **[Welcome to C# 9.0](https://devblogs.microsoft.com/dotnet/welcome-to-c-9-0/)**  
@@ -32,7 +32,7 @@ Everything is early and syntax and naming can still change.
 
 ***
 **[Introducing .NET Multi-platform App UI](https://devblogs.microsoft.com/dotnet/introducing-net-multi-platform-app-ui/)**  
-**Summary:** Short post on Xamarin.Forms evolved. MVVM or MVU. Go to https://github.com/dotnet/maui   
+**Summary:** Short post on Xamarin.Forms evolved. MVVM or MVU. Go to [https://github.com/dotnet/maui](https://github.com/dotnet/maui)  
 ![MAUI](https://devblogs.microsoft.com/dotnet/wp-content/uploads/sites/10/2020/05/maui-01-overview-1536x864.png)   
 ![One project](https://devblogs.microsoft.com/dotnet/wp-content/uploads/sites/10/2020/05/maui-02-1536x864.png)
 
@@ -133,12 +133,12 @@ clean and readable code and not *the end* itself that's good.
 
 **Visual Studio Code** has a nice `pdf` file with short cuts.
 
-https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf
+[https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf)
 
 **Visual Studio** needs a similar one page up-to-date one. 😉 
 Note there is a list for VS but it's not as "nice".
 
-https://docs.microsoft.com/en-us/visualstudio/ide/default-keyboard-shortcuts-for-frequently-used-commands-in-visual-studio?view=vs-2019
+[https://docs.microsoft.com/en-us/visualstudio/ide/default-keyboard-shortcuts-for-frequently-used-commands-in-visual-studio?view=vs-2019](https://docs.microsoft.com/en-us/visualstudio/ide/default-keyboard-shortcuts-for-frequently-used-commands-in-visual-studio?view=vs-2019)
 
 
 ***
@@ -148,15 +148,11 @@ https://docs.microsoft.com/en-us/visualstudio/ide/default-keyboard-shortcuts-for
 from his garage 😎 (and colleagues). 
 Shows off the new top level `Git` menu
 and the new git tooling, which is covered a bit above too.
-Keyboard navigation is less than ideal, as are
-keyboard short cuts.
-
 
 PS: If you haven't installed his Markdown extension for
 Visual Studio you should. It has easy paste of images,
 for example. Quick to do screen shots while documenting
 something in markdown.
-
 
 ***
 **Cloud Native Apps with .NET and AKS**
@@ -175,8 +171,9 @@ experimental stage, though.
 
 ## Download Videos for Offline Viewing
 A great site in general for downloading and getting an overview of 
-channel9 videos is: https://dayngo.com/channel9 Not all videos 
-from build 2020 are there, but most can be found at:
-https://dayngo.com/channel9/events/4c9262b67d02462caa94abad0181140c/2020
+channel9 videos is 
+[https://dayngo.com/channel9](https://dayngo.com/channel9) 
+Not all videos  from build 2020 are there, but most can be found at:
+[https://dayngo.com/channel9/events/4c9262b67d02462caa94abad0181140c/2020](https://dayngo.com/channel9/events/4c9262b67d02462caa94abad0181140c/2020)
 
 ![Download Videos Dayngo]({{ site.baseurl }}/images/2020-05-Microsoft-build-2020/download-videos-dayngo.png)
