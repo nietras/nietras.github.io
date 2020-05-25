@@ -1,6 +1,6 @@
 ﻿---
 layout: post
-title: Microsoft Build 2020
+title: Digest - Microsoft Build 2020
 ---
 
 Digest of the free virtual event at https://mybuild.microsoft.com/home
@@ -43,7 +43,7 @@ Everything is early and syntax and naming can still change.
 **Summary:** Finally the new revamped git tooling! This alone is worth
 the update. 
 TODO SHOW HOW TO ENABLE NEW GIT TOOLING
-
+TODO SHOW LACKING KEYBOARD SUPPORT
 ***
 
 **[Windows Forms Designer for .NET Core Released](https://devblogs.microsoft.com/dotnet/windows-forms-designer-for-net-core-released/)**\
@@ -145,7 +145,18 @@ https://docs.microsoft.com/en-us/visualstudio/ide/default-keyboard-shortcuts-for
 ***
 **The modern Visual Studio experience**
 **[![The modern Visual Studio experience](https://mediusprodstatic.studios.ms/asset-70f27855-2eff-4d97-b19e-2310b90bd3d5/Thumbnail000001.jpg?sv=2018-03-28&sr=b&sig=c5smDTwthKQ9Q1gVLxo5HSz1GPhf0Q0nLSW%2Bu2UjXss%3D&st=2020-05-15T10%3A48%3A19Z&se=2025-05-15T10%3A53%3A19Z&sp=r&rscd=filename%3DThumbnail000001.jpg)](https://channel9.msdn.com/Events/Build/2020/BOD111)**\
-**Summary:** Mads Kristensen, Visual Studio extensions author #1, 
+**Summary:** Mads Kristensen, VS extensions author #1, 
+from his garage 😎 (and colleagues). 
+Shows off the new top level `Git` menu
+and the new git tooling, which is covered a bit above too.
+Keyboard navigation is less than ideal, as are
+keyboard short cuts.
+
+
+PS: If you haven't installed his Markdown extension for
+Visual Studio you should. It has easy paste of images,
+for example. Quick to do screen shots while documenting
+something in markdown.
 
 
 ***
