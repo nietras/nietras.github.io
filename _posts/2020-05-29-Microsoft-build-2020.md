@@ -37,7 +37,8 @@ public data struct Point2D<T>(T X, T Y);
 ***
 
 **[Visual Studio 2019 v16.6 & v16.7 Preview 1](https://devblogs.microsoft.com/visualstudio/visual-studio-2019-v16-6-and-v16-7-preview-1-ship-today/)**\
-**Summary:** Revamped git tooling and loads more.
+**Summary:** Finally the new revamped git tooling! This alone is worth
+the update. 
 TODO SHOW HOW TO ENABLE NEW GIT TOOLING
 
 ***
@@ -53,6 +54,20 @@ TODO SHOW HOW TO ENABLE NEW GIT TOOLING
 ![Blazor WebAssembly Hello World](https://devblogs.microsoft.com/aspnet/wp-content/uploads/sites/16/2020/05/BlazorApp1-1.png)
 
 ***
+**[Introducing YARP Preview 1](https://devblogs.microsoft.com/dotnet/introducing-yarp-preview-1/)**\
+**Summary:** Yarp, Another Reverse Proxy. Kestrel-based so should be fast.
+
+***
+**[Using Visual Studio Codespaces with .NET Core](https://devblogs.microsoft.com/dotnet/using-visual-studio-codespaces-with-net-core/)**\
+**Summary:** 
+
+***
+**[F# 5 and F# tools update](https://devblogs.microsoft.com/dotnet/f-5-update-for-net-5-preview-4/)**\
+**Summary:** 
+
+
+
+***
 **[TODO]()**\
 **Summary:** 
 
@@ -62,7 +77,6 @@ https://devblogs.microsoft.com/cosmosdb/csharp-notebooks/
 
 ## Videos
 
-***
 **The Journey to One .NET**
 **[![The Journey to One .NET](https://mediusprodstatic.studios.ms/video-28844/thumbnail.jpg?sv=2018-03-28&sr=c&sig=eeLVrHGtaa9V9h%2F%2BKiwureWTVoYa8Nc0cs2O9tJ5l6s%3D&se=2025-05-15T12%3A10%3A58Z&sp=r)](https://channel9.msdn.com/Events/Build/2020/BOD106)**\
 **Summary:** The "Lesser" Scotts talk about many .NET related 
@@ -111,11 +125,19 @@ Note there is a list for VS but it's not as "nice".
 
 https://docs.microsoft.com/en-us/visualstudio/ide/default-keyboard-shortcuts-for-frequently-used-commands-in-visual-studio?view=vs-2019
 
+***
+**Cloud Native Apps with .NET and AKS**
+**[![Cloud Native Apps with .NET and AKS](https://mediusprodstatic.studios.ms/asset-9058b387-5d37-4e1d-b030-2def3b2776cb/Thumbnail000001.jpg?sv=2018-03-28&sr=b&sig=fPGl6cMNCMQ0xnKCiBow%2FmQ8WO%2Bl9QigFGLQvy4Z1Tc%3D&st=2020-05-20T03%3A55%3A21Z&se=2025-05-20T04%3A00%3A21Z&sp=r&rscd=filename%3DThumbnail000001.jpg)](https://channel9.msdn.com/Events/Build/2020/BOD105)**\
+**Summary:** `tye` demo. Blazing Pizza web site. Looks interesting, but still in experimental stage.
+
+***
+**Live, peer coding with VS Code, Azure and GitHub**
+**[![Live, peer coding with VS Code, Azure and GitHub](https://mediusprodstatic.studios.ms/asset-032c9707-a28d-4607-9719-26303efed3c4/Thumbnail-Archive-video_5500000-000001.jpg?sv=2018-03-28&sr=b&sig=YXjNls4RPcPvH5od0y2GoKwjz4iLwurTV15MA5Xx584%3D&st=2020-05-20T07%3A24%3A40Z&se=2025-05-20T07%3A29%3A40Z&sp=r&rscd=filename%3DThumbnail-Archive-video_5500000-000001.jpg)](https://channel9.msdn.com/Events/Build/2020/BDL131)**\
+**Summary:** .
 
 
 ***
-
-
+**title**
 **[![TITLE](IMAGE.jpg)](videourl)**\
 **Summary:** .
 
