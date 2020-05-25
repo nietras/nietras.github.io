@@ -292,7 +292,10 @@ div[class="highlight"] {
 
 code {
   font-family:'Consolas','Courier', monospace;
+  background-color: $code_background_color;
+  color: $code_entity_other_attribute_name
 }
+
 
 .highlight .c { color: $code_comment } /* Comment */
 .highlight .err { color: #93A1A1 } /* Error */
