@@ -3,16 +3,16 @@ layout: post
 title: Microsoft Build 2020
 ---
 
-Random notes for the virtual event at https://mybuild.microsoft.com/home
-
-1. TOC
-{:toc}
+Digest of the free virtual event at https://mybuild.microsoft.com/home
 
 ## Announcements and Blog Posts
+A few great announcements and blog posts can be found below.
+Looking forward .NET 5 (`net5.0`) and C# 9. 👍
 
 ***
 **[Welcome to C# 9.0](https://devblogs.microsoft.com/dotnet/welcome-to-c-9-0/)**\
-**Summary:** Must read! A preview of C# 9.0 features e.g. a full C# program (maybe! don't have it yet, but `Main` code comes between `using`s and type/method declarations):
+**Summary:** Must read! A preview of C# 9.0 features e.g. a full 
+working C# program could look like below:
 ```csharp
 var p = new Point2D<int> { X = 1, Y = 2 };
 var q = p with { X = 3 };
@@ -21,6 +21,9 @@ System.Console.WriteLine(r);
 
 public data struct Point2D<T>(T X, T Y);
 ```
+Maybe! Don't have it yet, but `Main` code comes between any 
+`using`s an type/method declarations. 
+Everything is early and syntax and naming can still change.
 
 ***
 **[Announcing .NET 5 Preview 4 and our journey to one .NET](https://devblogs.microsoft.com/dotnet/announcing-net-5-preview-4-and-our-journey-to-one-net/)**\
@@ -76,7 +79,20 @@ https://devblogs.microsoft.com/visualstudio/improvements-to-xaml-tooling-in-visu
 https://devblogs.microsoft.com/cosmosdb/csharp-notebooks/
 
 ## Videos
+I have selected a few videos I found interesting below. I would 
+definitely recommend **The Journey to One .NET** and 
+**C# Today & Tomorrow** for all things .NET/C# ❤.
 
+***
+**Microsoft Build 2020: CEO Satya Nadella's opening remarks**
+**[![Microsoft Build 2020: CEO Satya Nadella's opening remarks](https://img.youtube.com/vi/S_wNRx7f7rU/0.jpg)](https://youtu.be/S_wNRx7f7rU)**\
+**Summary:** Always interesting and provides a general overview. There
+is also a [youtube playlist](https://www.youtube.com/playlist?list=PLFPUGjQjckXEiPiW868RGBYYHXhBCGLng) 
+with the "key segments" from Build 2020. The 48 hour 
+live stream seems to have been removed, though. One interesting
+segment is the **The Computing Revolution**.
+
+***
 **The Journey to One .NET**
 **[![The Journey to One .NET](https://mediusprodstatic.studios.ms/video-28844/thumbnail.jpg?sv=2018-03-28&sr=c&sig=eeLVrHGtaa9V9h%2F%2BKiwureWTVoYa8Nc0cs2O9tJ5l6s%3D&se=2025-05-15T12%3A10%3A58Z&sp=r)](https://channel9.msdn.com/Events/Build/2020/BOD106)**\
 **Summary:** The "Lesser" Scotts talk about many .NET related 
@@ -125,15 +141,20 @@ Note there is a list for VS but it's not as "nice".
 
 https://docs.microsoft.com/en-us/visualstudio/ide/default-keyboard-shortcuts-for-frequently-used-commands-in-visual-studio?view=vs-2019
 
+
+***
+**The modern Visual Studio experience**
+**[![The modern Visual Studio experience](https://mediusprodstatic.studios.ms/asset-70f27855-2eff-4d97-b19e-2310b90bd3d5/Thumbnail000001.jpg?sv=2018-03-28&sr=b&sig=c5smDTwthKQ9Q1gVLxo5HSz1GPhf0Q0nLSW%2Bu2UjXss%3D&st=2020-05-15T10%3A48%3A19Z&se=2025-05-15T10%3A53%3A19Z&sp=r&rscd=filename%3DThumbnail000001.jpg)](https://channel9.msdn.com/Events/Build/2020/BOD111)**\
+**Summary:** Mads Kristensen, Visual Studio extensions author #1, 
+
+
 ***
 **Cloud Native Apps with .NET and AKS**
 **[![Cloud Native Apps with .NET and AKS](https://mediusprodstatic.studios.ms/asset-9058b387-5d37-4e1d-b030-2def3b2776cb/Thumbnail000001.jpg?sv=2018-03-28&sr=b&sig=fPGl6cMNCMQ0xnKCiBow%2FmQ8WO%2Bl9QigFGLQvy4Z1Tc%3D&st=2020-05-20T03%3A55%3A21Z&se=2025-05-20T04%3A00%3A21Z&sp=r&rscd=filename%3DThumbnail000001.jpg)](https://channel9.msdn.com/Events/Build/2020/BOD105)**\
-**Summary:** `tye` demo. Blazing Pizza web site. Looks interesting, but still in experimental stage.
+**Summary:** `tye` demo of orchestrating a Blazing Pizza web site with
+lots of docker containers. Looks interesting. Still in an early 
+experimental stage, though.
 
-***
-**Live, peer coding with VS Code, Azure and GitHub**
-**[![Live, peer coding with VS Code, Azure and GitHub](https://mediusprodstatic.studios.ms/asset-032c9707-a28d-4607-9719-26303efed3c4/Thumbnail-Archive-video_5500000-000001.jpg?sv=2018-03-28&sr=b&sig=YXjNls4RPcPvH5od0y2GoKwjz4iLwurTV15MA5Xx584%3D&st=2020-05-20T07%3A24%3A40Z&se=2025-05-20T07%3A29%3A40Z&sp=r&rscd=filename%3DThumbnail-Archive-video_5500000-000001.jpg)](https://channel9.msdn.com/Events/Build/2020/BDL131)**\
-**Summary:** .
 
 
 ***
@@ -143,9 +164,9 @@ https://docs.microsoft.com/en-us/visualstudio/ide/default-keyboard-shortcuts-for
 
 
 ## Download Videos for Offline Viewing
-A great site in general for downloading and getting an overview of
- channel9 videos is: https://dayngo.com/channel9 Not all videos 
-from build are there, but most can be found at:
+A great site in general for downloading and getting an overview of 
+channel9 videos is: https://dayngo.com/channel9 Not all videos 
+from build 2020 are there, but most can be found at:
 https://dayngo.com/channel9/events/4c9262b67d02462caa94abad0181140c/2020
 
 ![Download Videos Dayngo](images/2020-05-Microsoft-build-2020/download-videos-dayngo.png)
