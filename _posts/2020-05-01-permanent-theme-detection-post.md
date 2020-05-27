@@ -12,7 +12,7 @@ The quick brown fox jumps over the lazy dog.
 The quick brown fox jumps over the lazy dog.
 The quick brown fox jumps over the lazy dog.
 
-The quick brown fox jumps over the lazy dog.
+The quick `brown fox` jumps over the lazy dog.
 
 ## Source Code Highlighting
 [Coding horror code example](https://blog.codinghorror.com/is-your-ide-hot-or-not/):
