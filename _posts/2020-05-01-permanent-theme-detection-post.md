@@ -21,10 +21,11 @@ The quick `brown fox` jumps over the lazy dog.
 
 ```csharp
 #region codinghorror.com
-class Program : Object
+public class Program : object
 {
     // Normal comment
     static int _I = 1;
+    static char _C = 'A';
 
     /// <summary>
     /// The quick brown fox jumps over the lazy dog
@@ -32,15 +33,16 @@ class Program : Object
     /// </summary>
     static void Main(string[] args)
     {
-        Uri Illegal1Uri = new Uri("http://packmyboxwith/jugs.html?q=five-dozen&t=liquor");
-        Regex OperatorRegex = new Regex(@"\S#$", RegexOptions.IgnorePatternWhitespace);
+        string text = "The quick brown fox jumps over the lazy dog";
+        Uri illegal1Uri = new Uri("http://packmyboxwith/jugs.html?q=five-dozen&t=liquor");
+        Regex operatorRegex = new Regex(@"\S#$", RegexOptions.IgnorePatternWhitespace);
 
-        for (int O = 0; O < 123456789; O++)
+        for (int o = 0; o < 123456789; o++)
         {
-            _I += (O % 3) * ((O / 1) ^ 2) - 5;
-            if (!OperatorRegex.IsMatch(Illegal1Uri.ToString()))
+            _I += (o % 3) * ((o / 1) ^ 2) - 5;
+            if (!operatorRegex.IsMatch(illegal1Uri.ToString()))
             {
-                Console.WriteLine(Illegal1Uri);
+                Console.WriteLine(illegal1Uri);
             }
         }
     }
