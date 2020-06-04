@@ -15,12 +15,12 @@ Looking forward to .NET 5 (`net5.0`) and C# 9 due November 2020. 👍
 **Summary:** Must read! A preview of C# 9.0 features e.g. a full 
 working C# program could look like below:
 ```csharp
-var p = new Point2D<int> { X = 1, Y = 2 };
+var p = new Point2DI32 { X = 1, Y = 2 };
 var q = p with { X = 3 };
-Point2D<int>? r = q > p ? p : null;
+var? r = q == p ? p : null;
 System.Console.WriteLine(r);
 
-public data struct Point2D<T>(T X, T Y);
+public data struct Point2DI32(int X, int Y);
 ```
 Maybe! Don't have it yet, but `Main` code comes between any 
 `using`s and type/method declarations. 
