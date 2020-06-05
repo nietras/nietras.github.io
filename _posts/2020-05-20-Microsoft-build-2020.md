@@ -74,7 +74,7 @@ the update. This can be enabled in Visual Studio by:
 Now this is a big improvement from the old Team Explorer with less navigation.
 Unfortunately, keyboard navigation support is very poor.
 Below you can see how I am desperately trying to tab my way to the commit message
-field... an exersize in futility. 🤦‍
+field... an exercise in futility. 🤦‍
 
 ![New Git user experience keyboard navigation 🤦‍]({{ site.baseurl }}/images/2020-05-Microsoft-build-2020/vs2019-new-git-user-experience-keyboard-navigation.gif)
 
