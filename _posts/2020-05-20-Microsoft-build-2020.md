@@ -72,20 +72,22 @@ the update. This can be enabled in Visual Studio by:
 ![New Git user experience]({{ site.baseurl }}/images/2020-05-Microsoft-build-2020/vs2019-new-git-user-experience.png)
 
 Now this is a big improvement from the old Team Explorer with less navigation.
-Unfortunately, keyboard navigation support (incl. keyboard shortcuts) is very poor.
+Unfortunately, keyboard navigation support is very poor.
 Below you can see how I am desperately trying to tab my way to the commit message
-field... an excersize in futility. 
+field... an excersize in futility. 🤦‍
 
-
+![New Git user experience keyboard navigation 🤦‍]({{ site.baseurl }}/images/2020-05-Microsoft-build-2020/vs2019-new-git-user-experience-keyboard-navigation.gif)
 
 ***
 ### [Windows Forms Designer for .NET Core Released](https://devblogs.microsoft.com/dotnet/windows-forms-designer-for-net-core-released/)
-**Summary:** Yay!
+**Summary:** Looks familiar 😅. This also has to be enabled in preview features.
+
+![WinForms designer](https://devblogs.microsoft.com/dotnet/wp-content/uploads/sites/10/2020/05/designer-768x519.png)
 
 ***
 
 ### [Blazor WebAssembly 3.2.0 now available](https://devblogs.microsoft.com/aspnet/blazor-webassembly-3-2-0-now-available/)
-**Summary:** Cross-platform silverlight... ah no moonlight ;) MSIL from WASM!  
+**Summary:** Cross-platform silverlight... ah no moonlight 😉 MSIL via WASM!  
 
 ![Blazor WebAssembly Hello World](https://devblogs.microsoft.com/aspnet/wp-content/uploads/sites/16/2020/05/BlazorApp1-1.png)
 
@@ -95,21 +97,42 @@ field... an excersize in futility.
 
 ***
 ### [Using Visual Studio Codespaces with .NET Core](https://devblogs.microsoft.com/dotnet/using-visual-studio-codespaces-with-net-core/)
-**Summary:** 
+**Summary:** Nothing new to most developers in the trend of "mainframification"
+of developer tools and IDEs. VS Code is basically "just" a browser with local
+machine access and a gazillion amazing extensions. Codespaces is roughly speaking 
+developer tools and code running remotely. 
+This post shares how this works with .NET Core and current limitations e.g. 
+no apps with UI support.
+
+The ability to quickly get an amazing developer experience inside a browser
+for any project anywhere (e.g. GitHub or Azure DevOps) is pretty great.
+Especially, for large open source projects that might require an intricate
+and time-consuming setup of dependencies (looking at you CNTK 😉). We will
+have to see if that promise will be fulfilled. It is also, of course, another 
+potential recurring revenue stream for big tech companies.
 
 ***
 ### [F# 5 and F# tools update](https://devblogs.microsoft.com/dotnet/f-5-update-for-net-5-preview-4/)
-**Summary:** 
-
-
+**Summary:** A quick update on F# 5 news incl. compiler performance improvements.
+Always great to see. 👍
 
 ***
-### [TODO]()
-**Summary:** 
+### [Improvements to XAML tooling in Visual Studio 2019 version 16.7 Preview 1](https://devblogs.microsoft.com/visualstudio/improvements-to-xaml-tooling-in-visual-studio-2019-version-16-7-preview-1/)
+**Summary:** New features including:
+> * A new XAML data binding failure troubleshooting experience – now you can see when bindings have failed and review the details in a new dedicated tool window
+> * A built-in inline color visualizer in the XAML Code editor
+> * Two preview features that are still in early development including a new XAML Designer feature called Suggested Actions and our new and improved designer preview for WPF .NET Framework developers
 
-https://devblogs.microsoft.com/visualstudio/improvements-to-xaml-tooling-in-visual-studio-2019-version-16-7-preview-1/
+The binding failure troubleshooting looks like a great addition for debugging brittle
+binding issues.
 
-https://devblogs.microsoft.com/cosmosdb/csharp-notebooks/
+![XAML binding failure troubleshooting](https://devblogs.microsoft.com/visualstudio/wp-content/uploads/sites/4/2020/05/XAML-Binding-Failures-VS-2019-Update-7-Preview-1-1024x836.png)
+
+***
+### [Run C# notebooks with Azure Cosmos DB](https://devblogs.microsoft.com/cosmosdb/csharp-notebooks/)
+**Summary:** What I found interesting here were the data visualization examples.
+Looks neat.
+
 
 ## Videos
 I have selected a few videos I found interesting below. I would 
@@ -143,14 +166,14 @@ I hope 😀
 
 ***
 ### [Visual Studio .NET Productivity on PC and Mac](https://channel9.msdn.com/Events/Build/2020/BOD112)
-[![Visual Studio .NET Productivity on PC and Mac](https://mediusprodstatic.studios.ms/asset-db36c2f9-4861-4d59-a01f-a500d36f8e53/Thumbnail000001.jpg)](https://channel9.msdn.com/Events/Build/2020/BOD112)  
+[![Visual Studio .NET Productivity on PC and Mac](https://mediusprodstatic.studios.ms/asset-8b75d11a-5e03-4d8c-98b6-b276a454a562/Thumbnail000001.jpg)](https://channel9.msdn.com/Events/Build/2020/BOD112)  
 
 **Summary:** As always productivity tips almost always have the
 biggest impact on your everyday work, if you like me spent most of
 your time in Visual Studio 😁, so definitely recommended.
 Often there is something you did not know before and sometimes
 not even related to VS... e.g. `Windows key + .` brings up
-the Windows emoji keyboard. Did not know that or remember it.
+the Windows emoji keyboard. Did not know that.
 
 ![Windows Emoji Keyboard]({{ site.baseurl }}/images/2020-05-Microsoft-build-2020/windows-emoji-keyboard.png)
 
@@ -189,13 +212,6 @@ something in markdown.
 **Summary:** `tye` demo of orchestrating a Blazing Pizza web site with
 lots of docker containers. Looks interesting. Still in an early 
 experimental stage, though.
-
-
-
-***
-### [title]()
-**[![TITLE](IMAGE.jpg)](videourl)**  
-**Summary:** .
 
 
 ## Download Videos for Offline Viewing
