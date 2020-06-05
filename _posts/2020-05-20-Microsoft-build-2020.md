@@ -15,16 +15,36 @@ Looking forward to .NET 5 (`net5.0`) and C# 9 due November 2020. 👍
 **Summary:** Must read! A preview of C# 9.0 features e.g. a full 
 working C# program could look like below:
 ```csharp
-var p = new Point2DI32 { X = 1, Y = 2 };
+var p = new Point2D { X = 1, Y = 2 };
 var q = p with { X = 3 };
-var? r = q == p ? p : null;
+Point2D? r = q.Equals(p) ? p : null;
 System.Console.WriteLine(r);
 
-public data struct Point2DI32(int X, int Y);
+public data struct Point2D(nint X, nint Y);
 ```
-Maybe! Don't have it yet, but `Main` code comes between any 
+Maybe! This doesn't compile using the build 2020 demo compiler on 
+the awesome [sharplab.io](sharplab.io) see [example](https://sharplab.io/#v2:EYLgJgpgtg9gzgWmAVwJYBswIEwAY8A0YIA1AD4BuAhgE4AEADnQLx0B2EA7nQAoypsALtgAidAN50AGizoBGAnQCas7HQC+AbgCwAKGr0AjrKadUggBYTpsgMwaduvgOEiA/HXqtDAOgCihshU6HAAFAwAlHQeTCDsyOjojgACcj6pAJyhNBGOesn2YFSCVHRwgjTIAMaCvPxCoqFsLtKKzULKuUA==). 
+`Main` code comes between any 
 `using`s and type/method declarations. 
 Everything is early and syntax and naming can still change.
+I do hope value type records will be supported. Although,
+value tuples (e.g. `(int X, int Y)` are great for local scope 
+things, they aren't great across code/boundaries. Here a proper 
+named type is better. Value type records would
+be great for that. Below a list of potential C# 9 features:
+
+* `nint/nuint` the final nail in the coffin for [DotNetCross.NativeInts](https://github.com/DotNetCross/NativeInts)
+ * Init-only properties
+ * Init accessors and readonly fields
+ * Records
+ * With-expressions
+ * Value-based equality
+ * Data members
+ * Positional records
+ * Top-level programs
+ * Improved pattern matching
+
+Current proposals considered for C# 9 can be found at [csharplang/milestone/15](https://github.com/dotnet/csharplang/milestone/15).
 
 ***
 ### [Announcing .NET 5 Preview 4 and our journey to one .NET](https://devblogs.microsoft.com/dotnet/announcing-net-5-preview-4-and-our-journey-to-one-net/)
@@ -44,9 +64,19 @@ Everything is early and syntax and naming can still change.
 ***
 ### [Visual Studio 2019 v16.6 & v16.7 Preview 1](https://devblogs.microsoft.com/visualstudio/visual-studio-2019-v16-6-and-v16-7-preview-1-ship-today/)
 **Summary:** Finally the new revamped git tooling! This alone is worth
-the update. 
-TODO SHOW HOW TO ENABLE NEW GIT TOOLING
-TODO SHOW LACKING KEYBOARD SUPPORT
+the update. This can be enabled in Visual Studio by:
+ * Press `CTRL + Q`
+ * Search for `preview features` and open **Environment -> Preview features**
+ * Then check the **New Git user experience** as shown below.
+
+![New Git user experience]({{ site.baseurl }}/images/2020-05-Microsoft-build-2020/vs2019-new-git-user-experience.png)
+
+Now this is a big improvement from the old Team Explorer with less navigation.
+Unfortunately, keyboard navigation support (incl. keyboard shortcuts) is very poor.
+Below you can see how I am desperately trying to tab my way to the commit message
+field... an excersize in futility. 
+
+
 
 ***
 ### [Windows Forms Designer for .NET Core Released](https://devblogs.microsoft.com/dotnet/windows-forms-designer-for-net-core-released/)
@@ -109,14 +139,7 @@ I hope 😀
 ### [C# Today & Tomorrow](https://channel9.msdn.com/Events/Build/2020/BOD108)
 [![C# Today & Tomorrow](https://mediusprodstatic.studios.ms/video-28908/thumbnail.jpg?sv=2018-03-28&sr=c&sig=BO%2FwlUmCp8H%2BPnbsVOr8Ae5d4fraQ21G%2FBiMG5NRU5w%3D&se=2025-05-18T13%3A58%3A53Z&sp=r)](https://channel9.msdn.com/Events/Build/2020/BOD108)  
 
-**Summary:** C# 8 summarized and a preview of C# 9 (see
-current proposals considered for this at https://github.com/dotnet/csharplang/milestone/15):
-
-* `nint/nuint` the final nail in the coffin for [DotNetCross.NativeInts](https://github.com/DotNetCross/NativeInts)
-* Records
-* More pattern matching. Relational patterns. `switch` on everything etc.
-
-Everything is work-in-progress (WIP).
+**Summary:** C# 8 summarized and a preview of C# 9. See blog post comments above.
 
 ***
 ### [Visual Studio .NET Productivity on PC and Mac](https://channel9.msdn.com/Events/Build/2020/BOD112)
