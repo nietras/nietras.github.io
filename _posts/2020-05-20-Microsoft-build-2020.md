@@ -28,7 +28,7 @@ the awesome [sharplab.io](sharplab.io) see [example](https://sharplab.io/#v2:EYL
 `using`s and type/method declarations. 
 Everything is early and syntax and naming can still change.
 I do hope value type records will be supported. Although,
-value tuples (e.g. `(int X, int Y)` are great for local scope 
+value tuples - e.g. `(int X, int Y)` - are great for local scope 
 things, they aren't great across code/boundaries. Here a proper 
 named type is better. Value type records would
 be great for that. Below a list of potential C# 9 features:
@@ -74,7 +74,7 @@ the update. This can be enabled in Visual Studio by:
 Now this is a big improvement from the old Team Explorer with less navigation.
 Unfortunately, keyboard navigation support is very poor.
 Below you can see how I am desperately trying to tab my way to the commit message
-field... an excersize in futility. 🤦‍
+field... an exersize in futility. 🤦‍
 
 ![New Git user experience keyboard navigation 🤦‍]({{ site.baseurl }}/images/2020-05-Microsoft-build-2020/vs2019-new-git-user-experience-keyboard-navigation.gif)
 
