@@ -3,7 +3,9 @@ layout: post
 title: Digest - Microsoft Build 2020
 ---
 
-Digest of the free virtual event at [https://mybuild.microsoft.com/home](https://mybuild.microsoft.com/home)
+Digest of the free virtual event at 
+[https://mybuild.microsoft.com/home](https://mybuild.microsoft.com/home)
+held May 19-21, 2020.
 
 
 ## Announcements and Blog Posts
