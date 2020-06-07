@@ -71,14 +71,14 @@ the update. This can be enabled in Visual Studio by:
  * Search for `preview features` and open **Environment -> Preview features**
  * Then check the **New Git user experience** as shown below.
 
-![New Git user experience]({{ site.baseurl }}/images/2020-05-Microsoft-build-2020/vs2019-new-git-user-experience.png)
+![New Git user experience]({{ site.baseurl }}/images/2020-06-Microsoft-build-2020/vs2019-new-git-user-experience.png)
 
 Now this is a big improvement from the old Team Explorer with less navigation.
 Unfortunately, keyboard navigation support is very poor.
 Below you can see how I am desperately trying to tab my way to the commit message
 field... an exercise in futility. 🤦‍
 
-![New Git user experience keyboard navigation 🤦‍]({{ site.baseurl }}/images/2020-05-Microsoft-build-2020/vs2019-new-git-user-experience-keyboard-navigation.gif)
+![New Git user experience keyboard navigation 🤦‍]({{ site.baseurl }}/images/2020-06-Microsoft-build-2020/vs2019-new-git-user-experience-keyboard-navigation.gif)
 
 ***
 ### [Windows Forms Designer for .NET Core Released](https://devblogs.microsoft.com/dotnet/windows-forms-designer-for-net-core-released/)
@@ -177,7 +177,7 @@ Often there is something you did not know before and sometimes
 not even related to VS... e.g. `Windows key + .` brings up
 the Windows emoji keyboard. Did not know that.
 
-![Windows Emoji Keyboard]({{ site.baseurl }}/images/2020-05-Microsoft-build-2020/windows-emoji-keyboard.png)
+![Windows Emoji Keyboard]({{ site.baseurl }}/images/2020-06-Microsoft-build-2020/windows-emoji-keyboard.png)
 
 Lots of good tips, although I often feel that some of the 
 refactorings result in worse code than before or at 
@@ -223,4 +223,4 @@ channel9 videos is
 Not all videos  from build 2020 are there, but most can be found at:
 [https://dayngo.com/channel9/events/4c9262b67d02462caa94abad0181140c/2020](https://dayngo.com/channel9/events/4c9262b67d02462caa94abad0181140c/2020)
 
-![Download Videos Dayngo]({{ site.baseurl }}/images/2020-05-Microsoft-build-2020/download-videos-dayngo.png)
+![Download Videos Dayngo]({{ site.baseurl }}/images/2020-06-Microsoft-build-2020/download-videos-dayngo.png)
