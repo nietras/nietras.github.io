@@ -19,7 +19,10 @@ html {
 
 body {
   background: $white;
-  font: 18px/1.4 $helvetica;
+  //font: 18px/1.4 $fontDefault;
+  font-family: $fontDefault;
+  ///font-size: 16px;
+  line-height: 1.2;
   color: $darkGray;
 }
 
@@ -31,12 +34,12 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: $helveticaNeue;
+  font-family: $fontDefault;
   color: $darkerGray;
   font-weight: bold;
 
   line-height: 1.4;
-  margin: 0.4em 0 0.2em;
+  margin: 0.6em 0 0.2em;
   padding: 0;
 
   @include mobile {
@@ -45,27 +48,31 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 30px;
-/*  a {
+  //font-size: 30px;
+  font-size: 2em;
+  /*  a {
     color: inherit;
   }*/
 }
 
 h2 {
-  font-size: 24px;
+  //font-size: 24px;
+  font-size: 1.5em;
 }
 
 h3 {
-  font-size: 20px;
+  //font-size: 20px;
+  font-size: 1.17em;
 }
 
 h4 {
-  font-size: 18px;
+  //font-size: 18px;
+  font-size: 1em;
   color: $gray;
 }
 
 p {
-  margin: 12px 0;
+  margin: 10px 0;
 }
 
 a {
@@ -102,6 +109,9 @@ ul.posts {
   list-style-type: none;
   margin: 0px;
   padding-left: 0px;
+  li {
+      margin: 12px 0px;
+  }
     /*margin-bottom: 2em;*/
 }
 
@@ -198,7 +208,7 @@ img {
   margin: 0;
   color: $darkGray;
   cursor: pointer;
-  font-family: $helveticaNeue;
+  font-family: $fontDefault;
   font-weight: 300;
   font-size: 28px;
   letter-spacing: 1px;
@@ -217,7 +227,7 @@ img {
 nav {
   float: right;
   margin-top: 23px; // @TODO: Vertically middle align
-  font-family: $helveticaNeue;
+  font-family: $fontDefault;
   font-size: 18px;
 
   @include mobile {
@@ -257,12 +267,12 @@ nav {
 
 .post {
   blockquote {
-    margin: 1.8em .8em;
+    margin: .8em .8em;
     border-left: 2px solid $gray;
-    padding: 0.1em 1em;
+    padding: 0.1em 0.1em;
     color: $gray;
-    font-size: 22px;
-    font-style: italic;
+    //font-size: 22px;
+    //font-style: italic;
   }
 
   .comments {
