@@ -6,7 +6,7 @@
 $background: #000;
 
 // Colors
-$blue: #4183C4;
+$blue: #4993DD;
 
 // Grays
 // INVERTED COLORS, SINCE NAMES FROM BRIGHT THEME
@@ -20,9 +20,10 @@ $white: #111;
 $header-footer-background: #1D1D1D;
 
 // Font stacks
-$helvetica: Helvetica, Arial, sans-serif;
-$helveticaNeue: "Helvetica Neue", Helvetica, Arial, sans-serif;
-$georgia: Georgia, serif;
+$fontSansSerifBody: Helvetica, Arial, sans-serif;
+$fontSansSerif: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$fontSerifBody: Georgia, serif;
+$fontDefault: $fontSansSerif;
 
 // Mobile breakpoints
 @mixin mobile {
