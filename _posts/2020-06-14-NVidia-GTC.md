@@ -8,6 +8,7 @@ title: NVidia GTC 2020
 ![](https://blogs.nvidia.com/wp-content/uploads/2020/05/ampere-social-press-2-a100-sxm4-sxm-1307801-1280x829.png)
 
 cuDNN 8 and CUDA 11 notes, especially cuDNN and the library split of inference vs training to reduce size of dependencies.
+(SIZE NOT REALLY REDUCED DUE TO AMPERE PROBABLY)
 
 ## Announcements, Papers and Blog Posts
 
