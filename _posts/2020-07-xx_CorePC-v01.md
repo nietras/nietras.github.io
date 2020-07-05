@@ -15,7 +15,7 @@ Corsair
 ### CPU cooler
 
 
-## Current Components
+## System Components
 Components of the day.
 
 ### NVMe SSD
@@ -40,3 +40,7 @@ https://www.edbpriser.dk/produkt/gigabyte-b550m-ds3h/?searched=B550
 ### RAM
 G.Skill Ripjaws V - DDR4 - 32 GB: 2 x 16 GB - DIMM 288-PIN - ikke bufferet DKR 985,-
 https://www.edbpriser.dk/produkt/g-skill-ripjaws-v-ddr4-32-gb-2-x-16-gb-dimm-288-pin-3513768/
+
+## GPU
+For machine learning software engineering etc.
+2060 Super.
