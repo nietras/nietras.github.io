@@ -115,6 +115,25 @@ ul.posts {
     /*margin-bottom: 2em;*/
 }
 
+thead {
+    font-weight: bold;
+    background-color: $darkBlue;
+    color: $black;
+}
+
+td, th {
+    //border: 1px solid $lightGray;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: $alternateBackground;
+}
+
+tr:hover {
+    background-color: $hoverBackground;
+}
+
 em, i {
   font-style: italic;
 }
