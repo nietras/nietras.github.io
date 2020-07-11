@@ -8,9 +8,12 @@ Affordable developer PC, no peripherals.
 ## Base Components
 
 ### PSU
-Corsair
+Corsair RM550x 550W DKR 800,-
+https://www.edbpriser.dk/produkt/corsair-rmx-series-rm550x-3149738/?searched=rm500x
 
 ### Case
+Fractal Design Define Mini 
+From 2013
 
 ### CPU cooler
 
