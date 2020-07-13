@@ -115,23 +115,30 @@ ul.posts {
     /*margin-bottom: 2em;*/
 }
 
-thead {
-    font-weight: bold;
-    background-color: $darkBlue;
-    color: $black;
-}
-
 td, th {
     //border: 1px solid $lightGray;
     padding: 8px;
 }
 
-tr:nth-child(even) {
-    background-color: $alternateBackground;
+table tbody tr:nth-child(odd) {
+    background-color: $oddBackground;
 }
 
-tr:hover {
+table tbody tr:nth-child(even) {
+    background-color: $evenBackground;
+}
+
+table tbody tr:hover {
     background-color: $hoverBackground;
+}
+
+table thead tr {
+    background-color: $darkBlue;
+}
+thead {
+    font-weight: bold;
+    background-color: $darkBlue;
+    color: $black;
 }
 
 em, i {
