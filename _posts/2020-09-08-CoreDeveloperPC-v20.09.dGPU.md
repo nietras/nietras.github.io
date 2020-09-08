@@ -2,13 +2,17 @@
 layout: post
 title: Core Developer PC™ v20.09.dGPU - AMD 3700X vs Intel i7-10700 8c/16t with NVidia 2060 Super
 ---
-Assembling your own developer PC is a rite of passage for many 
-self respecting developers. Personally I have assembled perhaps close to a 
-hundred PCs both for personal use and for work. 
-That is quite a lot and is because at one point
+**TLDR**: Wait... until the NVidia 30 series is available. If you can't 
+I detail an 8 core/16t, 32 GB DDR4 RAM, 1 TB NVMe PCIe 3.0 SSD, PC with
+the NVidia 2060 Super at about ~$1300/~10000 DKK* (* incl. VAT).
+
+Assembling your own developer PC is seen as a rite of passage for many 
+self respecting developers. Personally I have assembled perhaps more than 
+fifty PCs both for personal use and for work. 
+That is quite a lot and is because, at one point,
 I assembled industrial PCs for work due to quality issues with previous PCs.
 Those issues were mainly resolved by selecting quality components for industrial use,
-not so much due to my PC assembly skills 😅
+not so much due to my PC assembly skills, I think 😅
 
 Last year I assembled 3 new deep learning model servers used for all our
 training needs at work in our fully versioned and reproducible machine learning
@@ -61,7 +65,7 @@ It will probably run [Age of Ascent](https://www.ageofascent.com/) and definitel
 but might take a little while on the final turns in long games of [Master of Orion II](https://en.wikipedia.org/wiki/Master_of_Orion_II:_Battle_at_Antares) 😉
 
 
-![https://en.wikipedia.org/wiki/File:HAL_2001_monolith_(color_correction).jpg]({{ site.baseurl }}/images/2020-07-CorePC/HAL_2001_monolith_(color_correction).jpg)
+![https://en.wikipedia.org/wiki/File:HAL_2001_monolith_(color_correction).jpg]({{ site.baseurl }}/images/2020-09-CorePC/HAL_2001_monolith_(color_correction).jpg)
 
 The premise is pitting AMD vs Intel CPUs against each other at about the 
 same price point. Peripherals are not considered. For GPU there is, in my view, 
@@ -91,7 +95,7 @@ have lesser quality base components, even though these are the most likely compo
 to be reused. I encourage picking high quality components here since they will form
 the base or foundation for the developer PC for years to come.
 
-|Component      |Selection           |USD    |DKK*    |
+|Component      |Selection           |USD    |DKK    |
 |----------|:-------------------|------:|-------:|
 |[Case](https://en.wikipedia.org/wiki/Computer_case) |[Fractal Design Define Mini C](https://www.fractal-design.com/products/cases/define/define-mini-c/black/) | [85](https://www.newegg.com/black-fractal-design-define-mini-c-micro-atx-mini-tower/p/N82E16811352064)| [600](https://www.pricerunner.dk/pl/186-3663561/Kabinetter/Fractal-Design-Define-Mini-C-Sammenlign-Priser)|
 |[PSU](https://en.wikipedia.org/wiki/ATX#Power_supply) |[Corsair RM650x 650W](https://www.corsair.com/eu/en/Categories/Products/Power-Supply-Units/Power-Supply-Units-Advanced/RMx-Series/p/CP-9020178-EU) | [115](https://www.newegg.com/corsair-rmx-series-rm650x-2018-cp-9020178-na-650w/p/N82E16817139232)| [900](https://www.edbpriser.dk/produkt/corsair-rmx-series-rm650x-3149708/?searched=rm650x)|
@@ -105,7 +109,7 @@ silent computing with built-in sound dampening material.
 How efficient this is I cannot quantify, but
 overall I think this is a great case with a good internal design.
 
-[![Fractal Design Define Mini C]({{ site.baseurl }}/images/2020-07-CorePC/Case-Fractal-Design-Define-Mini-C_16.jpg)](https://www.fractal-design.com/products/cases/define/define-mini-c/black/)
+[![Fractal Design Define Mini C]({{ site.baseurl }}/images/2020-09-CorePC/Case-Fractal-Design-Define-Mini-C_16.jpg)](https://www.fractal-design.com/products/cases/define/define-mini-c/black/)
 
 The case comes with two decent 120mm fans [Fractal Design Dynamic X2 GP12](https://www.fractal-design.com/products/fans/dynamic/dynamic-x2-gp-12/black/). 
 However, if you want better fans and fans that will last a long time 
@@ -116,7 +120,7 @@ The one thing that I really don't like on this case is the front panel connector
 are facing up. Since I have the PC sitting in a mount underneath my desk, this
 is a bit annoying, since I can't plug in an USB pen here due to lack of height. 🤦‍
 
-[![Fractal Design Define Mini C]({{ site.baseurl }}/images/2020-07-CorePC/Case-Fractal-Design-Define-Mini-C_11.jpg)](https://www.fractal-design.com/products/cases/define/define-mini-c/black/)
+[![Fractal Design Define Mini C]({{ site.baseurl }}/images/2020-09-CorePC/Case-Fractal-Design-Define-Mini-C_11.jpg)](https://www.fractal-design.com/products/cases/define/define-mini-c/black/)
 
 
 ### PSU
@@ -139,7 +143,7 @@ just the cables needed for powering the components. On the downside this isn't
 exactly a cheap PSU, but given it has a 10 year warranty and will likely last that
 long it's worth it.
 
-[![Corsair RM650x 650W]({{ site.baseurl }}/images/2020-07-CorePC/PSU-Corsair-RM650x-with-cables.png)](https://www.corsair.com/eu/en/Categories/Products/Power-Supply-Units/Power-Supply-Units-Advanced/RMx-Series/p/CP-9020178-EU)
+[![Corsair RM650x 650W]({{ site.baseurl }}/images/2020-09-CorePC/PSU-Corsair-RM650x-with-cables.png)](https://www.corsair.com/eu/en/Categories/Products/Power-Supply-Units/Power-Supply-Units-Advanced/RMx-Series/p/CP-9020178-EU)
 
 
 ### CPU Cooler
@@ -160,12 +164,12 @@ supporting future sockets via new mounting kits and hence it very likely
 will be able to be used for a possible future update and last +6 years.
 Replacing the fan is easy too.
 
-[![Noctua NH-12S]({{ site.baseurl }}/images/2020-07-CorePC/CPU-Cooler-Noctua-nh-u12s-with-boxes.jpg)](https://noctua.at/en/nh-u12s)
+[![Noctua NH-12S]({{ site.baseurl }}/images/2020-09-CorePC/CPU-Cooler-Noctua-nh-u12s-with-boxes.jpg)](https://noctua.at/en/nh-u12s)
 
 
 ## Common Components incl. GPU
 
-|Component      |Selection           |USD    |DKK*    |
+|Component      |Selection           |USD    |DKK    |
 |----------|:-------------------|------:|-------:|
 |[RAM](https://en.wikipedia.org/wiki/DDR4_SDRAM) |[G.SKILL Ripjaws V 2 x 16GB DDR4 3200 (PC4-25600) F4-3200C16D-32GVK](https://www.gskill.com/product/165/184/1536110922/F4-3200C16D-32GVKRipjaws-VDDR4-3200MHz-CL16-18-18-38-1.35V32GB-(2x16GB)) | [110](https://www.newegg.com/g-skill-32gb-288-pin-ddr4-sdram/p/N82E16820232091) | [850](https://www.edbpriser.dk/produkt/g-skill-ripjaws-v-ddr4-32-gb-2-x-16-gb-dimm-288-pin-3513768/) |
 |[SSD](https://en.wikipedia.org/wiki/Solid-state_drive) [NVMe](https://en.wikipedia.org/wiki/NVM_Express) | [ADATA XPG SX8200 Pro 1 TB](https://www.xpg.com/us/feature/583/) | [140](https://www.newegg.com/xpg-sx8200-pro-1tb/p/0D9-0017-000W4)| [1030](https://www.edbpriser.dk/produkt/adata-xpg-sx8200-pro/)|
@@ -186,7 +190,7 @@ and high end server CPUs have more. 8 for example.
 Be aware of RAM height and CPU cooler clearance here. If the RAM module is 
 very high and the CPU cooler does not have a lot of clearance they may clash.
 
-[![G.SKILL Ripjaws V 2 x 16GB DDR4 3200 (PC4-25600) F4-3200C16D-32GVK]({{ site.baseurl }}/images/2020-07-CorePC/RAM-G.SKILL-Ripjaws-V-2-x-16GB-DDR4-3200-(PC4-25600)-F4-3200C16D-32GVK.png)](https://www.gskill.com/product/165/184/1536110922/F4-3200C16D-32GVKRipjaws-VDDR4-3200MHz-CL16-18-18-38-1.35V32GB-(2x16GB))
+[![G.SKILL Ripjaws V 2 x 16GB DDR4 3200 (PC4-25600) F4-3200C16D-32GVK]({{ site.baseurl }}/images/2020-09-CorePC/RAM-G.SKILL-Ripjaws-V-2-x-16GB-DDR4-3200-(PC4-25600)-F4-3200C16D-32GVK.png)](https://www.gskill.com/product/165/184/1536110922/F4-3200C16D-32GVKRipjaws-VDDR4-3200MHz-CL16-18-18-38-1.35V32GB-(2x16GB))
 
 
 ### NVMe SSD
@@ -199,7 +203,7 @@ I picked the [ADATA XPG SX8200 Pro 1 TB](https://www.xpg.com/us/feature/583/)
 NVMe SSD based on multiple reviews of NVMe SSDs. [Anandtech](https://www.anandtech.com)
 has a recent review that includes this in the [The Best NVMe SSD for Laptops and Notebooks: SK hynix Gold P31 1TB SSD Reviewed](https://www.anandtech.com/show/16012/the-sk-hynix-gold-p31-ssd-review) article.
 
-[![ADATA XPG SX8200 Pro 1 TB]({{ site.baseurl }}/images/2020-07-CorePC/SSD-NVMe-Adata-XPG-SX8200-PRO-Gen3x4-1-TB.png)](https://www.xpg.com/us/feature/583/)
+[![ADATA XPG SX8200 Pro 1 TB]({{ site.baseurl }}/images/2020-09-CorePC/SSD-NVMe-Adata-XPG-SX8200-PRO-Gen3x4-1-TB.png)](https://www.xpg.com/us/feature/583/)
 
 Below I include a few key benchmarks that I base my choice on for a developer PC.
 Mixed 4kB and 128 kB Random Read/Write. Note the highlighted SSD is the 
@@ -211,9 +215,9 @@ Again this SSD has a 5 year warranty and should be usable for at least that long
 
 512 GB should suffice for many here but performance often scales with size.
 
-[![Mixed 4kB Random Read/Write]({{ site.baseurl }}/images/2020-07-CorePC/SSD-NVMe-sustained-rm.png)](https://www.anandtech.com/show/16012/the-sk-hynix-gold-p31-ssd-review/6)
+[![Mixed 4kB Random Read/Write]({{ site.baseurl }}/images/2020-09-CorePC/SSD-NVMe-sustained-rm.png)](https://www.anandtech.com/show/16012/the-sk-hynix-gold-p31-ssd-review/6)
 
-[![Mixed 128kB Random Read/Write]({{ site.baseurl }}/images/2020-07-CorePC/SSD-NVMe-sustained-sm.png)](https://www.anandtech.com/show/16012/the-sk-hynix-gold-p31-ssd-review/6)
+[![Mixed 128kB Random Read/Write]({{ site.baseurl }}/images/2020-09-CorePC/SSD-NVMe-sustained-sm.png)](https://www.anandtech.com/show/16012/the-sk-hynix-gold-p31-ssd-review/6)
 
 I have not picked a PCIe 4.0 SSD since there aren't that many yet,
 and price difference is still a bit high. More SSDs will come soon. Not the least
@@ -262,19 +266,19 @@ Personally, I am waiting for and hoping a 3060/3050 will be coming soon too,
 but it might not be before December or next year :( If that's the case I'd get
 the 3070 if one can't wait.
 
-[![Gigabyte GeForce RTX 2060 SUPER WINDFORCE OC 8G]({{ site.baseurl }}/images/2020-07-CorePC/GPU-Gigabyte-Geforce-RTX-2060-super-windforce-oc-8g.png)](https://www.gigabyte.com/Graphics-Card/GV-N206SWF2OC-8GD-rev-20#kf)
+[![Gigabyte GeForce RTX 2060 SUPER WINDFORCE OC 8G]({{ site.baseurl }}/images/2020-09-CorePC/GPU-Gigabyte-Geforce-RTX-2060-super-windforce-oc-8g.png)](https://www.gigabyte.com/Graphics-Card/GV-N206SWF2OC-8GD-rev-20#kf)
 
 From Anandtechs [The NVIDIA GeForce RTX 2070 Super & RTX 2060 Super Review: Smaller Numbers, Bigger Performance
 ](https://www.anandtech.com/show/14586/geforce-rtx-2070-super-rtx-2060-super-review)
 the specifications for the 20 series are:
 
-![NVidia 20 Series]({{ site.baseurl }}/images/2020-07-CorePC/GPU-nvidia-20-series.png)
+![NVidia 20 Series]({{ site.baseurl }}/images/2020-09-CorePC/GPU-nvidia-20-series.png)
 
 From [NVIDIA Announces the GeForce RTX 30 Series: Ampere For Gaming, Starting With RTX 3080 & RTX 3090
 ](https://www.anandtech.com/show/16057/nvidia-announces-the-geforce-rtx-30-series-ampere-for-gaming-starting-with-rtx-3080-rtx-3090) 
 the specifications for the 30 series currently are:
 
-![NVidia 30 Series]({{ site.baseurl }}/images/2020-07-CorePC/GPU-nvidia-30-series.png)
+![NVidia 30 Series]({{ site.baseurl }}/images/2020-09-CorePC/GPU-nvidia-30-series.png)
 
 Hence, comparing the 3070 to 2060 Super for F32 performance you get 
 20.4 TFLOPs	vs 7.2 TFLOPS or 20.4 / 7.2 = 2.83x more at $100 higher price. 
@@ -286,7 +290,7 @@ training/inference. I haven't seen confirmation of this yet, though.
 
 ## System Components: AMD
 
-|Component      |Selection           |USD    |DKK*    |
+|Component      |Selection           |USD    |DKK    |
 |----------|:-------------------|------:|-------:|
 |[CPU]() | [AMD Ryzen™ 7 3700X](https://www.amd.com/en/products/cpu/amd-ryzen-7-3700x) | [(a) 290](https://www.newegg.com/amd-ryzen-7-3700x/p/N82E16819113567)| [2300](https://www.edbpriser.dk/produkt/amd-ryzen-7-3700x-3-6-ghz-processor/?searched=3700X)|
 |[Motherboard]() | [Gigabyte B550M DS3H](https://www.gigabyte.com/Motherboard/B550M-DS3H-rev-10#kf) | [95](https://www.newegg.com/gigabyte-b550m-ds3h/p/N82E16813145210)| [730](https://www.edbpriser.dk/produkt/gigabyte-b550m-ds3h)|
@@ -302,9 +306,9 @@ right now is an 8 core/16 thread CPU. I picked the 3700X, because it has a great
 and is only slightly slower than the 3800X. I will compare this
 to the Intel CPU later.
 
-[![AMD Ryzen™ 7 3700X]({{ site.baseurl }}/images/2020-07-CorePC/CPU-AMD-Ryzen-7-3700X.jpg)](https://www.amd.com/en/products/cpu/amd-ryzen-7-3700x)
+[![AMD Ryzen™ 7 3700X]({{ site.baseurl }}/images/2020-09-CorePC/CPU-AMD-Ryzen-7-3700X.jpg)](https://www.amd.com/en/products/cpu/amd-ryzen-7-3700x)
 
-![AMD Matisse 3000 Series]({{ site.baseurl }}/images/2020-07-CorePC/CPU-AMD-Matisse-3000-Series.png)
+![AMD Matisse 3000 Series]({{ site.baseurl }}/images/2020-09-CorePC/CPU-AMD-Matisse-3000-Series.png)
 
 
 ### Motherboard (AMD)
@@ -346,14 +350,14 @@ but those only work if the CPU has an integrated GPU.
 > * Q-Flash Plus Update BIOS without Installing the CPU, Memory and Graphics Card
 > * Anti-Sulfur Resistors Design
 
-[![Gigabyte B550M DS3H]({{ site.baseurl }}/images/2020-07-CorePC/Motherboard-Gigabyte-B550M-DS3H.png)](https://www.gigabyte.com/Motherboard/B550M-DS3H-rev-10#kf)
+[![Gigabyte B550M DS3H]({{ site.baseurl }}/images/2020-09-CorePC/Motherboard-Gigabyte-B550M-DS3H.png)](https://www.gigabyte.com/Motherboard/B550M-DS3H-rev-10#kf)
 
-[![Gigabyte B550M DS3H Back panel]({{ site.baseurl }}/images/2020-07-CorePC/Motherboard-Gigabyte-B550M-DS3H-back-panel.png)](https://www.gigabyte.com/Motherboard/B550M-DS3H-rev-10#kf)
+[![Gigabyte B550M DS3H Back panel]({{ site.baseurl }}/images/2020-09-CorePC/Motherboard-Gigabyte-B550M-DS3H-back-panel.png)](https://www.gigabyte.com/Motherboard/B550M-DS3H-rev-10#kf)
 
 
 ## System Components: Intel
 
-|Component      |Selection           |USD    |DKK*    |
+|Component      |Selection           |USD    |DKK    |
 |----------|:-------------------|------:|-------:|
 |[CPU]() |[Intel i7-10700](https://ark.intel.com/content/www/us/en/ark/products/199316/intel-core-i7-10700-processor-16m-cache-up-to-4-80-ghz.html) | [305](https://www.newegg.com/intel-core-i7-10700-core-i7-10th-gen/p/N82E16819118126)| [2500](https://www.pricerunner.dk/pl/40-5202251/CPU/Intel-Core-i7-10700-2-9GHz-Socket-1200-Box-Sammenlign-Priser)|
 |[Motherboard]() | [Gigabyte B460M DS3H](https://www.gigabyte.com/Motherboard/B460M-DS3H-rev-10)| [80](https://www.newegg.com/gigabyte-ultra-durable-b460m-ds3h/p/N82E16813145206) | [640](https://www.pricerunner.dk/pl/35-5214751/Bundkort/Gigabyte-B460M-DS3H-Sammenlign-Priser) |
@@ -374,9 +378,9 @@ has the integrated 630 GPU, which is good enough for simple code editing,
 watching videos etc. on a few full HD monitors, so you can cut the expensive GPU
 if you don't need it.
 
-[![Intel i7-10700]({{ site.baseurl }}/images/2020-07-CorePC/CPU-Intel-10th-gen-core-i7-10700-tray.jpg)](https://ark.intel.com/content/www/us/en/ark/products/199316/intel-core-i7-10700-processor-16m-cache-up-to-4-80-ghz.html)
+[![Intel i7-10700]({{ site.baseurl }}/images/2020-09-CorePC/CPU-Intel-10th-gen-core-i7-10700-tray.jpg)](https://ark.intel.com/content/www/us/en/ark/products/199316/intel-core-i7-10700-processor-16m-cache-up-to-4-80-ghz.html)
 
-![Intel Comet Lake CPUs and Turbos]({{ site.baseurl }}/images/2020-07-CorePC/CPU-Intel-Comet-Lake-Turbos.png)
+![Intel Comet Lake CPUs and Turbos]({{ site.baseurl }}/images/2020-09-CorePC/CPU-Intel-Comet-Lake-Turbos.png)
 
 
 ### Motherboard (Intel)
@@ -400,16 +404,16 @@ the AMD version.
 > * GIGABYTE UEFI DualBIOS™
 > * Intel® Optane™ Memory Ready
 
-[![Gigabyte B460M DS3H]({{ site.baseurl }}/images/2020-07-CorePC/Motherboard-Gigabyte-B460M-DS3H.png)](https://www.gigabyte.com/Motherboard/B460M-DS3H-rev-10#kf)
+[![Gigabyte B460M DS3H]({{ site.baseurl }}/images/2020-09-CorePC/Motherboard-Gigabyte-B460M-DS3H.png)](https://www.gigabyte.com/Motherboard/B460M-DS3H-rev-10#kf)
 
-[![Gigabyte B460M DS3H Back panel]({{ site.baseurl }}/images/2020-07-CorePC/Motherboard-Gigabyte-B460M-DS3H-back-panel.png)](https://www.gigabyte.com/Motherboard/B460M-DS3H-rev-10#kf)
+[![Gigabyte B460M DS3H Back panel]({{ site.baseurl }}/images/2020-09-CorePC/Motherboard-Gigabyte-B460M-DS3H-back-panel.png)](https://www.gigabyte.com/Motherboard/B460M-DS3H-rev-10#kf)
 
 ## AMD vs Intel
 For comparing the AMD Ryzen 7 3700X with the Intel i7-10700 (which isn't covered
 in a lot of reviews) I am using the [Intel Core i7-10700 Review - Way to Overclock without the K](https://www.techpowerup.com/review/intel-core-i7-10700/) 
 from Techpowerup. Anandtech, my preferred review site, hasn't covered the i7-10700 yet.
 
-![AMD vs Intel CPU Specifications]({{ site.baseurl }}/images/2020-07-CorePC/CPU-AMD-vs-Intel-CPUs.png)
+![AMD vs Intel CPU Specifications]({{ site.baseurl }}/images/2020-09-CorePC/CPU-AMD-vs-Intel-CPUs.png)
 
 ### Benchmarks
 Below is a recap of benchmark results from the above mentioned review.
@@ -458,8 +462,8 @@ to be doing unfair CPU dispatching as detailed in Agner Fog's
 What this means is that software that uses Intel libraries or compilers **may** 
 run less optimal on AMD CPUs, since different code paths are chosen regardless
 of instruction set support e.g. AVX2 etc. This also can mean that
-there may be result differences for floating point computations 
-due to different code paths being used. Now this is expected and normal,
+there may be result differences for floating point computations. 
+Now this is expected and normal,
 but I have seen some "issues" for extensive numerical end-to-end tests that
 then will fail on an AMD CPU due to this. This is in some ways mainly
 due to the tests being too "brittle" to floating point differences, but
@@ -467,19 +471,44 @@ the least thing you want is to have to spent time on fixing
 this issue if that is not a priority. So just keep that in mind.
 
 ### Conclusion
-The two systems reiterated are shown below. 
-I very much welcome AMD coming back to the game with the Zen
+The two systems with selected components are reiterated below in full. 
+I very much welcome AMD coming back to the game with the Zen 2
 CPUs and giving some real competition to Intel and the fact that
 we can now buy 8 core CPUs at a much lower cost than 
 just a few years back.
 
-I recommend buying the AMD Ryzen 7 3700X based system 👍 
+I recommend the AMD Ryzen 7 3700X based system due to it being more future proof 👍 
+
+|Component      |Selection           |USD    |DKK    |
+|----------|:-------------------|------:|-------:|
+|[Case](https://en.wikipedia.org/wiki/Computer_case) |[Fractal Design Define Mini C](https://www.fractal-design.com/products/cases/define/define-mini-c/black/) | [85](https://www.newegg.com/black-fractal-design-define-mini-c-micro-atx-mini-tower/p/N82E16811352064)| [600](https://www.pricerunner.dk/pl/186-3663561/Kabinetter/Fractal-Design-Define-Mini-C-Sammenlign-Priser)|
+|[PSU](https://en.wikipedia.org/wiki/ATX#Power_supply) |[Corsair RM650x 650W](https://www.corsair.com/eu/en/Categories/Products/Power-Supply-Units/Power-Supply-Units-Advanced/RMx-Series/p/CP-9020178-EU) | [115](https://www.newegg.com/corsair-rmx-series-rm650x-2018-cp-9020178-na-650w/p/N82E16817139232)| [900](https://www.edbpriser.dk/produkt/corsair-rmx-series-rm650x-3149708/?searched=rm650x)|
+|[CPU Cooler](https://en.wikipedia.org/wiki/Computer_cooling) |[Noctua NH-12S](https://noctua.at/en/nh-u12s)|[65](https://www.newegg.com/noctua-nh-u12s/p/N82E16835608040)|[440](https://www.pricerunner.dk/pl/184-3500421/Computer-koeling/Noctua-NH-U12S-Sammenlign-Priser)|
+|**Base** |-|**265**|**1940**|
+|[RAM](https://en.wikipedia.org/wiki/DDR4_SDRAM) |[G.SKILL Ripjaws V 2 x 16GB DDR4 3200 (PC4-25600) F4-3200C16D-32GVK](https://www.gskill.com/product/165/184/1536110922/F4-3200C16D-32GVKRipjaws-VDDR4-3200MHz-CL16-18-18-38-1.35V32GB-(2x16GB)) | [110](https://www.newegg.com/g-skill-32gb-288-pin-ddr4-sdram/p/N82E16820232091) | [850](https://www.edbpriser.dk/produkt/g-skill-ripjaws-v-ddr4-32-gb-2-x-16-gb-dimm-288-pin-3513768/) |
+|[SSD](https://en.wikipedia.org/wiki/Solid-state_drive) [NVMe](https://en.wikipedia.org/wiki/NVM_Express) | [ADATA XPG SX8200 Pro 1 TB](https://www.xpg.com/us/feature/583/) | [140](https://www.newegg.com/xpg-sx8200-pro-1tb/p/0D9-0017-000W4)| [1030](https://www.edbpriser.dk/produkt/adata-xpg-sx8200-pro/)|
+|[GPU]() | [Gigabyte GeForce RTX 2060 SUPER WINDFORCE OC 8G](https://www.gigabyte.com/Graphics-Card/GV-N206SWF2OC-8GD-rev-20#kf)| [400](https://www.newegg.com/gigabyte-geforce-rtx-2060-super-gv-n206swf2oc-8gd/p/N82E16814932174) | [3200](https://www.edbpriser.dk/produkt/gigabyte-geforce-rtx-2060-super-windforce-oc-8g/)|
+|**Common** |-|**650**|**5080**|
+|[CPU]() | [AMD Ryzen™ 7 3700X](https://www.amd.com/en/products/cpu/amd-ryzen-7-3700x) | [290](https://www.newegg.com/amd-ryzen-7-3700x/p/N82E16819113567)| [2300](https://www.edbpriser.dk/produkt/amd-ryzen-7-3700x-3-6-ghz-processor/?searched=3700X)|
+|[Motherboard]() | [Gigabyte B550M DS3H](https://www.gigabyte.com/Motherboard/B550M-DS3H-rev-10#kf) | [95](https://www.newegg.com/gigabyte-b550m-ds3h/p/N82E16813145210)| [730](https://www.edbpriser.dk/produkt/gigabyte-b550m-ds3h)|
+|**AMD** |-|**385**|**3030**|
+|**AMD Full** |-|**1300**|**10050**|
+|[CPU]() |[Intel i7-10700](https://ark.intel.com/content/www/us/en/ark/products/199316/intel-core-i7-10700-processor-16m-cache-up-to-4-80-ghz.html) | [305](https://www.newegg.com/intel-core-i7-10700-core-i7-10th-gen/p/N82E16819118126)| [2500](https://www.pricerunner.dk/pl/40-5202251/CPU/Intel-Core-i7-10700-2-9GHz-Socket-1200-Box-Sammenlign-Priser)|
+|[Motherboard]() | [Gigabyte B460M DS3H](https://www.gigabyte.com/Motherboard/B460M-DS3H-rev-10)| [80](https://www.newegg.com/gigabyte-ultra-durable-b460m-ds3h/p/N82E16813145206) | [640](https://www.pricerunner.dk/pl/35-5214751/Bundkort/Gigabyte-B460M-DS3H-Sammenlign-Priser) |
+|**Intel** |-|**385**|**3140**|
+|**Intel Full** |-|**1300**|**10160**|
 
 
+If you are penny pinching the most expensive component is the GPU 
+so if you don't need it, take that out and perhaps get a cheap GPU for the AMD system.
+Then you can reduce RAM from 32 GB to 16 GB, which is enough for most 
+(I have yet to upgrade to that), and reduce the SSD to 512 GB. 
+Even more cash strapped... go with the Ryzen 5 3600 which is
+a great value buy at [$210](https://www.newegg.com/amd-ryzen-5-3600/p/N82E16819113569)/[1400 DKK](https://www.pricerunner.dk/pl/40-4981182/CPU/AMD-Ryzen-5-3600-3.6GHz-Socket-AM4-Box-Sammenlign-Priser). Don't forget to include the
+cost of a Microsoft Windows license if you need it, though 😉
 
-
-
-
+This got longer than I expected and I still haven't scratched of the many
+considerations that go into selecting components for a PC. 😅
 
 
 
