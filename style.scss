@@ -115,6 +115,32 @@ ul.posts {
     /*margin-bottom: 2em;*/
 }
 
+td, th {
+    //border: 1px solid $lightGray;
+    padding: 8px;
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: $oddBackground;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: $evenBackground;
+}
+
+table tbody tr:hover {
+    background-color: $hoverBackground;
+}
+
+table thead tr {
+    background-color: $darkBlue;
+}
+thead {
+    font-weight: bold;
+    background-color: $darkBlue;
+    color: $black;
+}
+
 em, i {
   font-style: italic;
 }
