@@ -318,12 +318,12 @@ Since the introduction of this in June there were finally inexpensive motherboar
 available supporting PCIe 4.0, which is the main differentiation for AMDs CPUs 
 compared to Intels current CPUs.
 
-I have great experience with the Gigabyte DS3H series. With these motherboards 
-being stable and robust. If you need more features that this provides, like wifi,
+I have great experience with the Gigabyte DS3H series and found it to be
+stable and robust. If you need more features than this basic model provides, like wifi,
 you should find another motherboard. The main features needed here are
 a x16 PCIe slot and at least one NVMe M.2 slot. Most boards have that now.
 Apparently, you are hard pressed to find a motherboard without RGB FUSION support
-now a days. One feature that I like in the Gigabyte boards in the "Smart Fan 5"
+now a days. One feature that I like in the Gigabyte boards is the "Smart Fan 5"
 feature, that allows you to define fan speed curves in the BIOS, so you can 
 tune the system to the cooling and noise profile you want at different temperatures.
 This includes fan stop if temperatures are low. Fans will last longer if they don't
@@ -332,7 +332,7 @@ spin when not needed.
 Note you cannot buy AMD Zen 2 APUs (that is CPU with integrated GPU), 
 like the [4700G](https://www.amd.com/en/products/apu/amd-ryzen-7-4700g) 
 for do-it-yourself PCs yet. These are only OEM, so if you don't really 
-need a high-end GPU you  still have to buy some form of GPU to connect displays. 
+need a high-end GPU you still have to buy some form of GPU to connect displays. 
 As you can see below the motherboard does have DVI and HDMI connectors, 
 but those only work if the CPU has an integrated GPU.
 
@@ -386,7 +386,7 @@ if you don't need it.
 ### Motherboard (Intel)
 There isn't a lot of differences between the AMD and Intel DS3H motherboards from
 Gigabyte, so nothing new to add here, except that since the i7-10700 has integrated
-GPU the DVI, VGA, HDMI ports will all work and you can run with a GPU 
+GPU the DVI, VGA, HDMI ports will all work and you can run without a GPU 
 if you don't need it. Due to the CPU differences the Intel motherboard only
 supports PCIe 3.0, which probably also explains the price difference between the two.
 Additionally, the Intel version only has a single NVMe M.2 slot compared to two in
@@ -439,7 +439,7 @@ but nothing significant.
 Importantly is also power consumption, also summarized below from the
 review. The i7-10700 has a slight edge here, but again nothing significant.
 Be aware these are whole system figures and the system includes a
-2080 Ti GPU which consumes most power by far.
+2080 Ti GPU which consumes most power by far if busy.
 
 |Power Consumption, Whole System [w]↓      |3700X  |i7-10700 |Relative ↓|
 |-------------------------------------------|------:|--------:|---------:|
@@ -448,6 +448,7 @@ Be aware these are whole system figures and the system includes a
 |Multi-Threaded, CineBench                  |    146|      137|      1.07|
 |Stress Test, Prime95                       |    140|      142|      0.99|
 
+### Choice
 Given that there are no significant differences in either benchmarks nor
 power consumption the choice comes down to AMD supports PCIe 4.0 and 
 two M.2 NVMe SSD drives with PCIe 4.0 x4 directly to the CPU.
@@ -508,7 +509,8 @@ a great value buy at [$210](https://www.newegg.com/amd-ryzen-5-3600/p/N82E168191
 cost of a Microsoft Windows license if you need it, though 😉
 
 This got longer than I expected and I still haven't scratched of the many
-considerations that go into selecting components for a PC. 😅
+considerations that go into selecting components for a PC, but I can keep going
+forever. 😅
 
 
 
