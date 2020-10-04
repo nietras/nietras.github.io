@@ -4,7 +4,7 @@ title: Embedded Assembly Loading with support for Symbols and Portable Class Lib
 ---
 REPOST: Of an old blog post from 2014.
 
-Jeffrey Richter has previously written about how to deploy a single executable file for an application by embedding dependencies as resources in the main application assembly in [Jeffrey Richter: Excerpt #2 from CLR via C#, Third Edition](http://blogs.msdn.com/b/microsoft_press/archive/2010/02/03/jeffrey-richter-excerpt-2-from-clr-via-c-third-edition.aspx).  
+Jeffrey Richter has previously written about how to deploy a single executable file for an application by embedding dependencies as resources in the main application assembly inÂ [Jeffrey Richter: Excerpt #2 from CLR via C#, Third Edition](http://blogs.msdn.com/b/microsoft_press/archive/2010/02/03/jeffrey-richter-excerpt-2-from-clr-via-c-third-edition.aspx).  
   
 However, this solution has a few issues. It does not handle Portable Class Libraries (PCLs) and does not show how to support loading symbols from embedded pdb-files either. The code presented below handles both.  
   
@@ -18,7 +18,7 @@ To use the code do the following:
 *   Add dependencies incl. pdb-files, if needed, to your project via **Add as Link** and change the build action to **Embedded Resource** and **Copy to Output Directory** to **Do not copy**
 *   Change the assembly references properties under `References` and set **Copy Local** to **false**
 
-UPDATE: See [Automatically Embed Copy Local Assemblies with Symbols in MSBuild](http://www.codingmurmur.com/2014/02/automatically-embed-copy-local.html) for how to automatically embed assemblies instead of doing this manually.  
+UPDATE: See [Automatically Embed Copy Local Assemblies with Symbols in MSBuild]({{ site.baseurl }}/2020/10/01/automatically-embed-copy-local-assemblies/) for how to automatically embed assemblies instead of doing this manually.  
 ```csharp
 private static void SetupEmbeddedAssemblyResolve()
 {
