@@ -120,22 +120,22 @@ td, th {
     padding: 8px;
 }
 
-table tbody tr:nth-child(odd) {
+table:not(.rouge-table) tbody tr:nth-child(odd) {
     background-color: $oddBackground;
 }
 
-table tbody tr:nth-child(even) {
+table:not(.rouge-table) tbody tr:nth-child(even) {
     background-color: $evenBackground;
 }
 
-table tbody tr:hover {
+table:not(.rouge-table) tbody tr:hover {
     background-color: $hoverBackground;
 }
 
-table thead tr {
+table:not(.rouge-table) thead tr {
     background-color: $darkBlue;
 }
-thead {
+thead:not(.rouge-table) {
     font-weight: bold;
     background-color: $darkBlue;
     color: $black;
