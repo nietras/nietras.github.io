@@ -36,3 +36,8 @@ as shown below.
 
 As shown above and below this is already mapped to `Ctrl + 0, Ctrl + G`, but for fun
 and ease of use we are gonna add another shortcut under the `Ctrl + G` prefix. 
+
+## Walkthrough
+
+* `⊞,"2019",Enter` - start visual studio 2019
+* `Ctrl+`
