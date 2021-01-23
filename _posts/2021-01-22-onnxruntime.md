@@ -22,7 +22,8 @@ D:\oss>git clone https://github.com/nietras/onnxruntime.git
 since I am building from my own fork of the project with some slight modifications.
 
 ## Execution Providers
-[Link to details on that and brief summary]
+See [Execution Providers](https://github.com/microsoft/onnxruntime/tree/master/docs/execution_providers)
+for more details on this concept.
 
 Some execution providers are linked statically into `onnxruntime.dll` while others
 are separate dlls. 
@@ -31,16 +32,14 @@ Hopefully, the modular approach with separate dlls for each execution
 provider prevails and nuget packages will be similarly modular, so it should no longer
 be required to build ONNX Runtime yourself to get the execution providers you want.
 
-* NVidia CUDA/cuDNN
-* NVidia TensorRT (depends on CUDA/cuDNN)
-* Microsoft DirectML
-* Intel DNNL
+* NVidia [CUDA](https://developer.nvidia.com/cuda-toolkit)/[cuDNN](https://developer.nvidia.com/CUDNN)
+* NVidia [TensorRT](https://developer.nvidia.com/TensorRT) (depends on CUDA/cuDNN)
+* Microsoft DirectML - [https://github.com/microsoft/DirectML](https://github.com/microsoft/DirectML)
+* Intel DNNL (now called oneDNN) - [https://github.com/oneapi-src/oneDNN](https://github.com/oneapi-src/oneDNN)
 
 Some of these are supported out-of-the-box via git sub-modules, while NVidia providers
 require downloading and installing these libraries separately. 
 This is covered briefly next.
-
-
 
 ## Download NVidia Libraries
 TODO
@@ -84,6 +83,12 @@ C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\bin\nvcc.exe"
   (...full parameters omitted for brevity...)
   "D:\oss\onnxruntime\onnxruntime\core\providers\cuda\math\cumsum_impl.cu"
 ```
+Once this completes you'll get something like:
+```
+[TIMESTAMP] build [INFO] - Build complete
+```
+It's common that there are a ton of warnings during the build. 
+Ignore them like most C++ devs do apparently.
 
 ## Output
 
