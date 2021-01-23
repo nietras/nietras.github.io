@@ -1,9 +1,10 @@
 ---
 layout: post
-title: ONNX Runtime - Build and benchmark with TensorRT, CUDA, DirectML execution providers on GeForce RTX 3070
+title: ONNX Runtime - Build with TensorRT, CUDA, DirectML execution providers and benchmark on GeForce RTX 3070 via C#
 ---
-TODO
-Windows 64-bit
+In this blog post I detail how to build [ONNX Runtime](https://github.com/microsoft/onnxruntime)
+on Windows (10 64-bit). Most importantly with support for the NVidia TensorRT library,
+which can give significant performance improvements compared to vanilla CUDA/cuDNN.
 
 ## Pre-requisites
 * Windows 10 64-bit
@@ -45,8 +46,8 @@ This is covered briefly next.
 TODO
 
 * CUDA
-* cuDNN
-* TensorRT
+* cuDNN (requires login)
+* TensorRT (requires login)
 
 ## Modifications
 CMake cuda architectures parameters not working ... TODO
@@ -67,7 +68,8 @@ D:\oss\onnxruntime>./build.bat --config RelWithDebInfo `
   --use_dnnl --use_dml --cmake_generator "Visual Studio 16 2019" --skip_tests
 ```
 
-Building takes a while
+Building takes a while... depending on your dev machine of course. 
+Enough for a lunch break on mine.
 
 During build you can verify that CUDA code is compiled as specified above.
 As for example can be seen below.
