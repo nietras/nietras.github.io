@@ -1,6 +1,6 @@
 ---
 layout: post
-title: ONNX Runtime - Build with TensorRT, CUDA, DirectML execution providers and benchmark on GeForce RTX 3070 via C#
+title: Building ONNX Runtime with TensorRT, CUDA, DirectML execution providers and quick benchmarks on GeForce RTX 3070 via C#
 ---
 In this blog post I detail how to build [ONNX Runtime](https://github.com/microsoft/onnxruntime)
 on Windows (10 64-bit). Most importantly with support for the NVidia TensorRT library,
@@ -44,9 +44,10 @@ This is covered briefly next.
 ## Download NVidia Libraries
 TODO
 
-* CUDA
-* cuDNN (requires login)
-* TensorRT (requires login)
+* CUDA - 11.2.0
+* cuDNN (requires login) - 8.0.5.39 for CUDA 11.1 (works on 11.2 too)
+* TensorRT (requires login) - 7.2.2.3 for CUDA 11.1 (works on 11.2 too)
+
 
 ## Modifications
 CMake cuda architectures parameters not working ... TODO
@@ -55,6 +56,9 @@ CMake cuda architectures parameters not working ... TODO
 ## Build
 ONNX Runtime is build via CMake files and a `build.bat` script. 
 Running `.\build.bat --help` displays build script parameters.
+Building is also covered in [Building ONNX Runtime](https://github.com/microsoft/onnxruntime/blob/master/BUILD.md)
+and documentation is generally very nice and worth a read.
+
 Below is the parameters I used to build the ONNX Runtime with support
 for the execution providers mentioned above.
 
@@ -91,9 +95,137 @@ It's common that there are a ton of warnings during the build.
 Ignore them like most C++ devs do apparently.
 
 ## Output
+The build output can then be found in:
+```
+D:\oss\onnxruntime\build\Windows\RelWithDebInfo\RelWithDebInfo
+```
+Hence, using:
+```
+gci D:\oss\onnxruntime\build\Windows\RelWithDebInfo\RelWithDebInfo\*.dll `
+ | Format-Table -Property Length,Name
+```
+The usable dlls are:
+```
+   Length Name
+   ------ ----
+    22016 custom_op_library.dll
+  1299328 DirectML.Debug.dll
+ 13410184 DirectML.dll
+ 30925824 dnnl.dll
+154482688 onnxruntime.dll
+   352768 onnxruntime_providers_dnnl.dll
+     9728 onnxruntime_providers_shared.dll
+  1599488 onnxruntime_providers_tensorrt.dll
+```
+As can be seen the DNNL and TensorRT providers are available as separate dlls.
+Note also that both DNNL and DirectML are compiled as part of ONNX runtime,
+with source via git sub-modules. The CUDA/cuDNN dlls need to be retrieved from
+their respective locations.
+
+Collected all this into one location to be able to run ONNX runtime without
+having to install or setup any environment variable paths or similar means having
+something like this next to the executable:
+```
+   Length Name
+   ------ ----
+107368448 cublas64_11.dll
+173154304 cublasLt64_11.dll
+   464896 cudart64_110.dll
+   222720 cudnn64_8.dll
+146511360 cudnn_adv_infer64_8.dll
+ 95296512 cudnn_adv_train64_8.dll
+705361408 cudnn_cnn_infer64_8.dll
+ 81943552 cudnn_cnn_train64_8.dll
+323019776 cudnn_ops_infer64_8.dll
+ 37118464 cudnn_ops_train64_8.dll
+    22016 custom_op_library.dll
+  1299328 DirectML.Debug.dll
+ 13410184 DirectML.dll
+ 30925824 dnnl.dll
+  4660736 myelin64_1.dll
+   315392 nvblas64_11.dll
+632996864 nvinfer.dll
+ 15790592 nvinfer_plugin.dll
+  1924608 nvonnxparser.dll
+  2469888 nvparsers.dll
+  5204992 nvrtc-builtins64_111.dll
+  5542912 nvrtc-builtins64_112.dll
+ 24423424 nvrtc64_111_0.dll
+ 31984128 nvrtc64_112_0.dll
+154482688 onnxruntime.dll
+   352768 onnxruntime_providers_dnnl.dll
+     9728 onnxruntime_providers_shared.dll
+  1599488 onnxruntime_providers_tensorrt.dll
+```
+Note that the total size of this is a whopping `~2500 MB`. 
+cuBLAS, cuDNN and TensorRT (`nvinfer*.dll`) being
+huge. If your only running CNNs you can remove the `cudnn_adv*.dl` files.
+
+This is an artefact of how NVidia has decided to distribute and package dlls with
+cubin code for multiple SM versions all together in the individual dlls.
+A more sensible approach in my view would be to do what Intel has done for years
+for Integrated Performance Primitives ([IPP](https://software.intel.com/content/www/us/en/develop/tools/oneapi/components/ipp.html))
+and split these into dlls for each SM version e.g. `cublas64_11_sm86.dll`.
+And clean up the whole not forwards compatible version naming etc. That's enough 
+ranting though. TensorRT is a must for best performance machine learning inference,
+it's very good, which we will get to in a moment.
 
 ## Issues
-No more delay loading of CUDA dlls.
+One issue is that the `onnxruntime.dll` no longer delay loads the dependent CUDA dlls.
+This means you have to have these in your path even if your are only running with
+the DirectML execution provider, for the way ONNX runtime is build here.
+
+In earlier versions the dlls where delay loaded and you can pick and choose.
+I've filed an issue regarding this and in that issue it was commented that a solution
+for this is upcoming. Hopefully, this means all execution providers will be "pluggable"
+as separate dlls, fulfilling the true potential of the ONNX runtime. 
+The issue can be found at:
+
+[https://github.com/microsoft/onnxruntime/issues/6350](https://github.com/microsoft/onnxruntime/issues/6350)
 
 ## Benchmarks
 Quick bench
+
+```
+Selected Device: GeForce RTX 3070
+Compute Capability: 8.6
+SMs: 46
+Compute Clock Rate: 1.83 GHz
+Device Global Memory: 8192 MiB
+Shared Memory per SM: 100 KiB
+Memory Bus Width: 256 bits (ECC disabled)
+Memory Clock Rate: 7.001 GHz
+```
+
+TODO FORMAT
+```
+===== 'resnet152-v2-7.onnx' with execution provider 'Tensorrt' =====
+Inputs 'data'
+Outputs 'resnetv27_dense0_fwd'
+Average time     5.797 ms
+
+===== 'resnet152-v2-7.onnx' with execution provider 'CUDA' =====
+Inputs 'data'
+Outputs 'resnetv27_dense0_fwd'
+Average time     9.052 ms
+
+===== 'resnet152-v2-7.onnx' with execution provider 'DirectML' =====
+Inputs 'data'
+Outputs 'resnetv27_dense0_fwd'
+Average time     7.795 ms
+
+===== 'resnet152-v2-7.onnx' with execution provider 'Dnnl' =====
+Inputs 'data'
+Outputs 'resnetv27_dense0_fwd'
+Average time    36.924 ms
+
+===== 'resnet152-v2-7.onnx' with execution provider 'CPU' =====
+Inputs 'data'
+Outputs 'resnetv27_dense0_fwd'
+Average time    37.012 ms
+
+===== 'resnet152-v2-7.onnx' with execution provider 'None' =====
+Inputs 'data'
+Outputs 'resnetv27_dense0_fwd'
+Average time    37.472 ms
+````
