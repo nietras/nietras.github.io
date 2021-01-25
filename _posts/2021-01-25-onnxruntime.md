@@ -1,4 +1,4 @@
----
+﻿---
 layout: post
 title: Building ONNX Runtime with TensorRT, CUDA, DirectML execution providers and quick benchmarks on GeForce RTX 3070 via C#
 ---
@@ -9,9 +9,9 @@ was simply not feasible since it would be way too slow to both startup and run, 
 of PTX and the real practicalities around that.
 
 Unfortunately, that is a common issue with GPUs and binaries for them not being 
-practically "forwards compatible". It's not like CPUs, where you can often
-run a 20 year old Windows executable on the latest x86 CPU and Windows version 
-without issue.
+"forwards compatible" in any practically working way. It's not like CPUs, 
+where you can often run a 20 year old Windows executable on the latest x86 CPU 
+and Windows version without issue. Incl. even 16-bit applications. 😀
 
 Hence, this blog post details how to build [ONNX Runtime](https://github.com/microsoft/onnxruntime)
 on Windows 10 64-bit using Visual Studio 2019 >=16.8 with currently available libraries
