@@ -11,4 +11,10 @@
     <PackageReference Include="OnnxSharp" Version="0.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="mnist-8.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
