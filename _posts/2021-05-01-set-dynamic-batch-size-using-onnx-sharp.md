@@ -3,16 +3,17 @@ layout: post
 title: Set Dynamic Batch Size in ONNX Models using OnnxSharp
 ---
 
-Continuing from ![Introducing OnnxSharp and 'dotnet onnx']({{ site.baseurl }}/2021/03/20/introducing-onnxsharp/)
+Continuing from [Introducing OnnxSharp and 'dotnet onnx']({{ site.baseurl }}/2021/03/20/introducing-onnxsharp/)
 in this post I will look at using [OnnxSharp](https://github.com/nietras/OnnxSharp)
 to set dynamic batch size in an ONNX model to allow the model to be
 used for batch inference using [ONNX Runtime](https://github.com/microsoft/onnxruntime)
 in a few steps:
 
- * Setup: Inference using [Microsoft.ML.OnnxRuntime](https://www.nuget.org/packages/Microsoft.ML.OnnxRuntime/)
- * Problem: Fixed Batch Size in Models
- * Solution: OnnxSharp `SetDim`
- * Result: Batch Inference
+ * **Setup**: Inference using [Microsoft.ML.OnnxRuntime](https://www.nuget.org/packages/Microsoft.ML.OnnxRuntime/)
+ * **Problem**: Fixed Batch Size in Models
+ * **Solution**: [OnnxSharp](https://github.com/nietras/OnnxSharp) `SetDim`
+ * **Result**: Batch Inference
+ * **How**: Setting Leading Dimension is not Enough
 
 ## Setup: Inference using [Microsoft.ML.OnnxRuntime](https://www.nuget.org/packages/Microsoft.ML.OnnxRuntime/)
 To run inference using the ONNX Runtime I've create a small C# console project with
@@ -24,7 +25,7 @@ Program.cs
 mnist-8.onnx
 ```
 where `mnist-8-onnx` is the same model as discussed in the previous blog post
-![Introducing OnnxSharp and 'dotnet onnx']({{ site.baseurl }}/2021/03/20/introducing-onnxsharp/).
+[Introducing OnnxSharp and 'dotnet onnx']({{ site.baseurl }}/2021/03/20/introducing-onnxsharp/).
 
 The project file `DymamicBatchSize.csproj` contains:
 ```xml
@@ -140,9 +141,112 @@ which has a clear message `index: 0 Got: 2 Expected: 1` indicating the model
 appears to be expecting the leading dimension or batch size to be 1.
 
 This is a common problem with ONNX models, and can be an artifact of how ONNX
-models are exporting from different ML frameworks. Most models are in fact defined
+models are exported from different ML frameworks. Most models are in fact defined
 with a dynamic batch size, since that is how they are trained, but when exporting
 to ONNX the exporter does not always handle this and instead simply outputs 1.
 
+In the above the input tensor `Input3` shape is given as `1x1x28x28`.
+In this case this shape defines `NCHW` where:
 
+ * `N = 1` is the batch size
+ * `C = 1` is the number of channels e.g. gray (1) or RGB (3).
+ * `H = 28` is the height
+ * `W = 28` is the width
 
+To fix this we need to change the `N` from `1` to, well, `N` in fact 
+(that is any string) as that is how the ONNX format defines a dimension:
+```json
+message Dimension {
+  oneof value {
+    int64 dim_value = 1;
+    string dim_param = 2;
+  };
+};
+```
+as can be seen in the ONNX protobuf schema 
+[onnx.proto3](https://github.com/onnx/onnx/blob/master/onnx/onnx.proto3).
+That is, a dimension can be either a 64-bit signed integer or a string.
+When it is a string it is considered "dynamic" and the same string e.g. `N`
+can be used to indicate the same dimension flowing through the graph from inputs
+to outputs.
+
+So how can we change this?
+
+## Solution: [OnnxSharp](https://github.com/nietras/OnnxSharp) `SetDim`
+With [OnnxSharp](https://github.com/nietras/OnnxSharp) it is very easy to
+change the fixed leading dimension using `SetDim` as shown below:
+```csharp
+using System;
+using System.Linq;
+using Google.Protobuf;
+using Microsoft.ML.OnnxRuntime;
+using Microsoft.ML.OnnxRuntime.Tensors;
+using Onnx;
+
+var model = ModelProto.Parser.ParseFromFile("mnist-8.onnx");
+model.Graph.SetDim();
+var modelBytes = model.ToByteArray();
+
+using var inference = new InferenceSession(modelBytes);
+
+const int batchSize = 2;
+
+var inputs = inference.InputMetadata.Select(p =>
+    NamedOnnxValue.CreateFromTensor(p.Key,
+        new DenseTensor<float>(SetBatchSize(p.Value.Dimensions, batchSize))))
+    .ToArray<NamedOnnxValue>();
+
+using var outputs = inference.Run(inputs);
+
+var output = outputs.Single();
+var outputTensor = output.AsTensor<float>();
+var arrayString = outputTensor.GetArrayString();
+
+Console.WriteLine($"N={batchSize} {arrayString}");
+
+static int[] SetBatchSize(int[] dimensions, int batchSize)
+{
+    dimensions[0] = batchSize;
+    return dimensions;
+}
+```
+which simply loads the ONNX model first via `OnnxSharp` calls `SetDim()` on
+the graph which defaults to changing the leading dimension to `N`. This also
+has an overload allowing for customization e.g.:
+```csharp
+public static void SetDim(this GraphProto graph, 
+    int dimIndex, DimParamOrValue dimParamOrValue);
+```
+After changing the dimension the model can either be converted to 
+a byte array or saved to file. In this case, I'm simply converting to
+a byte array which we can forward directory the `InferenceSession` 
+constructor.
+
+You can also use the `dotnet onnx` tool to do the same if you prefer that with:
+```powershell
+dotnet onnx setdim mnist-8.onnx mnist-8-setdim.onnx
+```
+
+## Result: Batch Inference
+Running this code will then output:
+```
+N=2 {
+    {-0.044856027,0.007791661,0.06810082,0.02999374,-0.12640963,0.14021875,-0.055284902,-0.049383815,0.08432205,-0.054540414},
+    {-0.044856027,0.007791661,0.06810082,0.02999374,-0.12640963,0.14021875,-0.055284902,-0.049383815,0.08432205,-0.054540414}
+}
+```
+Success! We can also change the batch size to `8`:
+```
+N=8 {
+    {-0.044856027,0.007791661,0.06810082,0.02999374,-0.12640963,0.14021875,-0.055284902,-0.049383815,0.08432205,-0.054540414},
+    {-0.044856027,0.007791661,0.06810082,0.02999374,-0.12640963,0.14021875,-0.055284902,-0.049383815,0.08432205,-0.054540414},
+    {-0.044856027,0.007791661,0.06810082,0.02999374,-0.12640963,0.14021875,-0.055284902,-0.049383815,0.08432205,-0.054540414},
+    {-0.044856027,0.007791661,0.06810082,0.02999374,-0.12640963,0.14021875,-0.055284902,-0.049383815,0.08432205,-0.054540414},
+    {-0.044856027,0.007791661,0.06810082,0.02999374,-0.12640963,0.14021875,-0.055284902,-0.049383815,0.08432205,-0.054540414},
+    {-0.044856027,0.007791661,0.06810082,0.02999374,-0.12640963,0.14021875,-0.055284902,-0.049383815,0.08432205,-0.054540414},
+    {-0.044856027,0.007791661,0.06810082,0.02999374,-0.12640963,0.14021875,-0.055284902,-0.049383815,0.08432205,-0.054540414},
+    {-0.044856027,0.007791661,0.06810082,0.02999374,-0.12640963,0.14021875,-0.055284902,-0.049383815,0.08432205,-0.054540414}
+}
+```
+
+## How: Setting Leading Dimension is not Enough

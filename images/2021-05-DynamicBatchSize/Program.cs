@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Linq;
+using Google.Protobuf;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
+using Onnx;
 
-using var inference = new InferenceSession("mnist-8.onnx");
+var model = ModelProto.Parser.ParseFromFile("mnist-8.onnx");
+model.Graph.SetDim();
+var modelBytes = model.ToByteArray();
 
-const int batchSize = 2;
+using var inference = new InferenceSession(modelBytes);
+
+const int batchSize = 8;
 
 var inputs = inference.InputMetadata.Select(p =>
     NamedOnnxValue.CreateFromTensor(p.Key,
