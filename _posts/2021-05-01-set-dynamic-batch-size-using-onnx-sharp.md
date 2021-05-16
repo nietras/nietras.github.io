@@ -13,7 +13,7 @@ in a few steps:
  * **Problem**: Fixed Batch Size in Models
  * **Solution**: [OnnxSharp](https://github.com/nietras/OnnxSharp) `SetDim`
  * **Result**: Batch Inference
- * **How**: Setting Leading Dimension is not Enough
+ * **How**: Don't Forget Reshapes
 
 ## Setup: Inference using [Microsoft.ML.OnnxRuntime](https://www.nuget.org/packages/Microsoft.ML.OnnxRuntime/)
 To run inference using the ONNX Runtime I've create a small C# console project with
@@ -249,4 +249,8 @@ N=8 {
 }
 ```
 
-## How: Setting Leading Dimension is not Enough
+## How: Don't Forget Reshapes
+
+![mnist-8 fixed reshape leading dimension 1]({{ site.baseurl }}/images/2021-05-DynamicBatchSize/set-dynamic-batch-size-reshape-before.png)
+
+![mnist-8 dynamic reshape leading dimension -1]({{ site.baseurl }}/images/2021-05-DynamicBatchSize/set-dynamic-batch-size-reshape-after.png)
