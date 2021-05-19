@@ -12,8 +12,8 @@ in a few steps:
  * **Setup**: Inference using [Microsoft.ML.OnnxRuntime](https://www.nuget.org/packages/Microsoft.ML.OnnxRuntime/)
  * **Problem**: Fixed Batch Size in Models
  * **Solution**: [OnnxSharp](https://github.com/nietras/OnnxSharp) `SetDim`
- * **Result**: Batch Inference
  * **How**: Don't Forget Reshapes
+ * **Notes**: First Time Behavior
 
 ## Setup: Inference using [Microsoft.ML.OnnxRuntime](https://www.nuget.org/packages/Microsoft.ML.OnnxRuntime/)
 To run inference using the ONNX Runtime I've create a small C# console project with
@@ -74,23 +74,31 @@ var arrayString = outputTensor.GetArrayString();
 
 Console.WriteLine(arrayString);
 ```
-which when run outputs:
+This uses input meta-data to create a tensor for each input and corresponding
+`NamedOnnxValue` needed for ONNX Runtime inference. It is, therefore, easy to 
+adapt to other models.
+
+Running this outputs:
 ```
 {
     {-0.044856027,0.007791661,0.06810082,0.02999374,-0.12640963,0.14021875,-0.055284902,-0.049383815,0.08432205,-0.054540414}
 }
 ```
 as you may have noticed this will be the output for a zero tensor of batch size 1 e.g.
-a black image. Recalling the input and outputs are defined as:
+a black image. Recalling from the previous blog post the input is defined as:
 
-|Name  |Type      |ElemType|Shape    |SizeInFile|
-|:-----|:---------|:-------|--------:|---------:|
-|Input3|TensorType|Float   |1x1x28x28|        32|
+|Name  |Type      |ElemType|Shape    |
+|:-----|:---------|:-------|--------:|
+|Input3|TensorType|Float   |1x1x28x28|
 
+And output is defined as:
 
-|Name            |Type      |ElemType|Shape|SizeInFile|
-|:---------------|:---------|:-------|----:|---------:|
-|Plus214_Output_0|TensorType|Float   | 1x10|        34|
+|Name            |Type      |ElemType|Shape|
+|:---------------|:---------|:-------|----:|
+|Plus214_Output_0|TensorType|Float   | 1x10|
+
+That is, the input is a 28x28 image and output is a vector of 10 where largest
+output should correspond to predicted digit in the image.
 
 ## Problem: Fixed Batch Size in Models
 To run with a different batch size we can change the code to the below.
@@ -107,8 +115,7 @@ using var inference = new InferenceSession("mnist-8.onnx");
 const int batchSize = 2;
 
 var inputs = inference.InputMetadata.Select(p =>
-    NamedOnnxValue.CreateFromTensor(p.Key,
-        new DenseTensor<float>(SetBatchSize(p.Value.Dimensions, batchSize))))
+        CreateNamedOnnxValueTensor(p.Key, p.Value, batchSize))
     .ToArray<NamedOnnxValue>();
 
 using var outputs = inference.Run(inputs);
@@ -119,13 +126,16 @@ var arrayString = outputTensor.GetArrayString();
 
 Console.WriteLine($"N={batchSize} {arrayString}");
 
-static int[] SetBatchSize(int[] dimensions, int batchSize)
+static NamedOnnxValue CreateNamedOnnxValueTensor(
+    string name, NodeMetadata node, int batchSize)
 {
+    var dimensions = node.Dimensions;
     dimensions[0] = batchSize;
-    return dimensions;
+    var tensor = new DenseTensor<float>(dimensions);
+    return NamedOnnxValue.CreateFromTensor(name, tensor);
 }
 ```
-However, when running this will throw an exception.
+However, when running this it will throw an exception.
 ```
 Unhandled exception. Microsoft.ML.OnnxRuntime.OnnxRuntimeException: [ErrorCode:InvalidArgument] Got invalid dimensions for input: Input3 for the following indices
  index: 0 Got: 2 Expected: 1
@@ -192,8 +202,7 @@ using var inference = new InferenceSession(modelBytes);
 const int batchSize = 2;
 
 var inputs = inference.InputMetadata.Select(p =>
-    NamedOnnxValue.CreateFromTensor(p.Key,
-        new DenseTensor<float>(SetBatchSize(p.Value.Dimensions, batchSize))))
+        CreateNamedOnnxValueTensor(p.Key, p.Value, batchSize))
     .ToArray<NamedOnnxValue>();
 
 using var outputs = inference.Run(inputs);
@@ -204,22 +213,30 @@ var arrayString = outputTensor.GetArrayString();
 
 Console.WriteLine($"N={batchSize} {arrayString}");
 
-static int[] SetBatchSize(int[] dimensions, int batchSize)
+static NamedOnnxValue CreateNamedOnnxValueTensor(
+    string name, NodeMetadata node, int batchSize)
 {
+    var dimensions = node.Dimensions;
     dimensions[0] = batchSize;
-    return dimensions;
+    var tensor = new DenseTensor<float>(dimensions);
+    return NamedOnnxValue.CreateFromTensor(name, tensor);
 }
 ```
 which simply loads the ONNX model first via `OnnxSharp` calls `SetDim()` on
-the graph which defaults to changing the leading dimension to `N`. This also
-has an overload allowing for customization e.g.:
+the graph which defaults to changing the leading dimension to `N`. 
+This also has an overload allowing for customization e.g.:
 ```csharp
 public static void SetDim(this GraphProto graph, 
     int dimIndex, DimParamOrValue dimParamOrValue);
 ```
+That is, `SetDim()` is equivalent to calling:
+```csharp
+model.Graph.SetDim(dimIndex: 0, DimParamOrValue.New("N"));
+```
+
 After changing the dimension the model can either be converted to 
 a byte array or saved to file. In this case, I'm simply converting to
-a byte array which we can forward directory the `InferenceSession` 
+a byte array which we can forward directly to the `InferenceSession` 
 constructor.
 
 You can also use the `dotnet onnx` tool to do the same if you prefer that with:
@@ -227,7 +244,6 @@ You can also use the `dotnet onnx` tool to do the same if you prefer that with:
 dotnet onnx setdim mnist-8.onnx mnist-8-setdim.onnx
 ```
 
-## Result: Batch Inference
 Running this code will then output:
 ```
 N=2 {
@@ -250,7 +266,94 @@ N=8 {
 ```
 
 ## How: Don't Forget Reshapes
+From the above it may seem straightforward to change a model from fixed batch size of `1`
+to `N` by simply replacing the leading dimension in all inputs, outputs etc. in the graph. 
+This is also what appears to be the most common cited solution on the web with accompanying
+Python code. However, as always the devil is in the details.
+
+I mostly work with CNN models. Most of these are based on a CNN back-end and some form
+of dense front-end. In the transition from "3D" (CHW) back-end to "1D" front-end there often
+is a reshape to handle this. This can be seen below for the `mnist-8.onnx` model,
+with the right side `Reshape` node called `"Times212_reshape0"`.
+
+Reshape nodes have they operation specified by an accompanying "shape" tensor
+that defines the dimensions of the reshape. In this case it is 
+`int64[2] = [ 1, 256 ]`. The reshape is, therefore, fixed to this shape.
+This is again an artefact of the ONNX exporter not handling dynamic shapes and
+instead outputting fixed size leading dimensions.
 
 ![mnist-8 fixed reshape leading dimension 1]({{ site.baseurl }}/images/2021-05-DynamicBatchSize/set-dynamic-batch-size-reshape-before.png)
 
+If this is not handled when changing the leading dimension, the ONNX Runtime will
+fail with an exception:
+```
+[E:onnxruntime:, sequential_executor.cc:339 onnxruntime::SequentialExecutor::Execute] 
+Non-zero status code returned while running Reshape node. 
+Name:'Times212_reshape0' Status Message: 
+D:\a\_work\1\s\onnxruntime\core\providers\cpu\tensor\reshape_helper.h:43 onnxruntime::ReshapeHelper::ReshapeHelper gsl::narrow_cast<int64_t>(input_shape.Size()) == size was false. 
+The input tensor cannot be reshaped to the requested shape. 
+Input shape:{2,16,4,4}, requested shape:{1,256}
+
+Unhandled exception. Microsoft.ML.OnnxRuntime.OnnxRuntimeException: 
+[ErrorCode:RuntimeException] Non-zero status code returned while running Reshape node. 
+Name:'Times212_reshape0' Status Message: D:\a\_work\1\s\onnxruntime\core\providers\cpu\tensor\reshape_helper.h:43 onnxruntime::ReshapeHelper::ReshapeHelper gsl::narrow_cast<int64_t>(input_shape.Size()) == size was false. 
+The input tensor cannot be reshaped to the requested shape. Input shape:{2,16,4,4}, requested shape:{1,256}
+
+   at Microsoft.ML.OnnxRuntime.NativeApiStatus.VerifySuccess(IntPtr nativeStatus)
+   at Microsoft.ML.OnnxRuntime.InferenceSession.RunImpl(RunOptions options, IntPtr[] inputNames, IntPtr[] inputValues, IntPtr[] outputNames, DisposableList`1 cleanupList)
+   at Microsoft.ML.OnnxRuntime.InferenceSession.Run(IReadOnlyCollection`1 inputs, IReadOnlyCollection`1 outputNames, RunOptions options)
+   at Microsoft.ML.OnnxRuntime.InferenceSession.Run(IReadOnlyCollection`1 inputs, IReadOnlyCollection`1 outputNames)
+   at Microsoft.ML.OnnxRuntime.InferenceSession.Run(IReadOnlyCollection`1 inputs)
+   at <Program>$.<Main>$(String[] args) in Program.cs:line 20
+```
+Which can be hard to understand unless you check the reshape operation in detail as 
+shown below. Where all the leading dimensions have been changed to `N` but the
+reshape shape has not been changed. Note that the graph contains another reshape,
+that is not changing, this is because this is for an initializer input.
+[OnnxSharp](https://github.com/nietras/OnnxSharp) handles all this.
+
+![mnist-8 reshape leading dimension incorrectly still 1]({{ site.baseurl }}/images/2021-05-DynamicBatchSize/set-dynamic-batch-size-reshape-wrong.png)
+
+Using [OnnxSharp](https://github.com/nietras/OnnxSharp) to set dynamic batch size
+will instead make sure the reshape is changed to being dynamic by changing the given
+dimension to `-1` which is what the Reshape operation uses to define a dynamic dimension.
+Only 1 of the dimensions in the shape can be -1 of course, though. 
+This can be seen below.
+
 ![mnist-8 dynamic reshape leading dimension -1]({{ site.baseurl }}/images/2021-05-DynamicBatchSize/set-dynamic-batch-size-reshape-after.png)
+
+It is also possible to use `SetDim` to simply set a new fixed batch size as shown
+below. This can be useful when taking how the ONNX Runtime works into account as
+discussed next.
+```csharp
+model.Graph.SetDim(dimIndex: 0, DimParamOrValue.New(4));
+```
+
+![mnist-8 fixed batch size]({{ site.baseurl }}/images/2021-05-DynamicBatchSize/set-dynamic-batch-size-reshape-fixed.png)
+
+
+## Notes: First Time Behavior
+When running a model with only fixed dimensions the ONNX Runtime will
+(depending on execution provider) prepare and optimize the graph for execution
+when constructing the `InferenseSession` that is in the call:
+```csharp
+using var inference = new InferenceSession("mnist-8.onnx");
+```
+For large models and e.g. using the TensorRT execution provider this means
+this call can take **minutes** (depending on model of course) to execute 
+if doing full graph optimizations.
+
+However, when the model has dynamic dimensions like batch size this is not the
+case. Instead, the ONNX Runtime may instead cache optimized graphs 
+(again it depends on execution provider, some don't) for specific batch sizes 
+when inputs are first encountered for that batch size. This means the first time 
+`Run` is called is when the graph is optimized:
+```csharp
+using var outputs = inference.Run(inputs);
+```
+Meaning this `Run` call can now take **minutes** to complete for a new batch size.
+Depending on use case it is, therefore, a good idea to call `Run` at least once
+for each expected batch size upon startup to avoid this in the middle of production.
+
+Or if only one batch size is used during production, set a fixed batch size 
+using `SetDim` as discussed above. In any case `OnnxSharp` can help.

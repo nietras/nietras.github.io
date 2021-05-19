@@ -5,17 +5,17 @@ using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using Onnx;
 
-var model = ModelProto.Parser.ParseFromFile("mnist-8.onnx");
-model.Graph.SetDim();
+var model = ModelProto.Parser.ParseFromFile("mnist-8.onnx"); //"squeezenet1.0-9.onnx");//"efficientnet-lite4-11.onnx"); /
+const int batchSize = 4;
+model.Graph.SetDim(dimIndex: 0, DimParamOrValue.New(4));
+model.WriteToFile("mnist-8-fixed-4-batchsize-onnx");
 var modelBytes = model.ToByteArray();
 
 using var inference = new InferenceSession(modelBytes);
 
-const int batchSize = 8;
 
 var inputs = inference.InputMetadata.Select(p =>
-    NamedOnnxValue.CreateFromTensor(p.Key,
-        new DenseTensor<float>(SetBatchSize(p.Value.Dimensions, batchSize))))
+        CreateNamedOnnxValueTensor(p.Key, p.Value, batchSize))
     .ToArray<NamedOnnxValue>();
 
 using var outputs = inference.Run(inputs);
@@ -26,10 +26,13 @@ var arrayString = outputTensor.GetArrayString();
 
 Console.WriteLine($"N={batchSize} {arrayString}");
 
-static int[] SetBatchSize(int[] dimensions, int batchSize)
+static NamedOnnxValue CreateNamedOnnxValueTensor(
+    string name, NodeMetadata node, int batchSize)
 {
+    var dimensions = node.Dimensions;
     dimensions[0] = batchSize;
-    return dimensions;
+    var tensor = new DenseTensor<float>(dimensions);
+    return NamedOnnxValue.CreateFromTensor(name, tensor);
 }
 
 //#define SET_DYNAMIC_BATCH_SIZE
