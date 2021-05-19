@@ -6,8 +6,7 @@ title: Set Dynamic Batch Size in ONNX Models using OnnxSharp
 Continuing from [Introducing OnnxSharp and 'dotnet onnx']({{ site.baseurl }}/2021/03/20/introducing-onnxsharp/)
 in this post I will look at using [OnnxSharp](https://github.com/nietras/OnnxSharp)
 to set dynamic batch size in an ONNX model to allow the model to be
-used for batch inference using [ONNX Runtime](https://github.com/microsoft/onnxruntime)
-in a few steps:
+used for batch inference using [ONNX Runtime](https://github.com/microsoft/onnxruntime):
 
  * **Setup**: Inference using [Microsoft.ML.OnnxRuntime](https://www.nuget.org/packages/Microsoft.ML.OnnxRuntime/)
  * **Problem**: Fixed Batch Size in Models
@@ -163,7 +162,7 @@ In this case this shape defines `NCHW` where:
  * `H = 28` is the height
  * `W = 28` is the width
 
-To fix this we need to change the `N` from `1` to, well, `N` in fact 
+To fix this we need to change the `N` from `1` to, well, `"N"` in fact 
 (that is any string) as that is how the ONNX format defines a dimension:
 ```json
 message Dimension {
@@ -176,7 +175,7 @@ message Dimension {
 as can be seen in the ONNX protobuf schema 
 [onnx.proto3](https://github.com/onnx/onnx/blob/master/onnx/onnx.proto3).
 That is, a dimension can be either a 64-bit signed integer or a string.
-When it is a string it is considered "dynamic" and the same string e.g. `N`
+When it is a string it is considered "dynamic" and the same string e.g. `"N"`
 can be used to indicate the same dimension flowing through the graph from inputs
 to outputs.
 
@@ -223,7 +222,7 @@ static NamedOnnxValue CreateNamedOnnxValueTensor(
 }
 ```
 which simply loads the ONNX model first via `OnnxSharp` calls `SetDim()` on
-the graph which defaults to changing the leading dimension to `N`. 
+the graph which defaults to changing the leading dimension to `"N"`. 
 This also has an overload allowing for customization e.g.:
 ```csharp
 public static void SetDim(this GraphProto graph, 
@@ -267,7 +266,8 @@ N=8 {
 
 ## How: Don't Forget Reshapes
 From the above it may seem straightforward to change a model from fixed batch size of `1`
-to `N` by simply replacing the leading dimension in all inputs, outputs etc. in the graph. 
+to `N` by simply replacing the leading dimension in all inputs (except initializer inputs), 
+value infos and outputs in the graph. 
 This is also what appears to be the most common cited solution on the web with accompanying
 Python code. However, as always the devil is in the details.
 
@@ -323,7 +323,7 @@ This can be seen below.
 ![mnist-8 dynamic reshape leading dimension -1]({{ site.baseurl }}/images/2021-05-DynamicBatchSize/set-dynamic-batch-size-reshape-after.png)
 
 It is also possible to use `SetDim` to simply set a new fixed batch size as shown
-below. This can be useful when taking how the ONNX Runtime works into account as
+below. This can be useful when taking into account how the ONNX Runtime works as
 discussed next.
 ```csharp
 model.Graph.SetDim(dimIndex: 0, DimParamOrValue.New(4));
@@ -356,4 +356,4 @@ Depending on use case it is, therefore, a good idea to call `Run` at least once
 for each expected batch size upon startup to avoid this in the middle of production.
 
 Or if only one batch size is used during production, set a fixed batch size 
-using `SetDim` as discussed above. In any case `OnnxSharp` can help.
+using `SetDim` as discussed above. In any case `OnnxSharp` can help. 😀
