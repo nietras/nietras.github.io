@@ -311,6 +311,7 @@ shown below. Where all the leading dimensions have been changed to `N` but the
 reshape shape has not been changed. Note that the graph contains another reshape,
 that is not changing, this is because this is for an initializer input.
 [OnnxSharp](https://github.com/nietras/OnnxSharp) handles all this.
+For details on how `SetDim` works see [source](https://github.com/nietras/OnnxSharp/blob/main/src/OnnxSharp/GraphExtensions.SetDim.cs).
 
 ![mnist-8 reshape leading dimension incorrectly still 1]({{ site.baseurl }}/images/2021-05-DynamicBatchSize/set-dynamic-batch-size-reshape-wrong.png)
 
@@ -357,3 +358,8 @@ for each expected batch size upon startup to avoid this in the middle of product
 
 Or if only one batch size is used during production, set a fixed batch size 
 using `SetDim` as discussed above. In any case `OnnxSharp` can help. 😀
+
+I don't expect `OnnxSharp` to handle all cases relevant for this,
+some of the code assumes a dimension to be 1 before being replaced for example.
+If you encounter an ONNX model that doesn't work, then feel free to 
+open an issue on GitHub.
