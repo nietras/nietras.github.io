@@ -3,14 +3,14 @@ layout: post
 title: Set Dynamic Batch Size in ONNX Models using OnnxSharp
 ---
 
-Continuing from [Introducing OnnxSharp and 'dotnet onnx']({{ site.baseurl }}/2021/03/20/introducing-onnxsharp/)
+Continuing from [Introducing OnnxSharp and 'dotnet onnx']({{ site.baseurl }}/2021/03/20/introducing-onnxsharp/),
 in this post I will look at using [OnnxSharp](https://github.com/nietras/OnnxSharp)
 to set dynamic batch size in an ONNX model to allow the model to be
-used for batch inference using [ONNX Runtime](https://github.com/microsoft/onnxruntime):
+used for batch inference using the [ONNX Runtime](https://github.com/microsoft/onnxruntime):
 
  * **Setup**: Inference using [Microsoft.ML.OnnxRuntime](https://www.nuget.org/packages/Microsoft.ML.OnnxRuntime/)
  * **Problem**: Fixed Batch Size in Models
- * **Solution**: [OnnxSharp](https://github.com/nietras/OnnxSharp) `SetDim`
+ * **Solution**: OnnxSharp `SetDim`
  * **How**: Don't Forget Reshapes
  * **Notes**: First Time Behavior
 
@@ -23,8 +23,8 @@ DynamicBatchSize.csproj
 Program.cs
 mnist-8.onnx
 ```
-where `mnist-8-onnx` is the same model as discussed in the previous blog post
-[Introducing OnnxSharp and 'dotnet onnx']({{ site.baseurl }}/2021/03/20/introducing-onnxsharp/).
+where `mnist-8-onnx` is the same model as discussed in the 
+[previous blog post]({{ site.baseurl }}/2021/03/20/introducing-onnxsharp/).
 
 The project file `DymamicBatchSize.csproj` contains:
 ```xml
@@ -311,14 +311,15 @@ shown below. Where all the leading dimensions have been changed to `N` but the
 reshape shape has not been changed. Note that the graph contains another reshape,
 that is not changing, this is because this is for an initializer input.
 [OnnxSharp](https://github.com/nietras/OnnxSharp) handles all this.
-For details on how `SetDim` works see [source](https://github.com/nietras/OnnxSharp/blob/main/src/OnnxSharp/GraphExtensions.SetDim.cs).
+For details on how `SetDim` works see [source](https://github.com/nietras/OnnxSharp/blob/main/src/OnnxSharp/GraphExtensions.SetDim.cs),
+which at this time still needs a bit of cleanup.
 
 ![mnist-8 reshape leading dimension incorrectly still 1]({{ site.baseurl }}/images/2021-05-DynamicBatchSize/set-dynamic-batch-size-reshape-wrong.png)
 
 Using [OnnxSharp](https://github.com/nietras/OnnxSharp) to set dynamic batch size
 will instead make sure the reshape is changed to being dynamic by changing the given
 dimension to `-1` which is what the Reshape operation uses to define a dynamic dimension.
-Only 1 of the dimensions in the shape can be -1 of course, though. 
+Only 1 of the dimensions in the shape can be -1, though. 
 This can be seen below.
 
 ![mnist-8 dynamic reshape leading dimension -1]({{ site.baseurl }}/images/2021-05-DynamicBatchSize/set-dynamic-batch-size-reshape-after.png)
