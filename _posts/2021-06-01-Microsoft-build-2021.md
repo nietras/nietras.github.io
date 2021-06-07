@@ -16,7 +16,7 @@ A few links can be found below.
 
 ***
 ### [Announcing .NET 6 Preview 4](https://devblogs.microsoft.com/dotnet/announcing-net-6-preview-4/)
-**Summary:**  Very long and detailed post about everything .NET 6 Preview 4 by 
+**Summary:**  Great, long and detailed post about everything .NET 6 Preview 4 by 
 [Rich Lander](https://twitter.com/runfaster2000).
 
 ***
@@ -63,7 +63,7 @@ the release of Visual Studio 2019 v16.10 GA (and v16.11 preview 1) with:
     first tool transitioned to our new analysis engine which is 
     significantly faster and provides more features. 
     After collection you can get to your results and 
-    build call-trees faster (~40% increase)
+    build call-trees faster (**~40% increase**). Nice!
  * A host of features that accelerate productivity.
 
 ***
@@ -71,6 +71,17 @@ the release of Visual Studio 2019 v16.10 GA (and v16.11 preview 1) with:
 **Summary:** [Amanda Silver](https://twitter.com/amandaksilver) shares exciting news with
 the first public preview of Visual Studio 2022 being released this summer.
 Not a Build announcement but worth mentioning. 64-bit!
+
+***
+### [F# and F# tools update for Visual Studio 16.10](https://devblogs.microsoft.com/dotnet/f-and-f-tools-update-for-visual-studio-16-10/)
+**Summary:** [Philip Carter](https://twitter.com/_cartermp) announces 
+updates to the F# tools for Visual Studio 16.10 with:
+
+* Support for Go to Definition on external symbols
+* Better support for mixing C# and F# projects in a solution
+* More quick fixes and refactorings
+* More tooling performance and responsiveness improvements
+* More core compiler improvements
 
 ***
 ### []()
@@ -95,46 +106,36 @@ which are just copies of the official summary.
 ***
 ### [Microsoft Build 2021 LIVE Day 1](https://youtu.be/xB7vqWEgifc)
 [![](https://img.youtube.com/vi/xB7vqWEgifc/0.jpg)](https://youtu.be/xB7vqWEgifc)
+
 **Summary:** Full day 1 live stream.
 
 ***
 ### [Microsoft Build 2021 LIVE Day 2](https://youtu.be/b4ryyEm5rSc)
 [![](https://img.youtube.com/vi/b4ryyEm5rSc/0.jpg)](https://youtu.be/b4ryyEm5rSc)
+
 **Summary:** Full day 2 live stream.
 
+***
+### [Application Development with Scott Hanselman & Friends](https://youtu.be/Idf1iJtYNrE)
+[![Application Development with Scott Hanselman & Friends](https://img.youtube.com/vi/Idf1iJtYNrE/0.jpg)](https://youtu.be/Idf1iJtYNrE)
+
+**Summary:** [Scott Hanselman](https://twitter.com/shanselman) and friends, in a
+theater together, in a fast paced "imprompto" keynote. Entertaining for sure.
+I really wish more focus and time had been spent on the below 😁.
+
+![Application Development With Scott Hanselman]({{ site.baseurl }}/images/2021-06-Microsoft-build-2021/application-development-with-scott-hanselman.png)
 
 ***
 ### [](https://youtu.be/HASH)
 [![](https://img.youtube.com/vi/HASH/0.jpg)](https://youtu.be/HASH)
+
 **Summary:** 
 
 ***
 ### [](https://youtu.be/HASH)
 [![](https://img.youtube.com/vi/HASH/0.jpg)](https://youtu.be/HASH)
+
 **Summary:** 
-
-***
-### [](https://youtu.be/HASH)
-[![](https://img.youtube.com/vi/HASH/0.jpg)](https://youtu.be/HASH)
-**Summary:** 
-
-
-[Seth Juarez](https://twitter.com/sethjuarez)
-
-[Scott Hunter](https://twitter.com/coolcsh)
-[Olia Gavrysh](https://twitter.com/oliagavrysh)
-
-[Cathy Sullivan](https://twitter.com/cathysull) 
-[Dmitry Lyalin](https://twitter.com/LyalinDotCom) 
-[Olia Gavrysh](https://twitter.com/oliagavrysh)
-[Jasmine Greenaway](https://twitter.com/paladique)
-[Isaac Levin](https://twitter.com/isaacrlevin)
-[Daniel Roth](https://twitter.com/danroth27)
-
-[Migual Ramos](https://twitter.com/marbtweeting)
-[Maddy Leger](https://twitter.com/maddyleger1) 
-[David Ortinau](https://twitter.com/davidortinau) 
-[Leslie Richardson](https://twitter.com/lyrichardson01)
 
 ## Links
 
@@ -144,3 +145,46 @@ which are just copies of the official summary.
 Most videos can be found below for direct download:
 
 [https://dayngo.com/channel9/events/c8f775c57bc144649a15acc800fba570/Focus-on-Windows](https://dayngo.com/channel9/events/c8f775c57bc144649a15acc800fba570/Focus-on-Windows)
+
+## People on Twitter
+
+
+[Rich Lander](https://twitter.com/runfaster2000)
+
+[David Ortinau](https://twitter.com/davidortinau)
+
+[Dmitry Lyalin](https://twitter.com/LyalinDotCom)
+
+[Shay Rojansky](https://twitter.com/shayrojansky)
+
+[Justin Johnson](https://twitter.com/profexorgeek)
+
+[Amanda Silver](https://twitter.com/amandaksilver)
+
+[Philip Carter](https://twitter.com/_cartermp)
+
+[Scott Hanselman](https://twitter.com/shanselman)
+
+[Seth Juarez](https://twitter.com/sethjuarez)
+
+[Scott Hunter](https://twitter.com/coolcsh)
+
+[Olia Gavrysh](https://twitter.com/oliagavrysh)
+
+[Cathy Sullivan](https://twitter.com/cathysull) 
+
+[Olia Gavrysh](https://twitter.com/oliagavrysh)
+
+[Jasmine Greenaway](https://twitter.com/paladique)
+
+[Isaac Levin](https://twitter.com/isaacrlevin)
+
+[Daniel Roth](https://twitter.com/danroth27)
+
+[Migual Ramos](https://twitter.com/marbtweeting)
+
+[Maddy Leger](https://twitter.com/maddyleger1) 
+
+[David Ortinau](https://twitter.com/davidortinau) 
+
+[Leslie Richardson](https://twitter.com/lyrichardson01)
