@@ -97,6 +97,8 @@ I have selected a few videos I found interesting below incl. full
 playlist of all videos from the conference. With summaries some of 
 which are just copies of the official summary.
 
+### Playlist and Live Streams
+
 ***
 ### [Microsoft Build 2021 All Sessions Playlist](https://www.youtube.com/playlist?list=PLlrxD0HtieHgMGEnTzEEfkADbaG8aAWRp)
 [![Microsoft Build 2021 All Sessions Playlist](https://i.ytimg.com/vi/KQt0v950h6k/hqdefault.jpg)](https://www.youtube.com/playlist?list=PLlrxD0HtieHgMGEnTzEEfkADbaG8aAWRp)
@@ -115,36 +117,228 @@ which are just copies of the official summary.
 
 **Summary:** Full day 2 live stream.
 
+### Keynotes
+
+***
+### [Build Opening](https://youtu.be/KQt0v950h6k)
+[![Build Opening](https://img.youtube.com/vi/KQt0v950h6k/0.jpg)](https://youtu.be/KQt0v950h6k)
+
+**Summary:** [Satya Nadella](https://twitter.com/satyanadella) opens Build with 
+an inspiring talk about how... well...
+[software is eating the world](https://www.wsj.com/articles/SB10001424053111903480904576512250915629460).
+
+
+***
+### [Scott Guthrie ‘Unplugged’ – Home Edition](https://youtu.be/vqOgvUzxAyM)
+[![Scott Guthrie ‘Unplugged’ – Home Edition](https://img.youtube.com/vi/vqOgvUzxAyM/0.jpg)](https://youtu.be/vqOgvUzxAyM)
+
+**Summary:** [Scott Guthrie](https://twitter.com/scottgu)/Microsoft ♥ Developers and covers
+what Microsoft has to offer developers from cloud to tools incl. customer stories.
+
+
+***
+### [Future of Technology with Kevin Scott](https://youtu.be/IrbG41L605s)
+[![Future of Technology with Kevin Scott](https://img.youtube.com/vi/IrbG41L605s/0.jpg)](https://youtu.be/IrbG41L605s)
+
+**Summary:** [Kevin Scott](https://twitter.com/kevin_scott), from his home workshop,
+gives a tour of creative labs and spaces where people are using cutting-edge technology 
+to create Grammy award-winning music, explore the possibilities of programming for ML-powered 
+Edge and IoT devices, inspire startups and build new applications with supercomputing-scale AI, 
+and solve some of the biggest health-care challenges on the planet with biotechnology.
+
 ***
 ### [Application Development with Scott Hanselman & Friends](https://youtu.be/Idf1iJtYNrE)
 [![Application Development with Scott Hanselman & Friends](https://img.youtube.com/vi/Idf1iJtYNrE/0.jpg)](https://youtu.be/Idf1iJtYNrE)
 
-**Summary:** [Scott Hanselman](https://twitter.com/shanselman) and friends, in a
-theater together, in a fast paced "imprompto" keynote. Entertaining for sure.
-I really wish more focus and time had been spent on the below 😁.
+**Summary:** [Scott Hanselman](https://twitter.com/shanselman) and friends in a 
+fast paced "impromptu" keynote. Entertaining for sure.
+I really wish more focus and time had been spent on the below [Scott Guthrie](https://twitter.com/scottgu)
+Red Shirt Web Architecture 😁.
 
 ![Application Development With Scott Hanselman]({{ site.baseurl }}/images/2021-06-Microsoft-build-2021/application-development-with-scott-hanselman.png)
 
+### Sessions
+
+***
+### [.NET 6 deep dive; what's new and what's coming](https://youtu.be/GJ_PaRNDe9E)
+[![.NET 6 deep dive; what's new and what's coming](https://img.youtube.com/vi/GJ_PaRNDe9E/0.jpg)](https://youtu.be/GJ_PaRNDe9E)
+
+**Summary:** [Scott Hunter](https://twitter.com/coolcsh) and friends cover all things .NET 6
+in a great talk with:
+
+MUST WATCH!
+
+* [Mads Tørgersen](https://twitter.com/MadsTorgersen) & [Dustin Campbell](https://twitter.com/dcampbell) 
+  C# 10
+
+```csharp
+global using System;
+
+namespace Model;
+
+public record struct Person
+{
+    public required string Name
+    {
+        get;
+        init => field = value.Trim();
+    }
+}
+```
+
+revisiting example from Build 2020 and C# 9 we can write:
+```csharp
+global using System;
+
+var p = new Point2D { X = 1, Y = 2 };
+var q = p with { X = 3 };
+Point2D? r = q.Equals(p) ? p : null;
+Console.WriteLine(r);
+
+public record struct Point2D(nint X, nint Y);
+```
+[sharplab](https://sharplab.io/#v2:EYLgZgpghgLgrgJwgZwLRIMYHsEBNXIwJwYzIA+AAgEwCMAsAFBMBuUCABAA4cC8HAOwgB3DgAUsASwExqAEQ4BvDgA0+HWgBoOATXXUOAXwDcrdhwCO6nsMkwAFktXqAzEdOMJ02XID8HTn4LADoAUQs4KAAbZAAKLgBKDn8eEEE4KKiPSloATliEBI8mSjdMHFwOQmJScSkZeViBb1VtZpldIqA===)
+```csharp
+public struct Point2D : IEquatable<Point2D>
+{
+    [CompilerGenerated]
+    private nint <X>k__BackingField;
+
+    [CompilerGenerated]
+    private nint <Y>k__BackingField;
+
+    public nint X
+    {
+        [IsReadOnly]
+        [CompilerGenerated]
+        get
+        {
+            return <X>k__BackingField;
+        }
+        [CompilerGenerated]
+        set
+        {
+            <X>k__BackingField = value;
+        }
+    }
+
+    public nint Y
+    {
+        [IsReadOnly]
+        [CompilerGenerated]
+        get
+        {
+            return <Y>k__BackingField;
+        }
+        [CompilerGenerated]
+        set
+        {
+            <Y>k__BackingField = value;
+        }
+    }
+
+    public Point2D(nint X, nint Y)
+    {
+        <X>k__BackingField = X;
+        <Y>k__BackingField = Y;
+    }
+
+    public override string ToString()
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.Append("Point2D");
+        stringBuilder.Append(" { ");
+        if (PrintMembers(stringBuilder))
+        {
+            stringBuilder.Append(" ");
+        }
+        stringBuilder.Append("}");
+        return stringBuilder.ToString();
+    }
+
+    private bool PrintMembers(StringBuilder builder)
+    {
+        builder.Append("X");
+        builder.Append(" = ");
+        builder.Append(((IntPtr)X).ToString());
+        builder.Append(", ");
+        builder.Append("Y");
+        builder.Append(" = ");
+        builder.Append(((IntPtr)Y).ToString());
+        return true;
+    }
+
+    public static bool operator !=(Point2D left, Point2D right)
+    {
+        return !(left == right);
+    }
+
+    public static bool operator ==(Point2D left, Point2D right)
+    {
+        return left.Equals(right);
+    }
+
+    public override int GetHashCode()
+    {
+        return EqualityComparer<IntPtr>.Default.GetHashCode(<X>k__BackingField) * -1521134295 + EqualityComparer<IntPtr>.Default.GetHashCode(<Y>k__BackingField);
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is Point2D)
+        {
+            return Equals((Point2D)obj);
+        }
+        return false;
+    }
+
+    public bool Equals(Point2D other)
+    {
+        if (EqualityComparer<IntPtr>.Default.Equals(<X>k__BackingField, other.<X>k__BackingField))
+        {
+            return EqualityComparer<IntPtr>.Default.Equals(<Y>k__BackingField, other.<Y>k__BackingField);
+        }
+        return false;
+    }
+
+    public void Deconstruct(out nint X, out nint Y)
+    {
+        X = this.X;
+        Y = this.Y;
+    }
+}
+```
+
+
 ***
 ### [](https://youtu.be/HASH)
 [![](https://img.youtube.com/vi/HASH/0.jpg)](https://youtu.be/HASH)
 
 **Summary:** 
 
+
 ***
 ### [](https://youtu.be/HASH)
 [![](https://img.youtube.com/vi/HASH/0.jpg)](https://youtu.be/HASH)
 
 **Summary:** 
+
+
+***
+### [](https://youtu.be/HASH)
+[![](https://img.youtube.com/vi/HASH/0.jpg)](https://youtu.be/HASH)
+
+**Summary:** 
+
 
 ## Links
 
 
 
 ## Download Videos for Offline Viewing
-Most videos can be found below for direct download:
+[dayngo.com](dayngo.com) doesn't appear to have the event listed yet but you can try checking at:
 
-[https://dayngo.com/channel9/events/c8f775c57bc144649a15acc800fba570/Focus-on-Windows](https://dayngo.com/channel9/events/c8f775c57bc144649a15acc800fba570/Focus-on-Windows)
+[https://dayngo.com/channel9/events/](https://dayngo.com/channel9/events/)
 
 ## People on Twitter
 
@@ -162,6 +356,10 @@ Most videos can be found below for direct download:
 [Amanda Silver](https://twitter.com/amandaksilver)
 
 [Philip Carter](https://twitter.com/_cartermp)
+
+[Satya Nadella](https://twitter.com/satyanadella)
+
+[Scott Guthrie](https://twitter.com/scottgu)
 
 [Scott Hanselman](https://twitter.com/shanselman)
 
