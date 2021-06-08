@@ -17,7 +17,20 @@ A few links can be found below.
 ***
 ### [Announcing .NET 6 Preview 4](https://devblogs.microsoft.com/dotnet/announcing-net-6-preview-4/)
 **Summary:**  Great, long and detailed post about everything .NET 6 Preview 4 by 
-[Rich Lander](https://twitter.com/runfaster2000).
+[Rich Lander](https://twitter.com/runfaster2000). To pick one thing to highlight
+the `FileStream` performance on Windows has been significantly improved based on
+work by [Ben \{chmark\} Adams](https://twitter.com/ben_a_adams), [Adam Sitnik](https://twitter.com/SitnikAdam) and more. Results speak for themselves,
+see the blog post for details.
+
+|Method     | Runtime  |      Mean | Ratio | Allocated
+|---------- | -------- | ---------:| -----:| ---------:
+|ReadAsync  | .NET 5.0 |  3.785 ms |  1.00 |     39 KB
+|ReadAsync  | .NET 6.0 |  1.762 ms |  0.47 |      1 KB
+|           |          |           |       |          
+|WriteAsync | .NET 5.0 | 12.573 ms |  1.00 |     39 KB
+|WriteAsync | .NET 6.0 |  3.200 ms |  0.25 |      1 KB
+
+Oh and this release also introduces the `DateOnly` and `TimeOnly` structs. 👍
 
 ***
 ### [Announcing .NET MAUI Preview 4](https://devblogs.microsoft.com/dotnet/announcing-net-maui-preview-4/)
@@ -366,6 +379,10 @@ public struct Point2D : IEquatable<Point2D>
 [Seth Juarez](https://twitter.com/sethjuarez)
 
 [Scott Hunter](https://twitter.com/coolcsh)
+
+[Ben \{chmark\} Adams](https://twitter.com/ben_a_adams)
+
+[Adam Sitnik](https://twitter.com/SitnikAdam)
 
 [Olia Gavrysh](https://twitter.com/oliagavrysh)
 
