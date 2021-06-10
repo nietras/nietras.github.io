@@ -11,3 +11,4 @@ package.json
 .vs
 bin
 obj
+BenchmarkDotNet.Artifacts

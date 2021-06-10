@@ -323,6 +323,13 @@ public struct Point2D : IEquatable<Point2D>
 ```
 
 
+https://devblogs.microsoft.com/premier-developer/performance-implications-of-default-struct-equality-in-c/
+* The default equality implementation for structs may easily cause a severe performance impact for your application. The issue is real, not a theoretical one.
+* The default equliaty members for value types are reflection-based.
+* The default `GetHashCode` implementation may provide a very poor distribution if a first field of many instances is the same.
+* There is an optimized default version for `Equals` and `GetHashCode` but you should never rely on it because you may stop hitting it with an innocent code change.
+* You may rely on FxCop rule to make sure that every struct overrides equality members, but a better approach is to catch the issue when the “wrong” struct is stored in a hash set or in a hash table using an analyzer.
+
 ***
 ### [](https://youtu.be/HASH)
 [![](https://img.youtube.com/vi/HASH/0.jpg)](https://youtu.be/HASH)
