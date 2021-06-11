@@ -97,8 +97,23 @@ updates to the F# tools for Visual Studio 16.10 with:
 * More core compiler improvements
 
 ***
-### []()
-**Summary:** []() 
+### [Learn What’s New in .NET Productivity](https://devblogs.microsoft.com/visualstudio/learn-whats-new-in-net-productivity/)
+**Summary:** [Mika Dumont](@mika_dumont) shares the latest tooling updates in 
+Visual Studio 2019. Jam packed with small clips and screen shots. Covers:
+
+ * [Inheritance margin](https://docs.microsoft.com/visualstudio/ide/reference/options-text-editor-csharp-advanced?view=vs-2019#inheritance-margin)
+ * [Remove Unused References](https://docs.microsoft.com/visualstudio/ide/reference/remove-unused-references?view=vs-2019)
+ * Add missing using directives on paste
+ * Tab twice to insert arguments (experimental)
+ * [Simplify LINQ expressions](https://docs.microsoft.com/en-us/visualstudio/ide/reference/simplify-linq-expression?view=vs-2019)
+ * Remove unnecessary discard
+
+To enable many of these you need to go to 
+**Tools > Options > Text Editor > C# or Basic > Advanced** or 
+in **Tools > Options > Text Editor > C# > IntelliSense**
+Visual Studio. Or quick search. 😉
+
+
 
 You can see a status table of C# language features on GitHub at 
 [Language Feature Status](https://github.com/dotnet/roslyn/blob/master/docs/Language%20Feature%20Status.md).
@@ -179,25 +194,37 @@ Red Shirt Web Architecture 😁.
 **Summary:** [Scott Hunter](https://twitter.com/coolcsh) and friends cover all things .NET 6
 in a great talk with:
 
+* Introduction covering .NET scope, ecosystem, performance and adoption.
+* One .NET - .NET 6: Single SDK, one BCL, unified tool chain
+* Entity Framework Core performance, as also covered above
+* C# 10
+  * Many syntactiv simplifications, less boilerplat
+  * `record struct` 👍 (Oh and then also `record class` which is same as just `record`)
+    * NOTE!: I cover the performance implications of this in a
+      blog post [TODO!!!]() vis a vis the auto-equality implementation.
+  * Improvements to lambdas and auto-properties
+  ```csharp
+  global using System;
+  
+  namespace Model;
+  
+  public record struct Person
+  {
+      public required string Name
+      {
+          get;
+          init => field = value.Trim();
+      }
+  }
+  ```
+  [Mads Tørgersen](https://twitter.com/MadsTorgersen) & 
+  [Dustin Campbell](https://twitter.com/dcampbell) cover this and more 
+  in a small segment in the video. Awesome!
+* 
+
 MUST WATCH!
 
-* [Mads Tørgersen](https://twitter.com/MadsTorgersen) & [Dustin Campbell](https://twitter.com/dcampbell) 
-  C# 10
-
-```csharp
-global using System;
-
-namespace Model;
-
-public record struct Person
-{
-    public required string Name
-    {
-        get;
-        init => field = value.Trim();
-    }
-}
-```
+TODO MOVE THIS TO SEPARATE BLOG POST
 
 revisiting example from Build 2020 and C# 9 we can write:
 ```csharp
@@ -331,11 +358,23 @@ https://devblogs.microsoft.com/premier-developer/performance-implications-of-def
 * You may rely on FxCop rule to make sure that every struct overrides equality members, but a better approach is to catch the issue when the “wrong” struct is stored in a hash set or in a hash table using an analyzer.
 
 ***
-### [](https://youtu.be/HASH)
-[![](https://img.youtube.com/vi/HASH/0.jpg)](https://youtu.be/HASH)
+### [Increase your .NET Productivity with Visual Studio](https://youtu.be/Ok-csh6FLL0)
+[![Increase your .NET Productivity with Visual Studio](https://img.youtube.com/vi/Ok-csh6FLL0/0.jpg)](https://youtu.be/Ok-csh6FLL0)
 
-**Summary:** 
+**Summary:** [Kendra Havens](@gotheap) and [Mika Dumont](@mika_dumont)
+give a quick talk about some great additions to Visual Studio 
+to boost your .NET productivity. Covering such things as:
 
+ * Extract base class refactoring
+ * Source generators
+ * Improvements to edit and continue
+ * Standard output directly in test explorer! And monospace font 👍 Finally! 
+ * Code coverage for VSTest on Linux
+ * Play a aound when tests finish 
+   (guessing this will be quite annoying in an open office space post-COVID19 😅)
+
+And more, also see the above coverage of 
+[Learn What’s New in .NET Productivity](https://devblogs.microsoft.com/visualstudio/learn-whats-new-in-net-productivity/).
 
 ***
 ### [](https://youtu.be/HASH)
