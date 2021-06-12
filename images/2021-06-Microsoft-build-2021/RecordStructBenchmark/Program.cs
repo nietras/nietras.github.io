@@ -4,21 +4,54 @@ using System.Linq;
 using System.Reflection;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using static System.Console;
 
 var rs = new RecordStruct { Type = typeof(short), Value = 42 };
+rs.Value = 17; // Compiles? huh?
 var (type, value) = rs;
 
-var x = new PlainStruct(typeof(string), 42);
-var y = new PlainStruct(typeof(long), 17);
-// OR
-//var x = new RecordStruct(typeof(string), 42);
-//var y = new RecordStruct(typeof(long), 17);
-Console.WriteLine(x.ToString());
-//Console.WriteLine(x == y);
-//Console.WriteLine(x != y);
-//Console.WriteLine(x == x);
+TestPlain();
+TestRecord();
 
 BenchmarkSwitcher.FromAssembly(Assembly.GetExecutingAssembly()).Run(args);
+
+void TestPlain()
+{
+    WriteLine(nameof(TestPlain));
+    var x = new PlainStruct(typeof(string), 42);
+    var y = new PlainStruct(typeof(string), 17);
+    var z = new PlainStruct(typeof(long), 17);
+    WriteLine(x.ToString());
+    WriteLine(x.Equals(y));
+    //WriteLine(x == y); N/A
+    //WriteLine(x != y); N/A
+    //WriteLine(x == x); N/A
+    WriteLine(x.GetHashCode());
+    WriteLine(y.GetHashCode());
+    WriteLine(z.GetHashCode());
+    //var (k, v) = x; // N/A
+    var i = new PlainStruct { Type = typeof(byte), Value = 17 };
+    var j = i with { Value = 3 };
+}
+
+void TestRecord()
+{
+    WriteLine(nameof(TestRecord));
+    var x = new RecordStruct(typeof(string), 42);
+    var y = new RecordStruct(typeof(string), 17);
+    var z = new RecordStruct(typeof(long), 17);
+    WriteLine(x.ToString());
+    WriteLine(x.Equals(y));
+    WriteLine(x == y);
+    WriteLine(x != y);
+    WriteLine(x == x);
+    WriteLine(x.GetHashCode());
+    WriteLine(y.GetHashCode());
+    WriteLine(z.GetHashCode());
+    var (k, v) = x;
+    var i = new RecordStruct { Type = typeof(byte) };
+    var j = i with { Value = 3 };
+}
 
 public readonly struct PlainStruct
 {
@@ -28,8 +61,8 @@ public readonly struct PlainStruct
         Value = value;
     }
 
-    public Type Type { get; }
-    public int Value { get; }
+    public Type Type { init; get; }
+    public int Value { init; get; }
 }
 
 public readonly struct EquatableStruct : IEquatable<EquatableStruct>
@@ -83,7 +116,7 @@ public readonly struct HashEquatableStruct : IEquatable<HashEquatableStruct>
         Type.GetHashCode() * -1521134295 + Value.GetHashCode();
 }
 
-public record struct RecordStruct(Type Type, int Value);
+public readonly record struct RecordStruct(Type Type, int Value);
 
 public abstract class BaseBench
 {
