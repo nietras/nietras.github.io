@@ -12,15 +12,14 @@ Previous year digest can be found at
 for more content 😁.
 
 ## Announcements and Blog Posts
-A few links can be found below.
 
 ***
 ### [Announcing .NET 6 Preview 4](https://devblogs.microsoft.com/dotnet/announcing-net-6-preview-4/)
 **Summary:**  Great, long and detailed post about everything .NET 6 Preview 4 by 
 [Rich Lander](https://twitter.com/runfaster2000). To pick one thing to highlight
 the `FileStream` performance on Windows has been significantly improved based on
-work by [Ben \{chmark\} Adams](https://twitter.com/ben_a_adams), [Adam Sitnik](https://twitter.com/SitnikAdam) and more. Results speak for themselves,
-see the blog post for details.
+work by [Ben \{chmark\} Adams](https://twitter.com/ben_a_adams), [Adam Sitnik](https://twitter.com/SitnikAdam) 
+and more. Results below speak for themselves, see the blog post for details.
 
 |Method     | Runtime  |      Mean | Ratio | Allocated
 |---------- | -------- | ---------:| -----:| ---------:
@@ -41,6 +40,8 @@ for all supported platforms (incl. Windows), new capabilities to support
 running Blazor on the desktop, and exciting progress in Visual Studio 
 to support .NET MAUI (e.g. .NET Hot Reload 🔥) see next link.
 
+![.NET MAUI Preview 4](https://devblogs.microsoft.com/dotnet/wp-content/uploads/sites/10/2021/05/maui-weather-hero-sm-768x536.png)
+
 ***
 ### [Introducing the .NET Hot Reload experience for editing code at runtime](https://devblogs.microsoft.com/dotnet/introducing-net-hot-reload/)
 **Summary:** [Dmitry Lyalin](https://twitter.com/LyalinDotCom) introduces you 
@@ -52,6 +53,24 @@ in .NET 6 (Preview 4).
 
 For the full power of this feature .NET 6 (and future releases of .NET) 
 and Visual Studio 2022 are targeted.
+
+***
+### [ASP.NET Core updates in .NET 6 Preview 4](https://devblogs.microsoft.com/aspnet/asp-net-core-updates-in-net-6-preview-4/)
+**Summary:** [Daniel Roth](https://twitter.com/danroth27) shares 
+what’s new in this preview release:
+
+* Introducing minimal APIs
+* Async streaming
+* HTTP logging middleware
+* Use Kestrel for the default launch profile in new projects
+* `IConnectionSocketFeature`
+* Improved single-page app (SPA) templates
+* .NET Hot Reload updates
+* Generic type constraints in Razor components
+* Blazor error boundaries
+* Blazor WebAssembly ahead-of-time (AOT) compilation
+* .NET MAUI Blazor apps
+* Other performance improvements
 
 ***
 ### [Announcing Entity Framework Core 6.0 Preview 4: Performance Edition](https://devblogs.microsoft.com/dotnet/announcing-entity-framework-core-6-0-preview-4-performance-edition/)
@@ -82,8 +101,7 @@ the release of Visual Studio 2019 v16.10 GA (and v16.11 preview 1) with:
 ***
 ### [Visual Studio 2022](https://devblogs.microsoft.com/visualstudio/visual-studio-2022/)
 **Summary:** [Amanda Silver](https://twitter.com/amandaksilver) shares exciting news with
-the first public preview of Visual Studio 2022 being released this summer.
-Not a Build announcement but worth mentioning. 64-bit!
+the first public preview of Visual Studio 2022 being released this summer. 64-bit!
 
 ***
 ### [F# and F# tools update for Visual Studio 16.10](https://devblogs.microsoft.com/dotnet/f-and-f-tools-update-for-visual-studio-16-10/)
@@ -110,14 +128,9 @@ Visual Studio 2019. Jam packed with small clips and screen shots. Covers:
 
 To enable many of these you need to go to 
 **Tools > Options > Text Editor > C# or Basic > Advanced** or 
-in **Tools > Options > Text Editor > C# > IntelliSense**
-Visual Studio. Or quick search. 😉
+**Tools > Options > Text Editor > C# > IntelliSense** in 
+Visual Studio.
 
-
-
-You can see a status table of C# language features on GitHub at 
-[Language Feature Status](https://github.com/dotnet/roslyn/blob/master/docs/Language%20Feature%20Status.md).
-Personally I wish for value type records e.g. `record struct`, which is being worked on.
 
 
 ## Videos
@@ -181,7 +194,7 @@ and solve some of the biggest health-care challenges on the planet with biotechn
 **Summary:** [Scott Hanselman](https://twitter.com/shanselman) and friends in a 
 fast paced "impromptu" keynote. Entertaining for sure.
 I really wish more focus and time had been spent on the below [Scott Guthrie](https://twitter.com/scottgu)
-Red Shirt Web Architecture 😁.
+Red Shirt Web Architecture, though 😁.
 
 ![Application Development With Scott Hanselman]({{ site.baseurl }}/images/2021-06-Microsoft-build-2021/application-development-with-scott-hanselman.png)
 
@@ -198,11 +211,12 @@ in a great talk with:
 * One .NET - .NET 6: Single SDK, one BCL, unified tool chain
 * Entity Framework Core performance, as also covered above
 * C# 10
-  * Many syntactiv simplifications, less boilerplat
-  * `record struct` 👍 (Oh and then also `record class` which is same as just `record`)
-    * NOTE!: I cover the performance implications of this in a
-      blog post [TODO!!!]() vis a vis the auto-equality implementation.
+  * Many syntactic simplifications, less boilerplate
+  * `record struct` 👍 (and by extension also `record class` which is the same as just writing `record`)
+    * NOTE!: I cover the performance implications of `record struct` in a
+      separate blog post [TODO!!!]().
   * Improvements to lambdas and auto-properties
+  
   ```csharp
   global using System;
   
@@ -217,145 +231,62 @@ in a great talk with:
       }
   }
   ```
-  [Mads Tørgersen](https://twitter.com/MadsTorgersen) & 
-  [Dustin Campbell](https://twitter.com/dcampbell) cover this and more 
-  in a small segment in the video. Awesome!
-* 
 
-MUST WATCH!
+  * [Mads Tørgersen](https://twitter.com/MadsTorgersen) & 
+    [Dustin Campbell](https://twitter.com/dcampbell) cover this and more 
+    in a small segment in the video. Personal nit here for me is
+    I really want the property order to be `{ init; get; set; }`
+    and not `{ get; init; set; }` 🙄
+* Minimal web APIs for cloud native apps
+  * Lightweight, single-file, cloud native APIs
+  * Low ceremony, top-level C# programs 
+  * Path to MVC
+  
+  ```csharp
+  var app = WebApplication.Create(args);
 
-TODO MOVE THIS TO SEPARATE BLOG POST
+  app.MapGet("/", (Func<string>)(() => "Hello World!"));
 
-revisiting example from Build 2020 and C# 9 we can write:
-```csharp
-global using System;
+  app.Run();
+  ```
 
-var p = new Point2D { X = 1, Y = 2 };
-var q = p with { X = 3 };
-Point2D? r = q.Equals(p) ? p : null;
-Console.WriteLine(r);
+  * Demo by [Maria Naggaga](https://twitter.com/LadyNaggaga) and 
+    [Stephen Halter](https://twitter.com/halter73).
+* .NET Multi-platform App UI (MAUI)
+  * Cross-platform, native UI
+  * Single project system, single codebase
+  * Deploy to multiple devices, mobile & desktop
+  * Demo by [David Ortinau](https://twitter.com/davidortinau)
+  * During this David demos a cool trick to set a random background color
+    on all view elements, which can be used to quickly debug bounding boxes
+    or similar.
+    ![Dotnet Maui Random Color Trick]({{ site.baseurl }}/images/2021-06-Microsoft-build-2021/dotnet-maui-random-color-trick.png)
+* Blazor desktop apps
+  * Reuse UI components across native and web
+  * Built on top of .NET Multi-platform App UI
+  * Native app container & embedded controls
+  * For .NET 6 primary focus is rich desktop apps for Windows and Max
+* ASP .NET Core new features (see coverage of blog post above)
+* Demo of ASP .NET Core and Blazor for web development 
+  by [Daniel Roth](https://twitter.com/danroth27) incl.
+  demo of .NET Hot Reload. Boom! 🔥 Also .NET AOT for WASM.
+* Developer productivity improvements 
+  * Build time perf improvements in CLI & Visual Studio
+  * Hot reload everywhere, all project types
+    > No more death by 1000 F5s! -Scott Hunter
+    * Which should be the official .NET Hot Reload slogan 🔥
+    * No process restart, maintains state
+    * Optionally attach the debugger
+    * Evolution of "Edit & Continue"
+    * Demo by [Dmitry Lyalin](https://twitter.com/LyalinDotCom)
+* ML.NET
+  * Now supports ARM64 and Apple M1
+  * Config-based training enables saved training state
+  * Model builder perf improvements
+  * Improved AutoML
+* Announcing .NET Conf 2021 Novemeber 9-11, 2021!
 
-public record struct Point2D(nint X, nint Y);
-```
-[sharplab](https://sharplab.io/#v2:EYLgZgpghgLgrgJwgZwLRIMYHsEBNXIwJwYzIA+AAgEwCMAsAFBMBuUCABAA4cC8HAOwgB3DgAUsASwExqAEQ4BvDgA0+HWgBoOATXXUOAXwDcrdhwCO6nsMkwAFktXqAzEdOMJ02XID8HTn4LADoAUQs4KAAbZAAKLgBKDn8eEEE4KKiPSloATliEBI8mSjdMHFwOQmJScSkZeViBb1VtZpldIqA===)
-```csharp
-public struct Point2D : IEquatable<Point2D>
-{
-    [CompilerGenerated]
-    private nint <X>k__BackingField;
-
-    [CompilerGenerated]
-    private nint <Y>k__BackingField;
-
-    public nint X
-    {
-        [IsReadOnly]
-        [CompilerGenerated]
-        get
-        {
-            return <X>k__BackingField;
-        }
-        [CompilerGenerated]
-        set
-        {
-            <X>k__BackingField = value;
-        }
-    }
-
-    public nint Y
-    {
-        [IsReadOnly]
-        [CompilerGenerated]
-        get
-        {
-            return <Y>k__BackingField;
-        }
-        [CompilerGenerated]
-        set
-        {
-            <Y>k__BackingField = value;
-        }
-    }
-
-    public Point2D(nint X, nint Y)
-    {
-        <X>k__BackingField = X;
-        <Y>k__BackingField = Y;
-    }
-
-    public override string ToString()
-    {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.Append("Point2D");
-        stringBuilder.Append(" { ");
-        if (PrintMembers(stringBuilder))
-        {
-            stringBuilder.Append(" ");
-        }
-        stringBuilder.Append("}");
-        return stringBuilder.ToString();
-    }
-
-    private bool PrintMembers(StringBuilder builder)
-    {
-        builder.Append("X");
-        builder.Append(" = ");
-        builder.Append(((IntPtr)X).ToString());
-        builder.Append(", ");
-        builder.Append("Y");
-        builder.Append(" = ");
-        builder.Append(((IntPtr)Y).ToString());
-        return true;
-    }
-
-    public static bool operator !=(Point2D left, Point2D right)
-    {
-        return !(left == right);
-    }
-
-    public static bool operator ==(Point2D left, Point2D right)
-    {
-        return left.Equals(right);
-    }
-
-    public override int GetHashCode()
-    {
-        return EqualityComparer<IntPtr>.Default.GetHashCode(<X>k__BackingField) * -1521134295 + EqualityComparer<IntPtr>.Default.GetHashCode(<Y>k__BackingField);
-    }
-
-    public override bool Equals(object obj)
-    {
-        if (obj is Point2D)
-        {
-            return Equals((Point2D)obj);
-        }
-        return false;
-    }
-
-    public bool Equals(Point2D other)
-    {
-        if (EqualityComparer<IntPtr>.Default.Equals(<X>k__BackingField, other.<X>k__BackingField))
-        {
-            return EqualityComparer<IntPtr>.Default.Equals(<Y>k__BackingField, other.<Y>k__BackingField);
-        }
-        return false;
-    }
-
-    public void Deconstruct(out nint X, out nint Y)
-    {
-        X = this.X;
-        Y = this.Y;
-    }
-}
-```
-
-
-https://devblogs.microsoft.com/premier-developer/performance-implications-of-default-struct-equality-in-c/
-* The default equality implementation for structs may easily cause a severe performance impact for your application. The issue is real, not a theoretical one.
-* The default equliaty members for value types are reflection-based.
-* The default `GetHashCode` implementation may provide a very poor distribution if a first field of many instances is the same.
-* There is an optimized default version for `Equals` and `GetHashCode` but you should never rely on it because you may stop hitting it with an innocent code change.
-* You may rely on FxCop rule to make sure that every struct overrides equality members, but a better approach is to catch the issue when the “wrong” struct is stored in a hash set or in a hash table using an analyzer.
+Must watch!
 
 ***
 ### [Increase your .NET Productivity with Visual Studio](https://youtu.be/Ok-csh6FLL0)
@@ -370,43 +301,81 @@ to boost your .NET productivity. Covering such things as:
  * Improvements to edit and continue
  * Standard output directly in test explorer! And monospace font 👍 Finally! 
  * Code coverage for VSTest on Linux
- * Play a aound when tests finish 
-   (guessing this will be quite annoying in an open office space post-COVID19 😅)
+ * Play a sound when tests finish  
+   (guessing this will be quite annoying in an open office 😱)
 
 And more, also see the above coverage of 
 [Learn What’s New in .NET Productivity](https://devblogs.microsoft.com/visualstudio/learn-whats-new-in-net-productivity/).
 
 ***
-### [](https://youtu.be/HASH)
-[![](https://img.youtube.com/vi/HASH/0.jpg)](https://youtu.be/HASH)
+### [Increase Developer Velocity with Microsoft’s end-to-end developer platform](https://youtu.be/jeCmyZuG8Ig)
+[![Increase Developer Velocity with Microsoft’s end-to-end developer platform](https://img.youtube.com/vi/jeCmyZuG8Ig/0.jpg)](https://youtu.be/jeCmyZuG8Ig)
 
-**Summary:** 
-
+**Summary:** [Amanda Silver](https://twitter.com/amandaksilver) (with
+[Donovan Brown](https://twitter.com/donovanbrown), Julie Strauss) talks about
+developers and [Developer Velocity Index](https://www.mckinsey.com/industries/technology-media-and-telecommunications/our-insights/developer-velocity-how-software-excellence-fuels-business-performance#)
+(a McKinsey concept) and how Microsoft Cloud increases it. This includes:
+ * Announcement of Visual Studio 2022 going 64-bit
+ * GitHub codespaces
+ * DevSecOps
+ * Power Platform
+ * Customer stories
 
 ***
-### [](https://youtu.be/HASH)
-[![](https://img.youtube.com/vi/HASH/0.jpg)](https://youtu.be/HASH)
+### [What's new in Windows 10 for ALL developers](https://youtu.be/hzmtaS5I29Q)
+[![What's new in Windows 10 for ALL developers](https://img.youtube.com/vi/hzmtaS5I29Q/0.jpg)](https://youtu.be/hzmtaS5I29Q)
 
-**Summary:** 
+**Summary:** [Kayla Cinnamon](https://twitter.com/cinnamon_msft), 
+Deondre Davis, and [Craig Loewen](https://twitter.com/craigaloewen)
+cover innovations with Terminal and WSL2, 
+performance improvements and delighters like PowerToys and 
+the Windows Package Manager. If you develop for web, cloud, or 
+other platforms including Windows, this is for you.
 
+ * WinGet (Windows Package Manager) 1.0 also shipping by default Q3
+ * Windows Terminal 
+   * Default included in new Windows version coming
+   * New settings UI
+   * Fragments
+ * Windows Shell
+   * Virtual desktops (`CTRL + WIN + LEFT/RIGHT`)
+     * Custom backgrounds
+     * Custom title
+     * Reposition
+   * Performance improvements in Windows to improve Android tools
+ * [Power Automate Desktop](https://flow.microsoft.com/en-us/desktop/) - looks very cool!
+ * WSL2 with GPU support
+ * Blizzard Entertainment segment on their Linux servers and 
+   how there devs can use Visual Studio on Windows to debug 
+   applications on Linux via remote debug. 
+ * WSLg announcement and demo
 
-## Links
+***
 
-
+That's all! However, there is a ton more videos so please be sure to check that out.
 
 ## Download Videos for Offline Viewing
 [dayngo.com](dayngo.com) doesn't appear to have the event listed yet but you can try checking at:
 
-[https://dayngo.com/channel9/events/](https://dayngo.com/channel9/events/)
+[https://dayngo.com/channel9/](https://dayngo.com/channel9/)
 
 ## People on Twitter
 
-
 [Rich Lander](https://twitter.com/runfaster2000)
+
+[Satya Nadella](https://twitter.com/satyanadella)
+
+[Scott Guthrie](https://twitter.com/scottgu)
+
+[Scott Hanselman](https://twitter.com/shanselman)
+
+[Scott Hunter](https://twitter.com/coolcsh)
 
 [David Ortinau](https://twitter.com/davidortinau)
 
 [Dmitry Lyalin](https://twitter.com/LyalinDotCom)
+
+[Daniel Roth](https://twitter.com/danroth27)
 
 [Shay Rojansky](https://twitter.com/shayrojansky)
 
@@ -416,36 +385,22 @@ And more, also see the above coverage of
 
 [Philip Carter](https://twitter.com/_cartermp)
 
-[Satya Nadella](https://twitter.com/satyanadella)
-
-[Scott Guthrie](https://twitter.com/scottgu)
-
-[Scott Hanselman](https://twitter.com/shanselman)
-
 [Seth Juarez](https://twitter.com/sethjuarez)
-
-[Scott Hunter](https://twitter.com/coolcsh)
 
 [Ben \{chmark\} Adams](https://twitter.com/ben_a_adams)
 
 [Adam Sitnik](https://twitter.com/SitnikAdam)
 
-[Olia Gavrysh](https://twitter.com/oliagavrysh)
+[Mads Tørgersen](https://twitter.com/MadsTorgersen)
 
-[Cathy Sullivan](https://twitter.com/cathysull) 
+[Dustin Campbell](https://twitter.com/dcampbell)
 
-[Olia Gavrysh](https://twitter.com/oliagavrysh)
+[Maria Naggaga](https://twitter.com/LadyNaggaga)
 
-[Jasmine Greenaway](https://twitter.com/paladique)
+[Stephen Halter](https://twitter.com/halter73)
 
-[Isaac Levin](https://twitter.com/isaacrlevin)
+[Kayla Cinnamon](https://twitter.com/cinnamon_msft), 
 
-[Daniel Roth](https://twitter.com/danroth27)
+[Craig Loewen](https://twitter.com/craigaloewen)
 
-[Migual Ramos](https://twitter.com/marbtweeting)
-
-[Maddy Leger](https://twitter.com/maddyleger1) 
-
-[David Ortinau](https://twitter.com/davidortinau) 
-
-[Leslie Richardson](https://twitter.com/lyrichardson01)
+[//]: # @runfaster2000 @davidortinau @shanselman @satyanadella @scottgu @coolcsh @LyalinDotCom @danroth27 @shayrojansky @profexorgeek @amandaksilver @_cartermp @sethjuarez @ben_a_adams @SitnikAdam @MadsTorgersen @dcampbell @LadyNaggaga @halter73 @cinnamon_msft @craigaloewen
