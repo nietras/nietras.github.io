@@ -42,6 +42,43 @@ public record struct RecordStruct(Type Type, int Value);
 
 
 [sharplab](https://sharplab.io/#v2:EYLgZgpghgLgrgJwgZwLRIMYHsEBNXIwJwYzIA+AAgEwCMAsAFBMBuUCABAshwLwcA7CAHcOAJQjY8AZSIkYAChgBPAA4QsYBZVoAGAJQAaDgBZq+gNxMdATgXdLTawGYuknLg6Fipce5lypAoAKmoQHKHqxgCWAjAcAGpQADZwEI6MQA===)
+
+```csharp
+[IsReadOnly]
+public struct PlainStruct
+{
+    [CompilerGenerated]
+    private readonly Type <Type>k__BackingField;
+
+    [CompilerGenerated]
+    private readonly int <Value>k__BackingField;
+
+    public Type Type
+    {
+        [CompilerGenerated]
+        get
+        {
+            return <Type>k__BackingField;
+        }
+    }
+
+    public int Value
+    {
+        [CompilerGenerated]
+        get
+        {
+            return <Value>k__BackingField;
+        }
+    }
+
+    public PlainStruct(Type type, int value)
+    {
+        <Type>k__BackingField = type;
+        <Value>k__BackingField = value;
+    }
+}
+```
+
 ```csharp
 public struct RecordStruct : IEquatable<RecordStruct>
 {
