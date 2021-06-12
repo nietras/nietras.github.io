@@ -309,7 +309,9 @@ generated code for these instead. As it is quite common
 to have value types with references. And few developers ensure there
 is no padding in their value types. And as I will show next this
 has a major impact on performance, since  `record struct` provides 
-generated code for these instead of the reflection-based versions. 
+generated code for these instead of the "possibly" 
+reflection-based versions and not the least implements the specific
+`IEquality<T>` interface avoiding the boxings as mentioned above. 
 
 ## Setup
 Compilers.Toolset
