@@ -206,3 +206,10 @@ public struct RecordStruct : IEquatable<RecordStruct>
 You can see a status table of C# language features on GitHub at 
 [Language Feature Status](https://github.com/dotnet/roslyn/blob/master/docs/Language%20Feature%20Status.md).
 
+|               Method |      Mean |     Error |   StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
+|--------------------- |----------:|----------:|---------:|------:|-------:|------:|------:|----------:|
+|         PlainStruct_ | 217.32 ns |  2.704 ns | 0.148 ns |  1.00 | 0.0110 |     - |     - |     184 B |
+|     EquatableStruct_ |  42.89 ns |  3.517 ns | 0.193 ns |  0.20 | 0.0019 |     - |     - |      32 B |
+| HashEquatableStruct_ |  12.39 ns |  0.486 ns | 0.027 ns |  0.06 |      - |     - |     - |         - |
+|          ValueTuple_ |  22.61 ns |  4.109 ns | 0.225 ns |  0.10 |      - |     - |     - |         - |
+|        RecordStruct_ |  11.35 ns | 13.272 ns | 0.727 ns |  0.05 |      - |     - |     - |         - |
