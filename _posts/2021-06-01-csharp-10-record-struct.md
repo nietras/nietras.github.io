@@ -282,27 +282,28 @@ a good default implementation whereas `struct` does not.
 ## Performance implications of default struct equality in C#
 In [Performance implications of default struct equality in C#](https://devblogs.microsoft.com/premier-developer/performance-implications-of-default-struct-equality-in-c/)
 by [Sergey Tepliakov](https://twitter.com/STeplyakov) the issues around
-`struct` are both default equality and hash codes is covered in detail. 
+`struct` are covered in detail with regards to both default equality and hash codes. 
 The following key points can be summarized from the post:
 
-> * If a struct does not provide `Equals` and `GetHashCode`, 
->   then the default versions of these methods from `System.ValueType` are used. 
-> * The default `GetHashCode` version just returns a hash code 
->   of a first non-null field and “munges” it with a type id
->   * If the first field is always the same, the default hash function 
->     returns the same value for all the elements. This effectively 
->     transforms a hash set into a linked list with O(N) for insertion 
->     and lookup operations. And the operation that populates the 
->     collection becomes O(N^2) (N insertions with O(N) complexity per insertion).
-> * Both `Equals` and `GetHashCode` have reflection-based implementations
->   if the optimized default version is not applied. This means they are very slow.
->   * The optimized version will only be used, if the value type has no 
->     references and is properly packed (no padding between members).
->   * The optimized Equals is based on comparing bytes directly,
->     but -0.0 and +0.0 are equal, yet have different binary representations.
-> * The default equality implementation for structs may easily 
->   cause a severe performance impact for your application. 
->   The issue is real, not a theoretical one.
+ * If a struct does not provide `Equals` and `GetHashCode`, 
+   then the default versions of these methods from `System.ValueType` are used. 
+ * The default `GetHashCode` version just returns a hash code 
+   of a first non-null field and “munges” it with a type id
+   * If the first field is always the same, the default hash function 
+     returns the same value for all the elements. This effectively 
+     transforms a hash set into a linked list with O(N) for insertion 
+     and lookup operations. And the operation that populates the 
+     collection becomes O(N^2) (N insertions with O(N) complexity per insertion).
+ * Both `Equals` and `GetHashCode` have reflection-based implementations
+   if the optimized default version is not applied. This means they are very slow.
+   * The optimized version will only be used, if the value type has no 
+     references and is properly packed (no padding between members).
+   * The optimized Equals is based on comparing bytes directly,
+     but for example `double` -0.0 and +0.0 are equal, 
+     yet have different binary representations.
+ * The default equality and hash code implementation for structs may easily 
+   cause a severe performance impact for your application. 
+   The issue is real, not a theoretical one.
 
 This is why it is so important that `record struct` provides 
 generated code for these instead. As it is quite common
@@ -483,5 +484,115 @@ public struct RecordStruct : IEquatable<RecordStruct>
 }
 ```
 
+
+```csharp
+[IsReadOnly]
+public struct CustomRecordStruct : IEquatable<CustomRecordStruct>
+{
+    [CompilerGenerated]
+    private readonly Type <Type>k__BackingField;
+
+    [CompilerGenerated]
+    private readonly int <Value>k__BackingField;
+
+    public Type Type
+    {
+        [CompilerGenerated]
+        get
+        {
+            return <Type>k__BackingField;
+        }
+        [CompilerGenerated]
+        init
+        {
+            <Type>k__BackingField = value;
+        }
+    }
+
+    public int Value
+    {
+        [CompilerGenerated]
+        get
+        {
+            return <Value>k__BackingField;
+        }
+        [CompilerGenerated]
+        init
+        {
+            <Value>k__BackingField = value;
+        }
+    }
+
+    public CustomRecordStruct(Type Type, int Value)
+    {
+        <Type>k__BackingField = Type;
+        <Value>k__BackingField = Value;
+    }
+
+    public bool Equals(CustomRecordStruct other)
+    {
+        if (Type.Equals(other.Type))
+        {
+            return Value.Equals(other.Value);
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return Type.GetHashCode() * -1521134295 + Value.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.Append("CustomRecordStruct");
+        stringBuilder.Append(" { ");
+        if (PrintMembers(stringBuilder))
+        {
+            stringBuilder.Append(" ");
+        }
+        stringBuilder.Append("}");
+        return stringBuilder.ToString();
+    }
+
+    private bool PrintMembers(StringBuilder builder)
+    {
+        builder.Append("Type");
+        builder.Append(" = ");
+        builder.Append(Type);
+        builder.Append(", ");
+        builder.Append("Value");
+        builder.Append(" = ");
+        builder.Append(Value.ToString());
+        return true;
+    }
+
+    public static bool operator !=(CustomRecordStruct left, CustomRecordStruct right)
+    {
+        return !(left == right);
+    }
+
+    public static bool operator ==(CustomRecordStruct left, CustomRecordStruct right)
+    {
+        return left.Equals(right);
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is CustomRecordStruct)
+        {
+            return Equals((CustomRecordStruct)obj);
+        }
+        return false;
+    }
+
+    public void Deconstruct(out Type Type, out int Value)
+    {
+        Type = this.Type;
+        Value = this.Value;
+    }
+}
+```
 
 [//]: # Superscript/subscript unicodes https://gist.github.com/molomby/9bc092e4a125f529ae362de7e46e8176

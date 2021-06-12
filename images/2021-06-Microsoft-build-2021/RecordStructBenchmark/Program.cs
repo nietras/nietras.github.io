@@ -7,7 +7,6 @@ using BenchmarkDotNet.Running;
 using static System.Console;
 
 var rs = new RecordStruct { Type = typeof(short), Value = 42 };
-rs.Value = 17; // Compiles? huh?
 var (type, value) = rs;
 
 TestPlain();
@@ -118,6 +117,15 @@ public readonly struct HashEquatableStruct : IEquatable<HashEquatableStruct>
 
 public readonly record struct RecordStruct(Type Type, int Value);
 
+public readonly record struct CustomRecordStruct(Type Type, int Value) : IEquatable<CustomRecordStruct>
+{
+    public bool Equals(CustomRecordStruct other) =>
+        Type.Equals(other.Type) && Value.Equals(other.Value);
+
+    public override int GetHashCode() =>
+        Type.GetHashCode() * -1521134295 + Value.GetHashCode();
+}
+
 public abstract class BaseBench
 {
     static readonly Type Type = typeof(ushort);
@@ -129,6 +137,7 @@ public abstract class BaseBench
     protected readonly HashEquatableStruct _hashEquatableStructKey = new(Type, Value);
     protected readonly (Type, int) _valueTupleKey = (Type, Value);
     protected readonly RecordStruct _recordStructKey = new(Type, Value);
+    protected readonly CustomRecordStruct _customRecordStructKey = new(Type, Value);
 }
 
 public class GetHashCodeBench : BaseBench
@@ -136,20 +145,23 @@ public class GetHashCodeBench : BaseBench
     [Benchmark(Baseline = true)]
     public int PlainStruct_GetHashCode() => _plainStructKey.GetHashCode();
 
-    [Benchmark()]
+    [Benchmark]
     public int EquatableStruct_GetHashCode() => _equatableStructKey.GetHashCode();
 
-    [Benchmark()]
+    [Benchmark]
     public int HashStruct_GetHashCode() => _hashStructKey.GetHashCode();
 
-    [Benchmark()]
+    [Benchmark]
     public int HashEquatableStruct_GetHashCode() => _hashEquatableStructKey.GetHashCode();
 
     [Benchmark]
     public int ValueTuple_GetHashCode() => _valueTupleKey.GetHashCode();
 
-    [Benchmark()]
+    [Benchmark]
     public int RecordStruct_GetHashCode() => _recordStructKey.GetHashCode();
+
+    [Benchmark]
+    public int CustomRecordStruct_GetHashCode() => _customRecordStructKey.GetHashCode();
 }
 
 public class EqualsBench : BaseBench
@@ -163,18 +175,22 @@ public class EqualsBench : BaseBench
     protected readonly HashEquatableStruct _hashEquatableStructKeyOther = new(TypeOther, ValueOther);
     protected readonly (Type, int) _valueTupleKeyOther = (TypeOther, ValueOther);
     protected readonly RecordStruct _recordStructKeyOther = new(TypeOther, ValueOther);
+    protected readonly CustomRecordStruct _customRecordStructKeyOther = new(TypeOther, ValueOther);
 
     [Benchmark(Baseline = true)]
     public bool PlainStruct_Equals() => _plainStructKey.Equals(_plainStructKeyOther);
 
-    [Benchmark()]
+    [Benchmark]
     public bool EquatableStruct_Equals() => _equatableStructKey.Equals(_equatableStructKeyOther);
 
     [Benchmark]
     public bool ValueTuple_Equals() => _valueTupleKey.Equals(_valueTupleKeyOther);
 
-    [Benchmark()]
+    [Benchmark]
     public bool RecordStruct_Equals() => _recordStructKey.Equals(_recordStructKeyOther);
+
+    [Benchmark]
+    public bool CustomRecordStruct_Equals() => _customRecordStructKey.Equals(_customRecordStructKeyOther);
 }
 
 public class DictionaryBench : BaseBench
@@ -209,21 +225,27 @@ public class DictionaryBench : BaseBench
     readonly Dictionary<RecordStruct, long> _recordKeyDictionary =
         Keys.ToDictionary(k => new RecordStruct(k.Type, k.Value), k => k.Value* 1L);
 
+    readonly Dictionary<CustomRecordStruct, long> _customRecordKeyDictionary =
+        Keys.ToDictionary(k => new CustomRecordStruct(k.Type, k.Value), k => k.Value * 1L);
+
     [Benchmark(Baseline = true)]
     public long PlainStruct_DictionaryGet() => _plainKeyDictionary[_plainStructKey];
 
-    [Benchmark()]
+    [Benchmark]
     public long EquatableStruct_DictionaryGet() => _equatableKeyDictionary[_equatableStructKey];
 
-    [Benchmark()]
+    [Benchmark]
     public long HashStruct_DictionaryGet() => _hashKeyDictionary[_hashStructKey];
 
-    [Benchmark()]
+    [Benchmark]
     public long HashEquatableStruct_DictionaryGet() => _hashEquatableKeyDictionary[_hashEquatableStructKey];
 
     [Benchmark]
     public long ValueTuple_DictionaryGet() => _valueTupleToValue[_valueTupleKey];
 
-    [Benchmark()]
+    [Benchmark]
     public long RecordStruct_DictionaryGet() => _recordKeyDictionary[_recordStructKey];
+
+    [Benchmark]
+    public long CustomRecordStruct_DictionaryGet() => _customRecordKeyDictionary[_customRecordStructKey];
 }
