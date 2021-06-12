@@ -6,9 +6,9 @@ using BenchmarkDotNet.Running;
 
 BenchmarkSwitcher.FromAssembly(Assembly.GetExecutingAssembly()).Run(args);
 
-public readonly struct Struct
+public readonly struct PlainStruct
 {
-    public Struct(Type type, int value)
+    public PlainStruct(Type type, int value)
     {
         Type = type;
         Value = value;
@@ -53,16 +53,16 @@ public readonly struct HashEquatableStruct : IEquatable<HashEquatableStruct>
 
 public record struct RecordStruct(Type Type, int Value);
 
-public class StructDictionary
+public class StructDictionaryBenchmark
 {
-    readonly Dictionary<Struct, long> _structToValue = new()
+    readonly Dictionary<PlainStruct, long> _plainStructToValue = new()
     {
-        { new Struct(typeof(byte), 101), 0 },
-        { new Struct(typeof(sbyte), 102), 1 },
-        { new Struct(typeof(ushort), 201), 2 },
-        { new Struct(typeof(short), 202), 3 },
-        { new Struct(typeof(uint), 301), 4 },
-        { new Struct(typeof(int), 302), 5 },
+        { new PlainStruct(typeof(byte), 101), 0 },
+        { new PlainStruct(typeof(sbyte), 102), 1 },
+        { new PlainStruct(typeof(ushort), 201), 2 },
+        { new PlainStruct(typeof(short), 202), 3 },
+        { new PlainStruct(typeof(uint), 301), 4 },
+        { new PlainStruct(typeof(int), 302), 5 },
     };
 
     readonly Dictionary<EquatableStruct, long> _equatableStructToValue = new()
@@ -105,14 +105,14 @@ public class StructDictionary
         { new(typeof(int), 302), 5 },
     };
 
-    readonly Struct _structKey = new (typeof(ushort), 201);
+    readonly PlainStruct _plainStructKey = new (typeof(ushort), 201);
     readonly EquatableStruct _equatableStructKey = new(typeof(ushort), 201);
     readonly HashEquatableStruct _hashEquatableStructKey = new(typeof(ushort), 201);
-    readonly RecordStruct _recordStructKey = new (typeof(ushort), 201);
     readonly (Type, int) _valueTupleKey = (typeof(ushort), 201);
+    readonly RecordStruct _recordStructKey = new(typeof(ushort), 201);
 
     [Benchmark(Baseline = true)]
-    public long Struct_() => _structToValue[_structKey];
+    public long PlainStruct_() => _plainStructToValue[_plainStructKey];
 
     [Benchmark()]
     public long EquatableStruct_() => _equatableStructToValue[_equatableStructKey];
