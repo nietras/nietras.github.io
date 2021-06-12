@@ -1,1 +1,1 @@
-dotnet run -c Release -f net5.0 -- -m --job short --runtimes net48 netcoreapp50 --filter *
+dotnet run -c Release -f net5.0 -- -m --job short --runtimes netcoreapp50 --filter *

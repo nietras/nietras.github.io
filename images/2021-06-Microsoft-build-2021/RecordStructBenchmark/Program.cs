@@ -33,6 +33,24 @@ public readonly struct EquatableStruct : IEquatable<EquatableStruct>
         Type.Equals(other.Type) && Value.Equals(other.Value);
 }
 
+public readonly struct HashEquatableStruct : IEquatable<HashEquatableStruct>
+{
+    public HashEquatableStruct(Type type, int value)
+    {
+        Type = type;
+        Value = value;
+    }
+
+    public Type Type { get; }
+    public int Value { get; }
+
+    public bool Equals(HashEquatableStruct other) =>
+        Type.Equals(other.Type) && Value.Equals(other.Value);
+
+    public override int GetHashCode() =>
+        Type.GetHashCode() * -1521134295 + Value.GetHashCode();
+}
+
 public record struct RecordStruct(Type Type, int Value);
 
 public class StructDictionary
@@ -57,6 +75,16 @@ public class StructDictionary
         { new EquatableStruct(typeof(int), 302), 5 },
     };
 
+    readonly Dictionary<HashEquatableStruct, long> _hashEquatableStructToValue = new()
+    {
+        { new HashEquatableStruct(typeof(byte), 101), 0 },
+        { new HashEquatableStruct(typeof(sbyte), 102), 1 },
+        { new HashEquatableStruct(typeof(ushort), 201), 2 },
+        { new HashEquatableStruct(typeof(short), 202), 3 },
+        { new HashEquatableStruct(typeof(uint), 301), 4 },
+        { new HashEquatableStruct(typeof(int), 302), 5 },
+    };
+
     readonly Dictionary<(Type, int), long> _valueTupleToValue = new()
     {
         { (typeof(byte), 101), 0 },
@@ -79,6 +107,7 @@ public class StructDictionary
 
     readonly Struct _structKey = new (typeof(ushort), 201);
     readonly EquatableStruct _equatableStructKey = new(typeof(ushort), 201);
+    readonly HashEquatableStruct _hashEquatableStructKey = new(typeof(ushort), 201);
     readonly RecordStruct _recordStructKey = new (typeof(ushort), 201);
     readonly (Type, int) _valueTupleKey = (typeof(ushort), 201);
 
@@ -87,6 +116,9 @@ public class StructDictionary
 
     [Benchmark()]
     public long EquatableStruct_() => _equatableStructToValue[_equatableStructKey];
+
+    [Benchmark()]
+    public long HashEquatableStruct_() => _hashEquatableStructToValue[_hashEquatableStructKey];
 
     [Benchmark]
     public long ValueTuple_() => _valueTupleToValue[_valueTupleKey];
