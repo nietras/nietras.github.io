@@ -4,6 +4,10 @@ title: C# 10 - `record struct` Deep Dive & Performance Implications
 ---
 
 
+https://github.com/dotnet/roslyn
+nuget source:
+https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json
+
 revisiting example from Build 2020 and C# 9 we can write:
 ```csharp
 global using System;
