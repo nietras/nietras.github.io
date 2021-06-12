@@ -2,7 +2,19 @@
 layout: post
 title: C# 10 - `record struct` Deep Dive & Performance Implications
 ---
+In this blog post I will do a quick deep dive into the new 
+[`record struct`](https://github.com/dotnet/csharplang/issues/4334) 
+being introduced in the upcoming C# 10 and look at the performance implications
+of this in a specific context (20x faster and infinitely less GC pressure than
+a plain `struct`). I will cover:
 
+ * Code generated for `record struct`
+ * Importance of the generated code
+ * Problem with plain `struct`s
+ * Example use case
+ * Benchmarks with common pitfalls
+
+## `record struct`
 what is record struct? show case what it does? what code is generated?
 
 some may argue that record struct doesn't provide much value? There is not much new
