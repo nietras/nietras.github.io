@@ -399,7 +399,10 @@ To do this I created the following types:
  * `RecordStruct` - straightforward `record struct` as discussed above.
  * `HashEquatableRecordStruct` - `record struct` which implements both `IEquatable<EquatableStruct` and overrides `GetHashCode`.
 
-as shown in the code below:
+This covers common pitfalls where one forgets to implement either equality and hash code,
+while still implementing one of them.
+
+Code for all types except the value tuple is shown below:
 ```csharp
 public readonly struct PlainStruct
 {
