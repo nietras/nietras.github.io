@@ -6,9 +6,6 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using static System.Console;
 
-var rs = new RecordStruct { Type = typeof(short), Value = 42 };
-var (type, value) = rs;
-
 TestPlain();
 TestRecord();
 
@@ -31,6 +28,7 @@ void TestPlain()
     //var (k, v) = x; // N/A
     var i = new PlainStruct { Type = typeof(byte), Value = 17 };
     var j = i with { Value = 3 };
+    WriteLine();
 }
 
 void TestRecord()
@@ -43,13 +41,15 @@ void TestRecord()
     WriteLine(x.Equals(y));
     WriteLine(x == y);
     WriteLine(x != y);
-    WriteLine(x == x);
+    var c = x;
+    WriteLine(x == c);
     WriteLine(x.GetHashCode());
     WriteLine(y.GetHashCode());
     WriteLine(z.GetHashCode());
     var (k, v) = x;
     var i = new RecordStruct { Type = typeof(byte) };
     var j = i with { Value = 3 };
+    WriteLine();
 }
 
 public readonly struct PlainStruct
@@ -60,11 +60,12 @@ public readonly struct PlainStruct
         Value = value;
     }
 
-    public Type Type { init; get; }
-    public int Value { init; get; }
+    public Type Type { get; init; }
+    public int Value { get; init; }
 }
 
-public readonly struct EquatableStruct : IEquatable<EquatableStruct>
+public readonly struct EquatableStruct 
+    : IEquatable<EquatableStruct>
 {
     public EquatableStruct(Type type, int value)
     {
@@ -72,11 +73,11 @@ public readonly struct EquatableStruct : IEquatable<EquatableStruct>
         Value = value;
     }
 
-    public Type Type { get; }
-    public int Value { get; }
+    public Type Type { get; init; }
+    public int Value { get; init; }
 
     public bool Equals(EquatableStruct other) =>
-        Type.Equals(other.Type) && Value.Equals(other.Value);
+        Type == other.Type && Value == other.Value;
 }
 
 public readonly struct HashStruct
@@ -87,17 +88,15 @@ public readonly struct HashStruct
         Value = value;
     }
 
-    public Type Type { get; }
-    public int Value { get; }
+    public Type Type { get; init; }
+    public int Value { get; init; }
 
     public override int GetHashCode() =>
         Type.GetHashCode() * -1521134295 + Value.GetHashCode();
-        // Above I am using the exact same hash method as the record struct
-        // to make sure they are comparable. However, if you do your own
-        // `GetHashCode()` prefer using `HashCode.Combine`
-        //HashCode.Combine(Type.GetHashCode(), Value.GetHashCode());
 }
-public readonly struct HashEquatableStruct : IEquatable<HashEquatableStruct>
+
+public readonly struct HashEquatableStruct 
+    : IEquatable<HashEquatableStruct>
 {
     public HashEquatableStruct(Type type, int value)
     {
@@ -105,11 +104,11 @@ public readonly struct HashEquatableStruct : IEquatable<HashEquatableStruct>
         Value = value;
     }
 
-    public Type Type { get; }
-    public int Value { get; }
+    public Type Type { get; init; }
+    public int Value { get; init; }
 
     public bool Equals(HashEquatableStruct other) =>
-        Type.Equals(other.Type) && Value.Equals(other.Value);
+        Type == other.Type && Value == other.Value;
 
     public override int GetHashCode() =>
         Type.GetHashCode() * -1521134295 + Value.GetHashCode();
@@ -117,10 +116,11 @@ public readonly struct HashEquatableStruct : IEquatable<HashEquatableStruct>
 
 public readonly record struct RecordStruct(Type Type, int Value);
 
-public readonly record struct CustomRecordStruct(Type Type, int Value) : IEquatable<CustomRecordStruct>
+public readonly record struct HashEquatableRecordStruct(Type Type, int Value) 
+    : IEquatable<HashEquatableRecordStruct>
 {
-    public bool Equals(CustomRecordStruct other) =>
-        Type.Equals(other.Type) && Value.Equals(other.Value);
+    public bool Equals(HashEquatableRecordStruct other) =>
+        Type == other.Type && Value == other.Value;
 
     public override int GetHashCode() =>
         Type.GetHashCode() * -1521134295 + Value.GetHashCode();
@@ -137,7 +137,7 @@ public abstract class BaseBench
     protected readonly HashEquatableStruct _hashEquatableStructKey = new(Type, Value);
     protected readonly (Type, int) _valueTupleKey = (Type, Value);
     protected readonly RecordStruct _recordStructKey = new(Type, Value);
-    protected readonly CustomRecordStruct _customRecordStructKey = new(Type, Value);
+    protected readonly HashEquatableRecordStruct _hashEquatableRecordStructKey = new(Type, Value);
 }
 
 public class GetHashCodeBench : BaseBench
@@ -161,7 +161,7 @@ public class GetHashCodeBench : BaseBench
     public int RecordStruct_GetHashCode() => _recordStructKey.GetHashCode();
 
     [Benchmark]
-    public int CustomRecordStruct_GetHashCode() => _customRecordStructKey.GetHashCode();
+    public int HashEquatableRecordStruct_GetHashCode() => _hashEquatableRecordStructKey.GetHashCode();
 }
 
 public class EqualsBench : BaseBench
@@ -175,7 +175,7 @@ public class EqualsBench : BaseBench
     protected readonly HashEquatableStruct _hashEquatableStructKeyOther = new(TypeOther, ValueOther);
     protected readonly (Type, int) _valueTupleKeyOther = (TypeOther, ValueOther);
     protected readonly RecordStruct _recordStructKeyOther = new(TypeOther, ValueOther);
-    protected readonly CustomRecordStruct _customRecordStructKeyOther = new(TypeOther, ValueOther);
+    protected readonly HashEquatableRecordStruct _hashEquatableRecordStructKeyOther = new(TypeOther, ValueOther);
 
     [Benchmark(Baseline = true)]
     public bool PlainStruct_Equals() => _plainStructKey.Equals(_plainStructKeyOther);
@@ -184,13 +184,19 @@ public class EqualsBench : BaseBench
     public bool EquatableStruct_Equals() => _equatableStructKey.Equals(_equatableStructKeyOther);
 
     [Benchmark]
+    public bool HashStruct_Equals() => _hashStructKey.Equals(_hashStructKeyOther);
+
+    [Benchmark]
+    public bool HashEquatableStruct_Equals() => _hashEquatableStructKey.Equals(_hashEquatableStructKeyOther);
+
+    [Benchmark]
     public bool ValueTuple_Equals() => _valueTupleKey.Equals(_valueTupleKeyOther);
 
     [Benchmark]
     public bool RecordStruct_Equals() => _recordStructKey.Equals(_recordStructKeyOther);
 
     [Benchmark]
-    public bool CustomRecordStruct_Equals() => _customRecordStructKey.Equals(_customRecordStructKeyOther);
+    public bool HashEquatableRecordStruct_Equals() => _hashEquatableRecordStructKey.Equals(_hashEquatableRecordStructKeyOther);
 }
 
 public class DictionaryBench : BaseBench
@@ -225,8 +231,8 @@ public class DictionaryBench : BaseBench
     readonly Dictionary<RecordStruct, long> _recordKeyDictionary =
         Keys.ToDictionary(k => new RecordStruct(k.Type, k.Value), k => k.Value* 1L);
 
-    readonly Dictionary<CustomRecordStruct, long> _customRecordKeyDictionary =
-        Keys.ToDictionary(k => new CustomRecordStruct(k.Type, k.Value), k => k.Value * 1L);
+    readonly Dictionary<HashEquatableRecordStruct, long> _customRecordKeyDictionary =
+        Keys.ToDictionary(k => new HashEquatableRecordStruct(k.Type, k.Value), k => k.Value * 1L);
 
     [Benchmark(Baseline = true)]
     public long PlainStruct_DictionaryGet() => _plainKeyDictionary[_plainStructKey];
@@ -247,5 +253,5 @@ public class DictionaryBench : BaseBench
     public long RecordStruct_DictionaryGet() => _recordKeyDictionary[_recordStructKey];
 
     [Benchmark]
-    public long CustomRecordStruct_DictionaryGet() => _customRecordKeyDictionary[_customRecordStructKey];
+    public long HashEquatableRecordStruct_DictionaryGet() => _customRecordKeyDictionary[_hashEquatableRecordStructKey];
 }

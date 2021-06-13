@@ -11,4 +11,4 @@ package.json
 .vs
 bin
 obj
-BenchmarkDotNet.Artifacts
+**/BenchmarkDotNet.Artifacts/*.log

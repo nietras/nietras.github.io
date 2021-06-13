@@ -5,18 +5,19 @@ title: C# 10 - `record struct` Deep Dive & Performance Implications
 In this blog post I will do a quick deep dive into the new 
 [`record struct`](https://github.com/dotnet/csharplang/issues/4334) 
 being introduced in the upcoming C# 10 and look at the performance implications
-of this in a specific context (**20x faster and infinitely less GC pressure** than
+of this in a specific context (**20x faster and 100% less allocations** than
 a plain `struct`). I will cover:
 
- * Code generated for `record struct` (going to IL and back to C#)
+ * Code generated for `record struct`
  * Importance of the generated code
  * Performance implications of default struct equality in C#
- * Example use case
  * Setup project to use preview compiler via `Microsoft.Net.Compilers.Toolset` nuget package
- * Benchmarks covering common pitfalls
+ * Types and implementations covering different possibilities and common pitfalls
+ * Benchmarks
 
 ## `record struct`
-With `record struct` you can take a plain struct like:
+With `record struct` you can take a plain struct like 
+(this is just an example but note that `Type` is a reference type/`class`):
 ```csharp
 public readonly struct PlainStruct
 {
@@ -26,8 +27,8 @@ public readonly struct PlainStruct
         Value = value;
     }
 
-    public Type Type { init; get; }
-    public int Value { init; get; }
+    public Type Type { get; init; }
+    public int Value { get; init; }
 }
 ```
 and simplify this to just one line:
@@ -174,7 +175,8 @@ public struct RecordStruct : IEquatable<RecordStruct>
 
     public override int GetHashCode()
     {
-        return EqualityComparer<Type>.Default.GetHashCode(<Type>k__BackingField) * -1521134295 + EqualityComparer<int>.Default.GetHashCode(<Value>k__BackingField);
+        return EqualityComparer<Type>.Default.GetHashCode(<Type>k__BackingField) * -1521134295 
+            + EqualityComparer<int>.Default.GetHashCode(<Value>k__BackingField);
     }
 
     public override bool Equals(object obj)
@@ -211,10 +213,12 @@ To sum up the generated code for this `record struct` has:
  * `get` and `init` for properties
  * Constructor matching the properties
  * Custom overridden `ToString()` implementation based on `StringBuilder`
- * Implements `IEquality<RecordStruct>` as value based comparison
+ * Implements `IEquality<RecordStruct>` as value based comparison 
+   based on `EqualityComparer<T>.Default`
  * Equality operators `!=` and `==` that forward to `IEquality<RecordStruct>.Equals`
  * Custom overridden `bool Equals(object obj)` that forwards to `IEquality<RecordStruct>.Equals`
  * Custom `GetHashCode()` with default decent hash combination
+   based on `EqualityComparer<T>.Default`
  * A `Deconstruct` method for easy deconstruction i.e. you can write
    ```csharp
    var (type, value) = rs;
@@ -305,45 +309,194 @@ The following key points can be summarized from the post:
    cause a severe performance impact for your application. 
    The issue is real, not a theoretical one.
 
-This is why it is so important that `record struct` provides 
-generated code for these instead. As it is quite common
-to have value types with references. And few developers ensure there
-is no padding in their value types. And as I will show next this
-has a major impact on performance, since  `record struct` provides 
-generated code for these instead of the "possibly" 
-reflection-based versions and not the least implements the specific
-`IEquality<T>` interface avoiding the boxings as mentioned above. 
+This is why it is so important that for `record struct` the 
+compiler generates code for these instead, as it is quite common
+to have value types with references and few developers ensure there
+is no padding in their value types. As I will show next this
+has a major impact on performance since  `record struct` avoids 
+the "possibly" reflection-based versions and implements the 
+`IEquality<T>` interface avoiding the boxings as mentioned above,
+but first we need to be able to use `record struct`.
 
 ## Setup
-Compilers.Toolset
+Fortunately, it is very easy to use preview versions of 
+[Roslyn](https://github.com/dotnet/roslyn) - the .NET compiler - via
+the nuget package [`Microsoft.Net.Compilers.Toolset`](https://www.nuget.org/packages/Microsoft.Net.Compilers.Toolset/).
+We just need to get the latest preview version of this package from the
+nuget feed [dotnet-tools](https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json).
+This we can either add to nuget feeds in Visual Studio or simply add
+a `nuget.config` next to our solution.
 
-BenchmarkDotNet
+So to test `record struct` I created a new C# console project and
+added a few files to end up with:
+```
+nuget.config
+Program.cs
+RecordStructBenchmark.csproj
+RecordStructBenchmark.sln
+```
+where `nuget.config` is:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageSources>
+    <add key="nuget" value="https://api.nuget.org/v3/index.json" />
+    <add key="dotnet-tools" value="https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json" />
+  </packageSources>
+</configuration>
+```
+which contains the nuget feed and allows us to install the latest compilers toolset
+and hence our project file ends up as:
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net5.0</TargetFrameworks>
+    <OutputType>Exe</OutputType>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <Configuration>Release</Configuration>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.0" />
+    <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.13.0" />
+    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.0.0-2.21310.45">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>
+```
+This is based on the recommended definitions for use with 
+[`BenchmarkDotNet`](https://github.com/dotnet/BenchmarkDotNet), 
+which has also been added as a nuget package to the project.
 
-https://github.com/dotnet/roslyn
-nuget source:
-https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json
+Note that `<LangVersion>preview</LangVersion>` which means
+we get the latest C# preview compiler with whatever features are
+available in the compilers toolset package. This property was not
+supported in BenchmarkDotnet 0.12.1, but luckily this was fixed in
+0.13.0, so be sure to use that or a later version .
 
+## Types
+To fully examine the set of possibilities given the default behavior of `struct`s,
+we need to cover both whether it is plain `struct` or `record struct` with or
+without manual/custom implementations of `IEquality<T>` and/or `GetHashCode`.
+To do this I created the following types:
 
-## Benchmarks
+ * `PlainStruct` - plain struct with no custom equality or hash code.
+ * `EquatableStruct` - plain struct which implements `IEquatable<EquatableStruct`.
+ * `HashStruct` - plain struct which .
+ * `HashEquatableStruct` - plain struct which implements both `IEquatable<EquatableStruct` and overrides `GetHashCode`.
+ * `RecordStruct` - straightforward `record struct` as discussed above.
+ * `HashEquatableRecordStruct` - `record struct` which implements both `IEquatable<EquatableStruct` and overrides `GetHashCode`.
 
-
+as shown in the code below:
 ```csharp
-using System;
+public readonly struct PlainStruct
+{
+    public PlainStruct(Type type, int value)
+    {
+        Type = type;
+        Value = value;
+    }
 
-var rs = new RecordStruct(typeof(string), 42);
-Console.WriteLine(rs);
+    public Type Type { get; init; }
+    public int Value { get; init; }
+}
 
-public record struct RecordStruct(Type Type, int Value);
+public readonly struct EquatableStruct 
+    : IEquatable<EquatableStruct>
+{
+    public EquatableStruct(Type type, int value)
+    {
+        Type = type;
+        Value = value;
+    }
+
+    public Type Type { get; init; }
+    public int Value { get; init; }
+
+    public bool Equals(EquatableStruct other) =>
+        Type == other.Type && Value == other.Value;
+}
+
+public readonly struct HashStruct
+{
+    public HashStruct(Type type, int value)
+    {
+        Type = type;
+        Value = value;
+    }
+
+    public Type Type { get; init; }
+    public int Value { get; init; }
+
+    public override int GetHashCode() =>
+        Type.GetHashCode() * -1521134295 + Value.GetHashCode();
+}
+
+public readonly struct HashEquatableStruct 
+    : IEquatable<HashEquatableStruct>
+{
+    public HashEquatableStruct(Type type, int value)
+    {
+        Type = type;
+        Value = value;
+    }
+
+    public Type Type { get; init; }
+    public int Value { get; init; }
+
+    public bool Equals(HashEquatableStruct other) =>
+        Type == other.Type && Value == other.Value;
+
+    public override int GetHashCode() =>
+        Type.GetHashCode() * -1521134295 + Value.GetHashCode();
+}
+
+public readonly record struct RecordStruct(Type Type, int Value);
+
+public readonly record struct HashEquatableRecordStruct(Type Type, int Value) 
+    : IEquatable<HashEquatableRecordStruct>
+{
+    public bool Equals(HashEquatableRecordStruct other) =>
+        Type == other.Type && Value == other.Value;
+
+    public override int GetHashCode() =>
+        Type.GetHashCode() * -1521134295 + Value.GetHashCode();
+}
+```
+Above I am using the exact same hash method as the `record struct`
+to make sure they are comparable. However, if you do your own
+`GetHashCode()` prefer using `HashCode.Combine` 
+(if you target a platform where this is available):
+```csharp
+HashCode.Combine(Type.GetHashCode(), Value.GetHashCode());
 ```
 
 
+## Benchmarks
+To examing the performance implications of the different type implementations 
+we will look at three benchmarks:
+
+ * `Equals` - 
+ * `GetHashCode` - 
+ * `DictionaryGet` - 
+
+```
+dotnet run -c Release -f net5.0 -- -m -d --runtimes netcoreapp50 --filter *
+```
+
 [sharplab](https://sharplab.io/#v2:EYLgZgpghgLgrgJwgZwLRIMYHsEBNXIwJwYzIA+AAgEwCMAsAFBMBuUCABAshwLwcA7CAHcOAJQjY8AZSIkYAChgBPAA4QsYBZVoAGAJQAaDgBZq+gNxMdATgXdLTawGYuknLg6Fipce5lypAoAKmoQHKHqxgCWAjAcAGpQADZwEI6MQA===)
 
-
-
-
-You can see a status table of C# language features on GitHub at 
-[Language Feature Status](https://github.com/dotnet/roslyn/blob/master/docs/Language%20Feature%20Status.md).
 
 ```ini
 BenchmarkDotNet=v0.13.0, OS=Windows 10.0.19043.985 (21H1/May2021Update)
@@ -363,6 +516,12 @@ Runtime=.NET 5.0  Toolchain=netcoreapp50
 | HashEquatableStruct_ |  10.65 ns | 0.101 ns | 0.089 ns |  0.05 |      - |     - |     - |         - |
 |          ValueTuple_ |  21.24 ns | 0.417 ns | 0.370 ns |  0.09 |      - |     - |     - |         - |
 |        RecordStruct_ |  10.91 ns | 0.111 ns | 0.098 ns |  0.05 |      - |     - |     - |         - |
+
+
+## Conclusion
+
+You can see a status table of C# language features on GitHub at 
+[Language Feature Status](https://github.com/dotnet/roslyn/blob/master/docs/Language%20Feature%20Status.md).
 
 
 ## Appendix: `record struct` default mutable

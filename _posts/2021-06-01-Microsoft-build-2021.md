@@ -234,9 +234,7 @@ in a great talk with:
 
   * [Mads Tørgersen](https://twitter.com/MadsTorgersen) & 
     [Dustin Campbell](https://twitter.com/dcampbell) cover this and more 
-    in a small segment in the video. Personal nit here for me is
-    I really want the property order to be `{ init; get; set; }`
-    and not `{ get; init; set; }` 🙄
+    in a small segment in the video.
 * Minimal web APIs for cloud native apps
   * Lightweight, single-file, cloud native APIs
   * Low ceremony, top-level C# programs 
