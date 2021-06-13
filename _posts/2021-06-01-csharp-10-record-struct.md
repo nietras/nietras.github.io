@@ -528,7 +528,6 @@ AMD Ryzen 9 5950X, 1 CPU, 32 logical and 16 physical cores
 Runtime=.NET 5.0  Toolchain=netcoreapp50
 ```
 
-
 #### Equals
 ```
 |                                  Method |      Mean | Ratio | Allocated | Code Size |
@@ -566,15 +565,45 @@ Runtime=.NET 5.0  Toolchain=netcoreapp50
 | HashEquatableRecordStruct_DictionaryGet |   8.707 ns |  0.04 |         - |     113 B |
 ```
 
+The results pretty much speak for themselves, but note that:
 
+ * Fastest code is with the manual/custom `Equals` and/or `GetHashCode`.
+ * `record struct` is very close to the manual/custom code, but there appears to 
+   be a small price to pay here for the `EqualityComparer<T>.Default` use.
+ * `Equals` naturally boxes the value type on each call if `IEquatable<T>` is
+   not implemented given `bool Equals(object obj)`.
+ * `GetHashCode` perhaps more surprisingly allocates on each call if it is not overridden. 
+ * Dictionary get benchmark shows that for a real use case 
+   `record struct` can be **20x faster with 100% less allocations** than a plain struct
+   with default equality and hash code. Even faster are the manual/code versions 
+   with **25-28x faster with 100% less allocations**, but small numbers.
+ * Value tuples are slower than `record struct`, but still way better
+   than a plain struct with default equality and hash code.
 
-[sharplab](https://sharplab.io/#v2:EYLgZgpghgLgrgJwgZwLRIMYHsEBNXIwJwYzIA+AAgEwCMAsAFBMBuUCABAshwLwcA7CAHcOAJQjY8AZSIkYAChgBPAA4QsYBZVoAGAJQAaDgBZq+gNxMdATgXdLTawGYuknLg6Fipce5lypAoAKmoQHKHqxgCWAjAcAGpQADZwEI6MQA===)
+Based on this I definitely think that one should default to using 
+`readonly record struct` for all value types you create
+when C# 10 is released as this avoids performance issues that plain `struct`s have
+and you can still customize/optimize equality and/or hash code as needed.
+It depends on your exact needs, of course.
+
+While value tuples can be an alternative they suffer from being harder to 
+maintain since you are basically repeating the type definition on every use.
+
+This is why I think **`record struct` is the best new feature of C# 10**. 
+
 
 
 ## Conclusion
 
+
+
 You can see a status table of C# language features on GitHub at 
 [Language Feature Status](https://github.com/dotnet/roslyn/blob/master/docs/Language%20Feature%20Status.md).
+
+
+
+
+[sharplab](https://sharplab.io/#v2:EYLgZgpghgLgrgJwgZwLRIMYHsEBNXIwJwYzIA+AAgEwCMAsAFBMBuUCABAshwLwcA7CAHcOAJQjY8AZSIkYAChgBPAA4QsYBZVoAGAJQAaDgBZq+gNxMdATgXdLTawGYuknLg6Fipce5lypAoAKmoQHKHqxgCWAjAcAGpQADZwEI6MQA===)
 
 
 ## Appendix: Raw form of `record struct`s
