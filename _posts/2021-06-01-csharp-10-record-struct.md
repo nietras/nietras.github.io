@@ -395,6 +395,7 @@ To do this I created the following types:
  * `EquatableStruct` - plain struct which implements `IEquatable<EquatableStruct`.
  * `HashStruct` - plain struct which .
  * `HashEquatableStruct` - plain struct which implements both `IEquatable<EquatableStruct` and overrides `GetHashCode`.
+ * `ValueTuple` - this is just a value tuple `(Type Type, int Value)`
  * `RecordStruct` - straightforward `record struct` as discussed above.
  * `HashEquatableRecordStruct` - `record struct` which implements both `IEquatable<EquatableStruct` and overrides `GetHashCode`.
 
@@ -484,20 +485,39 @@ HashCode.Combine(Type.GetHashCode(), Value.GetHashCode());
 
 
 ## Benchmarks
-To examing the performance implications of the different type implementations 
+To examine the performance implications of the different type implementations 
 we will look at three benchmarks:
 
- * `Equals` - 
- * `GetHashCode` - 
- * `DictionaryGet` - 
+ * `Equals` - comparing two instances of the type e.g.:
+   ```csharp
+   [Benchmark(Baseline = true)]
+   public bool PlainStruct_Equals() => 
+       _plainStructKey.Equals(_plainStructKeyOther);
+   ```
+ * `GetHashCode` - getting hash code from an instance e.g.:
+   ```csharp
+   [Benchmark(Baseline = true)]
+   public int PlainStruct_GetHashCode() => 
+       _plainStructKey.GetHashCode();
+   ```
+ * `DictionaryGet` - looking up a value in a dictionary where the type is the
+   key e.g.:
+   ```csharp
+   [Benchmark(Baseline = true)]
+   public long PlainStruct_DictionaryGet() => 
+       _plainKeyDictionary[_plainStructKey];
+   ```
+    where the dictionary is populated by a small set of keys and values.
 
+These are all relevant to the use of value types in hash containers e.g. `HashSet<T>`,
+`Dictionary<TKey, TValue>` or similar. Which is where I often see the performance
+issues stemming from the `struct` defaults.
+
+To run the benchmarks on the console do:
 ```
 dotnet run -c Release -f net5.0 -- -m -d --runtimes netcoreapp50 --filter *
 ```
-
-[sharplab](https://sharplab.io/#v2:EYLgZgpghgLgrgJwgZwLRIMYHsEBNXIwJwYzIA+AAgEwCMAsAFBMBuUCABAshwLwcA7CAHcOAJQjY8AZSIkYAChgBPAA4QsYBZVoAGAJQAaDgBZq+gNxMdATgXdLTawGYuknLg6Fipce5lypAoAKmoQHKHqxgCWAjAcAGpQADZwEI6MQA===)
-
-
+Results are for:
 ```ini
 BenchmarkDotNet=v0.13.0, OS=Windows 10.0.19043.985 (21H1/May2021Update)
 AMD Ryzen 9 5950X, 1 CPU, 32 logical and 16 physical cores
@@ -508,14 +528,47 @@ AMD Ryzen 9 5950X, 1 CPU, 32 logical and 16 physical cores
 Runtime=.NET 5.0  Toolchain=netcoreapp50
 ```
 
-|               Method |      Mean |    Error |   StdDev | Ratio |  Gen 0 | Gen 1 | Gen 2 | Allocated |
-|---------------------:|----------:|---------:|---------:|------:|-------:|------:|------:|----------:|
-|         PlainStruct_ | 227.06 ns | 2.671 ns | 2.498 ns |  1.00 | 0.0110 |     - |     - |     184 B |
-|     EquatableStruct_ |  43.22 ns | 0.193 ns | 0.171 ns |  0.19 | 0.0019 |     - |     - |      32 B |
-|          HashStruct_ | 177.89 ns | 1.119 ns | 0.874 ns |  0.78 | 0.0091 |     - |     - |     152 B |
-| HashEquatableStruct_ |  10.65 ns | 0.101 ns | 0.089 ns |  0.05 |      - |     - |     - |         - |
-|          ValueTuple_ |  21.24 ns | 0.417 ns | 0.370 ns |  0.09 |      - |     - |     - |         - |
-|        RecordStruct_ |  10.91 ns | 0.111 ns | 0.098 ns |  0.05 |      - |     - |     - |         - |
+
+#### Equals
+```
+|                                  Method |      Mean | Ratio | Allocated | Code Size |
+|---------------------------------------- |----------:|------:|----------:|----------:|
+|                      PlainStruct_Equals | 94.744 ns |  1.00 |     104 B |     403 B |
+|                  EquatableStruct_Equals |  1.119 ns |  0.01 |         - |      59 B |
+|                       HashStruct_Equals | 94.763 ns |  1.00 |     104 B |     406 B |
+|              HashEquatableStruct_Equals |  1.291 ns |  0.01 |         - |      59 B |
+|                       ValueTuple_Equals |  2.385 ns |  0.03 |         - |     152 B |
+|                     RecordStruct_Equals |  2.380 ns |  0.03 |         - |     148 B |
+|        HashEquatableRecordStruct_Equals |  1.089 ns |  0.01 |         - |      59 B |
+```
+#### GetHashCode
+```
+|                                  Method |      Mean | Ratio | Allocated | Code Size |
+|---------------------------------------- |----------:|------:|----------:|----------:|
+|                 PlainStruct_GetHashCode | 34.241 ns |  1.00 |      32 B |      58 B |
+|             EquatableStruct_GetHashCode | 32.694 ns |  0.95 |      32 B |      58 B |
+|                  HashStruct_GetHashCode |  2.004 ns |  0.06 |         - |      49 B |
+|         HashEquatableStruct_GetHashCode |  1.980 ns |  0.06 |         - |      49 B |
+|                  ValueTuple_GetHashCode |  4.230 ns |  0.12 |         - |     145 B |
+|                RecordStruct_GetHashCode |  2.835 ns |  0.08 |         - |      58 B |
+|   HashEquatableRecordStruct_GetHashCode |  1.992 ns |  0.06 |         - |      49 B |
+```
+#### DictionaryGet
+```
+|                                  Method |       Mean | Ratio | Allocated | Code Size |
+|---------------------------------------- |-----------:|------:|----------:|----------:|
+|               PlainStruct_DictionaryGet | 213.739 ns |  1.00 |     184 B |     110 B |
+|           EquatableStruct_DictionaryGet |  39.478 ns |  0.18 |      32 B |     113 B |
+|                HashStruct_DictionaryGet | 167.100 ns |  0.78 |     152 B |     113 B |
+|       HashEquatableStruct_DictionaryGet |   7.555 ns |  0.04 |         - |     113 B |
+|                ValueTuple_DictionaryGet |  20.471 ns |  0.10 |         - |     174 B |
+|              RecordStruct_DictionaryGet |  10.562 ns |  0.05 |         - |     113 B |
+| HashEquatableRecordStruct_DictionaryGet |   8.707 ns |  0.04 |         - |     113 B |
+```
+
+
+
+[sharplab](https://sharplab.io/#v2:EYLgZgpghgLgrgJwgZwLRIMYHsEBNXIwJwYzIA+AAgEwCMAsAFBMBuUCABAshwLwcA7CAHcOAJQjY8AZSIkYAChgBPAA4QsYBZVoAGAJQAaDgBZq+gNxMdATgXdLTawGYuknLg6Fipce5lypAoAKmoQHKHqxgCWAjAcAGpQADZwEI6MQA===)
 
 
 ## Conclusion
@@ -524,7 +577,7 @@ You can see a status table of C# language features on GitHub at
 [Language Feature Status](https://github.com/dotnet/roslyn/blob/master/docs/Language%20Feature%20Status.md).
 
 
-## Appendix: `record struct` default mutable
+## Appendix: Raw form of `record struct`s
 As an appendix here I show what the default `record struct` looks like
 if it is not marked as `readonly` e.g.:
 ```csharp
@@ -614,7 +667,8 @@ public struct RecordStruct : IEquatable<RecordStruct>
 
     public override int GetHashCode()
     {
-        return EqualityComparer<Type>.Default.GetHashCode(<Type>k__BackingField) * -1521134295 + EqualityComparer<int>.Default.GetHashCode(<Value>k__BackingField);
+        return EqualityComparer<Type>.Default.GetHashCode(<Type>k__BackingField) * -1521134295 
+            + EqualityComparer<int>.Default.GetHashCode(<Value>k__BackingField);
     }
 
     public override bool Equals(object obj)
@@ -643,7 +697,7 @@ public struct RecordStruct : IEquatable<RecordStruct>
 }
 ```
 
-
+TODO RENAME
 ```csharp
 [IsReadOnly]
 public struct CustomRecordStruct : IEquatable<CustomRecordStruct>
