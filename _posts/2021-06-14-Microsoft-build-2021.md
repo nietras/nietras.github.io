@@ -5,11 +5,11 @@ title: Digest - Microsoft Build 2021
 
 Digest of the free virtual event at 
 [https://mybuild.microsoft.com/home](https://mybuild.microsoft.com/home)
-held May 25-27, 2021.
-
-Previous year digest can be found at 
-[Digest - Microsoft Build 2020]({{ site.baseurl }}/2020/06/07/Microsoft-build-2021/)
-for more content 😁.
+held May 25-27, 2021 plus a bit more. Previous year digest can be found at 
+[Digest - Microsoft Build 2020]({{ site.baseurl }}/2020/06/07/Microsoft-build-2020/)
+for more content 😁. Be sure to check out the accompanying blog post on
+[C# 10 - `record struct` Deep Dive & Performance Implications]({{ site.baseurl }}/2021/06/14/csharp-10-record-struct/) 
+too!
 
 ## Announcements and Blog Posts
 
@@ -28,8 +28,6 @@ and more. Results below speak for themselves, see the blog post for details.
 |           |          |           |       |          
 |WriteAsync | .NET 5.0 | 12.573 ms |  1.00 |     39 KB
 |WriteAsync | .NET 6.0 |  3.200 ms |  0.25 |      1 KB
-
-Oh and this release also introduces the `DateOnly` and `TimeOnly` structs. 👍
 
 ***
 ### [Announcing .NET MAUI Preview 4](https://devblogs.microsoft.com/dotnet/announcing-net-maui-preview-4/)
@@ -101,7 +99,10 @@ the release of Visual Studio 2019 v16.10 GA (and v16.11 preview 1) with:
 ***
 ### [Visual Studio 2022](https://devblogs.microsoft.com/visualstudio/visual-studio-2022/)
 **Summary:** [Amanda Silver](https://twitter.com/amandaksilver) shares exciting news with
-the first public preview of Visual Studio 2022 being released this summer. 64-bit!
+the first public preview of Visual Studio 2022 being released this summer. 64-bit! 
+And new icons 😅
+
+![Visual Studio 2022 New Icons](https://devblogs.microsoft.com/visualstudio/wp-content/uploads/sites/4/2021/04/icon-refresh.png)
 
 ***
 ### [F# and F# tools update for Visual Studio 16.10](https://devblogs.microsoft.com/dotnet/f-and-f-tools-update-for-visual-studio-16-10/)
@@ -116,8 +117,8 @@ updates to the F# tools for Visual Studio 16.10 with:
 
 ***
 ### [Learn What’s New in .NET Productivity](https://devblogs.microsoft.com/visualstudio/learn-whats-new-in-net-productivity/)
-**Summary:** [Mika Dumont](@mika_dumont) shares the latest tooling updates in 
-Visual Studio 2019. Jam packed with small clips and screen shots. Covers:
+**Summary:** [Mika Dumont](https://twitter.com/mika_dumont) shares the latest tooling updates in 
+Visual Studio 2019. Jam-packed with small clips and screen shots. Covers:
 
  * [Inheritance margin](https://docs.microsoft.com/visualstudio/ide/reference/options-text-editor-csharp-advanced?view=vs-2019#inheritance-margin)
  * [Remove Unused References](https://docs.microsoft.com/visualstudio/ide/reference/remove-unused-references?view=vs-2019)
@@ -131,7 +132,14 @@ To enable many of these you need to go to
 **Tools > Options > Text Editor > C# > IntelliSense** in 
 Visual Studio.
 
+***
+### [Date, Time, and Time Zone Enhancements in .NET 6](https://devblogs.microsoft.com/dotnet/date-time-and-time-zone-enhancements-in-net-6/)
+**Summary:** [Matt Johnson-Pint](https://twitter.com/mattjohnsonpint) covers the following topics:
 
+* [The new DateOnly and TimeOnly types](https://devblogs.microsoft.com/dotnet/date-time-and-time-zone-enhancements-in-net-6/#introducing-the-dateonly-and-timeonly-types)
+* [Time Zone Conversion APIs](https://devblogs.microsoft.com/dotnet/date-time-and-time-zone-enhancements-in-net-6/#time-zone-conversion-apis)
+* [Time Zone Display Names on Linux and macOS](https://devblogs.microsoft.com/dotnet/date-time-and-time-zone-enhancements-in-net-6/#time-zone-display-names-on-linux-and-macos)
+* [TimeZoneInfo.AdjustmentRule Improvements](https://devblogs.microsoft.com/dotnet/date-time-and-time-zone-enhancements-in-net-6/#timezoneinfo-adjustmentrule-improvements)
 
 ## Videos
 I have selected a few videos I found interesting below incl. full
@@ -213,8 +221,8 @@ in a great talk with:
 * C# 10
   * Many syntactic simplifications, less boilerplate
   * `record struct` 👍 (and by extension also `record class` which is the same as just writing `record`)
-    * NOTE!: I cover the performance implications of `record struct` in a
-      separate blog post [TODO!!!]().
+    * NOTE: As mentioned I cover the `record struct` in detail in a
+      separate blog post [C# 10 - `record struct` Deep Dive & Performance Implications]({{ site.baseurl }}/2021/06/14/csharp-10-record-struct/).
   * Improvements to lambdas and auto-properties
   
   ```csharp
@@ -351,54 +359,56 @@ other platforms including Windows, this is for you.
 ***
 
 That's all! However, there is a ton more videos so please be sure to check that out.
+And while we are at it [Rich Lander](https://twitter.com/runfaster2000) has a
+series of [conversations about .NET](https://devblogs.microsoft.com/dotnet/category/conversations/).
 
 ## Download Videos for Offline Viewing
 [dayngo.com](dayngo.com) doesn't appear to have the event listed yet but you can try checking at:
 
 [https://dayngo.com/channel9/](https://dayngo.com/channel9/)
 
-## People on Twitter
-
-[Rich Lander](https://twitter.com/runfaster2000)
-
-[Satya Nadella](https://twitter.com/satyanadella)
-
-[Scott Guthrie](https://twitter.com/scottgu)
-
-[Scott Hanselman](https://twitter.com/shanselman)
-
-[Scott Hunter](https://twitter.com/coolcsh)
-
-[David Ortinau](https://twitter.com/davidortinau)
-
-[Dmitry Lyalin](https://twitter.com/LyalinDotCom)
-
-[Daniel Roth](https://twitter.com/danroth27)
-
-[Shay Rojansky](https://twitter.com/shayrojansky)
-
-[Justin Johnson](https://twitter.com/profexorgeek)
-
-[Amanda Silver](https://twitter.com/amandaksilver)
-
-[Philip Carter](https://twitter.com/_cartermp)
-
-[Seth Juarez](https://twitter.com/sethjuarez)
-
-[Ben \{chmark\} Adams](https://twitter.com/ben_a_adams)
-
-[Adam Sitnik](https://twitter.com/SitnikAdam)
-
-[Mads Tørgersen](https://twitter.com/MadsTorgersen)
-
-[Dustin Campbell](https://twitter.com/dcampbell)
-
-[Maria Naggaga](https://twitter.com/LadyNaggaga)
-
-[Stephen Halter](https://twitter.com/halter73)
-
-[Kayla Cinnamon](https://twitter.com/cinnamon_msft), 
-
-[Craig Loewen](https://twitter.com/craigaloewen)
-
+[//]: # ## People on Twitter
+[//]: # 
+[//]: # [Rich Lander](https://twitter.com/runfaster2000)
+[//]: # 
+[//]: # [Satya Nadella](https://twitter.com/satyanadella)
+[//]: # 
+[//]: # [Scott Guthrie](https://twitter.com/scottgu)
+[//]: # 
+[//]: # [Scott Hanselman](https://twitter.com/shanselman)
+[//]: # 
+[//]: # [Scott Hunter](https://twitter.com/coolcsh)
+[//]: # 
+[//]: # [David Ortinau](https://twitter.com/davidortinau)
+[//]: # 
+[//]: # [Dmitry Lyalin](https://twitter.com/LyalinDotCom)
+[//]: # 
+[//]: # [Daniel Roth](https://twitter.com/danroth27)
+[//]: # 
+[//]: # [Shay Rojansky](https://twitter.com/shayrojansky)
+[//]: # 
+[//]: # [Justin Johnson](https://twitter.com/profexorgeek)
+[//]: # 
+[//]: # [Amanda Silver](https://twitter.com/amandaksilver)
+[//]: # 
+[//]: # [Philip Carter](https://twitter.com/_cartermp)
+[//]: # 
+[//]: # [Seth Juarez](https://twitter.com/sethjuarez)
+[//]: # 
+[//]: # [Ben \{chmark\} Adams](https://twitter.com/ben_a_adams)
+[//]: # 
+[//]: # [Adam Sitnik](https://twitter.com/SitnikAdam)
+[//]: # 
+[//]: # [Mads Tørgersen](https://twitter.com/MadsTorgersen)
+[//]: # 
+[//]: # [Dustin Campbell](https://twitter.com/dcampbell)
+[//]: # 
+[//]: # [Maria Naggaga](https://twitter.com/LadyNaggaga)
+[//]: # 
+[//]: # [Stephen Halter](https://twitter.com/halter73)
+[//]: # 
+[//]: # [Kayla Cinnamon](https://twitter.com/cinnamon_msft), 
+[//]: # 
+[//]: # [Craig Loewen](https://twitter.com/craigaloewen)
+[//]: # 
 [//]: # @runfaster2000 @davidortinau @shanselman @satyanadella @scottgu @coolcsh @LyalinDotCom @danroth27 @shayrojansky @profexorgeek @amandaksilver @_cartermp @sethjuarez @ben_a_adams @SitnikAdam @MadsTorgersen @dcampbell @LadyNaggaga @halter73 @cinnamon_msft @craigaloewen

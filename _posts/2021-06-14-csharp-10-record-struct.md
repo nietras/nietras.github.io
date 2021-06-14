@@ -2,18 +2,21 @@
 layout: post
 title: C# 10 - `record struct` Deep Dive & Performance Implications
 ---
-In this blog post I will do a quick deep dive into the new 
+In this blog post I will do a deep dive into 
 [`record struct`](https://github.com/dotnet/csharplang/issues/4334) 
 being introduced in the upcoming C# 10 and look at the performance implications
-of this in a specific context (**20x faster and 100% less allocations** than
-a plain `struct`). I will cover:
+of this in a specific context. I will cover:
 
  * Code generated for `record struct`
  * Importance of the generated code
  * Performance implications of default struct equality in C#
  * Setup project to use preview compiler via `Microsoft.Net.Compilers.Toolset` nuget package
  * Types and implementations covering different possibilities and common pitfalls
- * Benchmarks
+ * Benchmarks showing `record struct` can be **20x faster with 100% less allocations** than
+a plain `struct`
+
+Note: I use "struct" and "value type" interchangeably in this post, and refer
+to ordinary value types as "plain struct".
 
 ## `record struct`
 With `record struct` you can take a plain struct like 
@@ -93,7 +96,7 @@ public struct PlainStruct
 Pretty straightforward. The compiler generates backing fields for the properties 
 and in this case both getters and init setters.
 
-However, for the `record struct` the raw form is:
+For the `record struct` the raw form is:
 ```csharp
 [IsReadOnly]
 public struct RecordStruct : IEquatable<RecordStruct>
@@ -210,14 +213,14 @@ where I have selected the **C# Next: Record structs (22 Apr 2021)** compiler.
 
 To sum up the generated code for this `record struct` has:
  * Backing fields for properties
- * `get` and `init` for properties
+ * `get` and `init` for properties (if not `readonly` this would have `set` instead of `init`)
  * Constructor matching the properties
  * Custom overridden `ToString()` implementation based on `StringBuilder`
  * Implements `IEquality<RecordStruct>` as value based comparison 
    based on `EqualityComparer<T>.Default`
  * Equality operators `!=` and `==` that forward to `IEquality<RecordStruct>.Equals`
  * Custom overridden `bool Equals(object obj)` that forwards to `IEquality<RecordStruct>.Equals`
- * Custom `GetHashCode()` with default decent hash combination
+ * Custom `GetHashCode()` with hash combination
    based on `EqualityComparer<T>.Default`
  * A `Deconstruct` method for easy deconstruction i.e. you can write
    ```csharp
@@ -292,7 +295,7 @@ The following key points can be summarized from the post:
  * If a struct does not provide `Equals` and `GetHashCode`, 
    then the default versions of these methods from `System.ValueType` are used. 
  * The default `GetHashCode` version just returns a hash code 
-   of a first non-null field and “munges” it with a type id
+   of the first non-null field and “munges” it with a type id
    * If the first field is always the same, the default hash function 
      returns the same value for all the elements. This effectively 
      transforms a hash set into a linked list with O(N) for insertion 
@@ -302,8 +305,8 @@ The following key points can be summarized from the post:
    if the optimized default version is not applied. This means they are very slow.
    * The optimized version will only be used, if the value type has no 
      references and is properly packed (no padding between members).
-   * The optimized Equals is based on comparing bytes directly,
-     but for example `double` -0.0 and +0.0 are equal, 
+   * The optimized `Equals` is based on comparing bytes directly,
+     but, for example, `double` -0.0 and +0.0 are equal, 
      yet have different binary representations.
  * The default equality and hash code implementation for structs may easily 
    cause a severe performance impact for your application. 
@@ -346,7 +349,7 @@ where `nuget.config` is:
 </configuration>
 ```
 which contains the nuget feed and allows us to install the latest compilers toolset
-and hence our project file ends up as:
+and hence the project file `RecordStructBenchmark.csproj` ends up as:
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
@@ -387,17 +390,17 @@ supported in BenchmarkDotnet 0.12.1, but luckily this was fixed in
 
 ## Types
 To fully examine the set of possibilities given the default behavior of `struct`s,
-we need to cover both whether it is plain `struct` or `record struct` with or
+we need to cover both whether it is a plain `struct` or a `record struct` with or
 without manual/custom implementations of `IEquality<T>` and/or `GetHashCode`.
 To do this I created the following types:
 
  * `PlainStruct` - plain struct with no custom equality or hash code.
- * `EquatableStruct` - plain struct which implements `IEquatable<EquatableStruct`.
- * `HashStruct` - plain struct which .
- * `HashEquatableStruct` - plain struct which implements both `IEquatable<EquatableStruct` and overrides `GetHashCode`.
+ * `EquatableStruct` - plain struct which implements `IEquatable<EquatableStruct>`.
+ * `HashStruct` - plain struct which overrides `GetHashCode`.
+ * `HashEquatableStruct` - plain struct which implements both `IEquatable<EquatableStruct>` and overrides `GetHashCode`.
  * `ValueTuple` - this is just a value tuple `(Type Type, int Value)`
  * `RecordStruct` - straightforward `record struct` as discussed above.
- * `HashEquatableRecordStruct` - `record struct` which implements both `IEquatable<EquatableStruct` and overrides `GetHashCode`.
+ * `HashEquatableRecordStruct` - `record struct` which implements both `IEquatable<EquatableStruct>` and overrides `GetHashCode`.
 
 This covers common pitfalls where one forgets to implement either equality and hash code,
 while still implementing one of them.
@@ -516,7 +519,7 @@ These are all relevant to the use of value types in hash containers e.g. `HashSe
 `Dictionary<TKey, TValue>` or similar. Which is where I often see the performance
 issues stemming from the `struct` defaults.
 
-To run the benchmarks on the console do:
+Benchmarks can be run on the console with:
 ```
 dotnet run -c Release -f net5.0 -- -m -d --runtimes netcoreapp50 --filter *
 ```
@@ -570,8 +573,8 @@ Runtime=.NET 5.0  Toolchain=netcoreapp50
 
 The results pretty much speak for themselves, but note that:
 
- * Fastest code is with the manual/custom `Equals` and/or `GetHashCode`.
- * `record struct` is very close to the manual/custom code, but there appears to 
+ * Fastest code is with the manual/custom `Equals` and `GetHashCode`.
+ * `record struct` is very close to the manual code, but there appears to 
    be a small price to pay here for the `EqualityComparer<T>.Default` use.
  * `Equals` naturally boxes the value type on each call if `IEquatable<T>` is
    not implemented given `bool Equals(object obj)`.
@@ -579,7 +582,7 @@ The results pretty much speak for themselves, but note that:
  * Dictionary get benchmark shows that for a real use case 
    `record struct` can be **20x faster with 100% less allocations** than a plain struct
    with default equality and hash code. Even faster are the manual/code versions 
-   with **25-28x faster with 100% less allocations**, but small numbers.
+   at **25-28x faster with 100% less allocations**.
  * Value tuples are slower than `record struct`, but still way better
    than a plain struct with default equality and hash code.
 
@@ -592,21 +595,32 @@ It depends on your exact needs, of course.
 While value tuples can be an alternative they suffer from being harder to 
 maintain since you are basically repeating the type definition on every use.
 
-This is why I think **`record struct` is the best new feature of C# 10**. 
-
-
-
-## Conclusion
-
-
+This is why I think **`record struct` is a great new feature of C# 10**.
 
 You can see a status table of C# language features on GitHub at 
 [Language Feature Status](https://github.com/dotnet/roslyn/blob/master/docs/Language%20Feature%20Status.md).
+There are lots of great features coming!
 
 
 
+## Appendix: Source code and benchmark results
+[Source code]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/) can be found at:
+ * [RecordStructBenchmark.sln]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/RecordStructBenchmark.sln)
+ * [RecordStructBenchmark.csproj]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/RecordStructBenchmark.csproj)
+ * [Program.cs]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/Program.cs)
+ * [nuget.config]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/nuget.config)
 
-[sharplab](https://sharplab.io/#v2:EYLgZgpghgLgrgJwgZwLRIMYHsEBNXIwJwYzIA+AAgEwCMAsAFBMBuUCABAshwLwcA7CAHcOAJQjY8AZSIkYAChgBPAA4QsYBZVoAGAJQAaDgBZq+gNxMdATgXdLTawGYuknLg6Fipce5lypAoAKmoQHKHqxgCWAjAcAGpQADZwEI6MQA===)
+[Benchmark results]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/BenchmarkDotNet.Artifacts/results/)
+ can be found at:
+ * [EqualsBench-report.html]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/BenchmarkDotNet.Artifacts/results/EqualsBench-report.html),
+   [EqualsBench-asm]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/BenchmarkDotNet.Artifacts/results/EqualsBench-asm)
+ * [GetHashCodeBench-report.html]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/BenchmarkDotNet.Artifacts/results/GetHashCodeBench-report.html),
+   [GetHashCodeBench-asm]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/BenchmarkDotNet.Artifacts/results/GetHashCodeBench-asm)
+ * [DictionaryBench-report.html]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/BenchmarkDotNet.Artifacts/results/DictionaryBench-report.html),
+   [DictionaryBench-asm]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/BenchmarkDotNet.Artifacts/results/DictionaryBench-asm)
+
+Or you can also just go to the [GitHub repository](https://github.com/nietras/nietras.github.io),
+which has the code and results as well.
 
 
 ## Appendix: Raw form of `record struct`s
@@ -729,10 +743,11 @@ public struct RecordStruct : IEquatable<RecordStruct>
 }
 ```
 
-TODO RENAME
+Below you can also find the `record struct` which implements `IEquatable<T>` and
+overrides `GetHashCode`. These simply replace the otherwise generated versions.
 ```csharp
 [IsReadOnly]
-public struct CustomRecordStruct : IEquatable<CustomRecordStruct>
+public struct HashEquatableRecordStruct : IEquatable<HashEquatableRecordStruct>
 {
     [CompilerGenerated]
     private readonly Type <Type>k__BackingField;
@@ -768,17 +783,17 @@ public struct CustomRecordStruct : IEquatable<CustomRecordStruct>
         }
     }
 
-    public CustomRecordStruct(Type Type, int Value)
+    public HashEquatableRecordStruct(Type Type, int Value)
     {
         <Type>k__BackingField = Type;
         <Value>k__BackingField = Value;
     }
 
-    public bool Equals(CustomRecordStruct other)
+    public bool Equals(HashEquatableRecordStruct other)
     {
-        if (Type.Equals(other.Type))
+        if (Type == other.Type)
         {
-            return Value.Equals(other.Value);
+            return Value == other.Value;
         }
         return false;
     }
@@ -791,7 +806,7 @@ public struct CustomRecordStruct : IEquatable<CustomRecordStruct>
     public override string ToString()
     {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.Append("CustomRecordStruct");
+        stringBuilder.Append("HashEquatableRecordStruct");
         stringBuilder.Append(" { ");
         if (PrintMembers(stringBuilder))
         {
@@ -813,21 +828,21 @@ public struct CustomRecordStruct : IEquatable<CustomRecordStruct>
         return true;
     }
 
-    public static bool operator !=(CustomRecordStruct left, CustomRecordStruct right)
+    public static bool operator !=(HashEquatableRecordStruct left, HashEquatableRecordStruct right)
     {
         return !(left == right);
     }
 
-    public static bool operator ==(CustomRecordStruct left, CustomRecordStruct right)
+    public static bool operator ==(HashEquatableRecordStruct left, HashEquatableRecordStruct right)
     {
         return left.Equals(right);
     }
 
     public override bool Equals(object obj)
     {
-        if (obj is CustomRecordStruct)
+        if (obj is HashEquatableRecordStruct)
         {
-            return Equals((CustomRecordStruct)obj);
+            return Equals((HashEquatableRecordStruct)obj);
         }
         return false;
     }
