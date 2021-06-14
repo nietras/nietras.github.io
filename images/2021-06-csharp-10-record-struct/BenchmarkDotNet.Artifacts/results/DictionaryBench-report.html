@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>DictionaryBench-20210613-110018</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.13.0, OS=Windows 10.0.19043.985 (21H1/May2021Update)
+AMD Ryzen 9 5950X, 1 CPU, 32 logical and 16 physical cores
+.NET SDK=5.0.300
+  [Host]     : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
+  Job-GIPAIU : .NET 5.0.6 (5.0.621.22011), X64 RyuJIT
+</code></pre>
+<pre><code>Runtime=.NET 5.0  Toolchain=netcoreapp50  
+</code></pre>
+
+<table>
+<thead><tr><th>                           Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Ratio</th><th>Code Size</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>PlainStruct_DictionaryGet</td><td>213.739 ns</td><td>0.9996 ns</td><td>0.9351 ns</td><td>1.00</td><td>110 B</td><td>0.0110</td><td>-</td><td>-</td><td>184 B</td>
+</tr><tr><td>EquatableStruct_DictionaryGet</td><td>39.478 ns</td><td>0.1974 ns</td><td>0.1847 ns</td><td>0.18</td><td>113 B</td><td>0.0019</td><td>-</td><td>-</td><td>32 B</td>
+</tr><tr><td>HashStruct_DictionaryGet</td><td>167.100 ns</td><td>1.1699 ns</td><td>1.0371 ns</td><td>0.78</td><td>113 B</td><td>0.0091</td><td>-</td><td>-</td><td>152 B</td>
+</tr><tr><td>HashEquatableStruct_DictionaryGet</td><td>7.555 ns</td><td>0.0429 ns</td><td>0.0401 ns</td><td>0.04</td><td>113 B</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>ValueTuple_DictionaryGet</td><td>20.471 ns</td><td>0.0664 ns</td><td>0.0519 ns</td><td>0.10</td><td>174 B</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>RecordStruct_DictionaryGet</td><td>10.562 ns</td><td>0.0381 ns</td><td>0.0356 ns</td><td>0.05</td><td>113 B</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>HashEquatableRecordStruct_DictionaryGet</td><td>8.707 ns</td><td>0.0935 ns</td><td>0.0780 ns</td><td>0.04</td><td>113 B</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr></tbody></table>
+</body>
+</html>
