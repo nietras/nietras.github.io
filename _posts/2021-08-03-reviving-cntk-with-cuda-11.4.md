@@ -86,4 +86,4 @@ tokens are automatically blocked. This is covered in
 and has not yet been resolved.
 
 That's all. If you end up using any of the above releases and encounter any issues
-feel free to create a pull request on my branch and I can do a new release at some point.
+feel free to create a pull request to my fork and I can do a new release at some point.
