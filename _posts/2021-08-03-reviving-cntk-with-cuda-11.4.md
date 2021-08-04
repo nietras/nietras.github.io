@@ -3,8 +3,8 @@ layout: post
 title: Reviving CNTK with CUDA 11.4 for Ampere support
 ---
 
-In this blog post I quickly cover how I've revived the Microsoft
-open source Cognitive Toolkit [CNTK](https://cntk.ai) with CUDA 11.4 
+In this blog post I quickly cover how I've revived the open source 
+[Microsoft Cognitive Toolkit (CNTK)](https://cntk.ai) with CUDA 11.4 
 in order to get support for NVidia Ampere/30 series GPUs.
 
 This work is based on the community effort discussed in 
@@ -17,10 +17,10 @@ I, however, did the work in incremental steps and with a focus on
 reverse engineering nuget packages so new ones could be made. These
 steps were done as a series of pull requests (PRs) in my 
 [fork](https://github.com/nietras/CNTK)
-of the repository.
+of the repository as detailed below.
 
  * [Building with Visual Studio 2019 and CUDA 10.2 (incl. patches)](https://github.com/nietras/CNTK/pull/1) -
-   this PR and release simply updates the library to use CUDA 10.2 (from 10.0)
+   this PR simply updates the library to use CUDA 10.2 (from 10.0)
    to be able to build CNTK with as few changes as possible with Visual Studio 2019.
    However, still with the C++ v141 toolset. The main idea here was to verify that
    I could build CNTK and that it worked as expected in pipelines at my work.
@@ -30,18 +30,18 @@ of the repository.
  * [Add NuGet package definitions (reverse engineered)](https://github.com/nietras/CNTK/pull/4) -
    this PR adds `nuspec` files and similar reverse engineered from existing nuget packages
    for CNTK 2.7.0. This marks the first release of my fork with the first nuget packages 
-   as [`Release 2.7.1`](https://github.com/nietras/CNTK/releases/tag/v2.7.1).
+   as [Release 2.7.1](https://github.com/nietras/CNTK/releases/tag/v2.7.1).
  * [CUDA 11.1.1](https://github.com/nietras/CNTK/pull/6) - building from
    the [`2.7-cuda-11.1`](https://github.com/haryngod/CNTK/tree/2.7-cuda-11.1) branch
    this PR switches to using CUDA 11.1.1. There were several other changes needed
    to get this to compile. This was released as 
-   [`Release 2.8.0`](https://github.com/nietras/CNTK/releases/tag/v2.8.0).
+   [Release 2.8.0](https://github.com/nietras/CNTK/releases/tag/v2.8.0).
  * [CUDA 11.4](https://github.com/nietras/CNTK/pull/7) - finally I update to the
    latest available CUDA version (11.4) at this time. This required a lot of changes,
    due to CUDA apparently doing more template instantiations with increasing version,
    requiring adding overloads of several low level methods before the code would compile.
    This was released as 
-   [`Release 2.8.1`](https://github.com/nietras/CNTK/releases/tag/v2.8.1).
+   [Release 2.8.1](https://github.com/nietras/CNTK/releases/tag/v2.8.1).
 
 All the work was done on and for Windows x86-64 using Visual Studio 2019 (`v141` toolset)
 and was done as quickly as possible. Only single GPU is supported.
@@ -64,8 +64,8 @@ floating points on CPUs. Order of instructions etc.
 
 Each of the above releases contains the nuget packages too. I very much wanted to 
 publish these on [nuget.org](https://nuget.org), but they have a 250MB limit on
-package sizes, which is impossible to hit since a single file in cuDNN has 
-a size of `~615MB` name `cudnn_cnn_infer64_8.dll`, which cannot be 
+package sizes, which is impossible to hit since e.g. the file 
+`cudnn_cnn_infer64_8.dll` in cuDNN has  a size of `~615MB`, which cannot be 
 compressed below 250MB with zip. This limit is mentioned in 
 [https://github.com/NuGet/Home/issues/6208#issuecomment-346171972](https://github.com/NuGet/Home/issues/6208#issuecomment-346171972):
 
