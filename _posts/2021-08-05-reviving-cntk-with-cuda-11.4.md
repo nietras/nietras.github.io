@@ -72,11 +72,12 @@ compressed below 250MB with zip. This limit is mentioned in
 > Yes, the limit is 250 MB. However, it's extremely rare for packages to be that large. In fact, less than 3% of packages are larger than 10 MB (less than 0.1% are larger than 100 MB).
 
 Just because something is rare, does not mean there isn't a need for larger packages.
-And if they are rare the overall impact on overall disk usage should be small, so it is a
+And if they are rare the impact on overall disk usage should be small, so it is a
 bit counterintuitive.
 
 GitHub Package Registry like Azure Artifacts appears to support packages up to 512MB,
-so I have published the packages on my GitHub packages feed at https://github.com/nietras?tab=packages.
+so I have published the packages on my GitHub packages feed at 
+[https://github.com/nietras?tab=packages](https://github.com/nietras?tab=packages).
 However, GitHub does not allow anonymous un-authenticated access to this package feed, which
 means I would have to distribute an API key for read accesss to this, but users would
 not easily be able to add this to their git repositories (e.g. on GitHub) since such
