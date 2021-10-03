@@ -237,7 +237,8 @@ an empty return.
 ```
 
 ## World's Smallest C# Program with `N`
-We can do better, though. Introducing `N`!
+We can do better, though. Introducing `N`! 
+See [https://github.com/nietras/N](https://github.com/nietras/N).
 *The* library for World's Smallest C# Program.
 Available in a nuget package. Let's add it to the project with
 ```
@@ -255,7 +256,7 @@ this means `SmallestPossibleCSharpProgram.csproj` becomes:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="N" Version="0.1.0" />
+    <PackageReference Include="N" Version="0.2.0" />
   </ItemGroup>
 
 </Project>
@@ -277,4 +278,49 @@ Success!
 
 \* Using `N` 😉
 
+However, this is not the only solution. `N` let's you write the smallest C# program
+in many ways
 
+Want to be asynchronous? **World's Smallest C# async/await Program**
+```csharp
+await T;
+```
+Want to return a code?
+```csharp
+return I;
+```
+Want to increment?
+```csharp
+++I;
+```
+or
+```csharp
+I++;
+```
+Decrement?
+```csharp
+--I;
+```
+or
+```csharp
+I--;
+```
+Absolutely need to assign something?
+```csharp
+I=0;
+```
+or
+```csharp
+I=I;
+```
+Need to new something up:
+```csharp
+new O();
+```
+What about `args`? `N`s got you covered.
+```csharp
+N(args);
+```
+
+## How
+TBD
