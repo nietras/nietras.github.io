@@ -224,9 +224,8 @@ return;
 ```
 This compiles! And runs:
 ```
-SmallestPossibleCSharpProgram\bin\Debug\net6.0\SmallestPossibleCSharpProgram.exe 
+SmallestPossibleCSharpProgram.exe 
 (process 16400) exited with code 0.
-Press any key to close this window . . .
 ```
 Thus, this appears to be **The World's Smallest C# Program at `7` characters** ... out-of-the-box.
 
@@ -236,4 +235,46 @@ an empty return.
 ```
 .method private hidebysig static void  '<Main>$'(string[] args) cil managed
 ```
+
+## World's Smallest C# Program with `N`
+We can do better, though. Introducing `N`!
+*The* library for World's Smallest C# Program.
+Available in a nuget package. Let's add it to the project with
+```
+dotnet add SmallestPossibleCSharpProgram.csproj package N
+```
+this means `SmallestPossibleCSharpProgram.csproj` becomes:
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="N" Version="0.1.0" />
+  </ItemGroup>
+
+</Project>
+```
+and change `Program.cs` to:
+```csharp
+N();
+```
+Let's compile and run!
+```
+Hello friend from nietras!
+
+SmallestPossibleCSharpProgram.exe 
+(process 24920) exited with code 0.
+```
+Success!
+
+**The world's smallest C# program in just 4 characters is `N();`***
+
+\* Using `N` 😉
+
 
