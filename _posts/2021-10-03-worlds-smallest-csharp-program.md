@@ -49,7 +49,7 @@ Hence, let's make the challenge more clear. Given:
   dotnet new console
   ```
  - Write the smallest possible program in `Program.cs` and runs without adding any other
-   code files to the project and with the contents of `Main` (or actually `$Main`) solely
+   code files to the project and with the contents of `Main` (or actually `<Main>$`) solely
    defined by the contents of `Program.cs`. Any nuget package can be added to the project.
 
 I'm sure readers can guess the last sentence is key 😉 The project created is very simple,
@@ -210,7 +210,7 @@ four different `Main` signatures as defined in
 |`return`|`static int Main(string[] args)`|
 |No `await` or `return`|`static void Main(string[] args)`|
 
-Yes! We are missing `return`.
+Yes! We are missing `return`. The compiler was trying to fool us, sneeky 😆
 
 ## World's Smallest C# Program (out-of-the-box)
 ```csharp
@@ -224,6 +224,10 @@ Press any key to close this window . . .
 ```
 Thus, this appears to be **The World's Smallest C# Program at `7` characters** ... out-of-the-box.
 
-
-
+Also looking at the IL and the signature of the compiler generated `<Main>$` 
+it appears the above table is a bit misleading or does not take into account 
+an empty return.
+```
+.method private hidebysig static void  '<Main>$'(string[] args) cil managed
+```
 
