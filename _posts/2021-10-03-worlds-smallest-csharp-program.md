@@ -202,10 +202,10 @@ Ah, a nice error message telling us what to try. So:
    await, and new object expressions can be used as a statement
    ```
    wait.. what?! Isn't that a `new object expression`? 😅
-   Still at `9` characters still too long. 
+   Still at `9` characters too long. 
 
 Was that it? Is `8` characters the world's smallest C# program? 
-Something is missing here isn't it? Are top-level statements supposed to support
+Something is missing here isn't it? Aren't top-level statements supposed to support
 four different `Main` signatures as defined in 
 [Implicit entry point method](https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/program-structure/top-level-statements#c-language-specification)?
 
@@ -261,7 +261,7 @@ this means `SmallestPossibleCSharpProgram.csproj` becomes:
 
 </Project>
 ```
-and change `Program.cs` to:
+or later version maybe. We can then change `Program.cs` to:
 ```csharp
 N();
 ```
