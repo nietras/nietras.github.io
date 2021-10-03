@@ -48,12 +48,14 @@ Hence, let's make the challenge more clear. Given:
   cd SmallestPossibleCSharpProgram
   dotnet new console
   ```
- - Write the smallest possible program in `Program.cs` and runs without adding any other
-   code files to the project and with the contents of `Main` (or actually `<Main>$`) solely
-   defined by the contents of `Program.cs`. Any nuget package can be added to the project.
+ - Write the smallest possible program in `Program.cs` that compiles and runs 
+   without adding any other code files to the project and with the contents of 
+   `Main` (or actually `<Main>$`) solely defined by the contents of `Program.cs`. 
+   Any nuget package can be added to the project. No other changes can be made.
+ 
+I'm sure readers can guess the add any nuget package part is key 😉 
 
-I'm sure readers can guess the last sentence is key 😉 The project created is very simple,
-it has two files:
+The project created is very simple, it has two files:
 ```
 Program.cs
 SmallestPossibleCSharpProgram.csproj
@@ -86,10 +88,12 @@ Let's just try the absolute smallest possible C# program by deleting everything 
 ```
 and compile. This outputs:
 ```
-Error	CS5001	Program does not contain a static 'Main' method suitable for an entry point
+Error	CS5001	Program does not contain a static 'Main' 
+method suitable for an entry point
 ```
 Damn. Well, it wouldn't have been worth a blog post if this had been possible.
-Apparently, you have at least one [top-level statement](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/tutorials/top-level-statements) 🤔
+Apparently, you have to have at least one 
+[top-level statement](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/tutorials/top-level-statements) 🤔
 
 Let's try the next best case with just 1 character in `Program.cs`:
 ```csharp
@@ -116,9 +120,9 @@ and compile:
 CS0201	Only assignment, call, increment, decrement, await, 
 and new object expressions can be used as a statement
 ```
-Uhh a nice error message telling us what to try. So:
+Ah, a nice error message telling us what to try. So:
 
- - Assignment - this requires something to assign to e.g. a variable or field.
+ - **Assignment** - this requires something to assign to e.g. a variable or field.
    There are no global scope fields or variables available here without `using static`,
    so best case seems to be creating and assigning a variable:
    ```csharp
@@ -130,16 +134,16 @@ Uhh a nice error message telling us what to try. So:
    but its value is never used
    ```
    I know, I know 😅 This is our current smallest C# program at `8` characters incl. space.
- - Call - this requires something to call, which in C# requires an instance to call an
+ - **Call** - this requires something to call, which in C# requires an instance to call an
    instance method on, or type to call a static method on, or 
-   again `using static` pulling in static methods on a type, which would be too long.
+   again `using static` pulling in static methods from a type, which would be too long.
    How about:
    ```csharp
    0.Equals(0);
    ```
    this compiles and no warning, but it's longer at `12` characters.
    Seems like a dead end, let's move on.
- - Increment - so?
+ - **Increment** - so?
    ```csharp
    ++0;
    ```
@@ -150,8 +154,8 @@ Uhh a nice error message telling us what to try. So:
    ```
    So we are back to "Assignment" as shown above. Dead end without any available 
    variables, properties or indexers.
- - Decrement - same as increment.
- - `await` - so?
+ - **Decrement** - same as increment.
+ - **`await`** - so?
    ```csharp
    await;
    ```
@@ -173,7 +177,7 @@ Uhh a nice error message telling us what to try. So:
    The `no accessible extension method 'GetAwaiter'` part seems like 
    a loop hole here, we could create such an extension method,
    but we are still at `8` characters so no better than assignment. Moving on.
- - `new object` - seems a bit misleading here why "object"? 
+ - **`new object`** - seems a bit misleading here why "object"? 
    Do value types or structs not count? Or are they considered "objects"?
    In any case, so?
    ```csharp
@@ -185,7 +189,8 @@ Uhh a nice error message telling us what to try. So:
    ```
    this fails:
    ```
-   CS1526	A new expression requires an argument list or (), [], or {} after type
+   CS1526	A new expression requires an argument list 
+   or (), [], or {} after type
    ```
    Hmm, perhaps an anynomous type then:
    ```csharp
@@ -193,7 +198,8 @@ Uhh a nice error message telling us what to try. So:
    ```
    this fails:
    ```
-   CS0201	Only assignment, call, increment, decrement, await, and new object expressions can be used as a statement
+   CS0201	Only assignment, call, increment, decrement, 
+   await, and new object expressions can be used as a statement
    ```
    wait.. what?! Isn't that a `new object expression`? 😅
    Still at `9` characters still too long. 
