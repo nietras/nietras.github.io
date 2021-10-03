@@ -1,7 +1,15 @@
 ﻿---
 layout: post
-title: World's Smallest C# Program (with `N`)
+title: World's Smallest C# Program (featuring `N`)
 ---
+**TLDR:** In .NET 6/C# 10 the smallest possible C# program appears 
+to be `return;` or 7 characters long. Using `N` 
+([github](https://github.com/nietras/N), [nuget](https://www.nuget.org/packages/N/))
+this can be brought down to 4 characters with `N();`.
+This should be the world's smallest C# program... currently. 
+
+---
+
 Recently, while lying facedown on an exercise mat, I had a fun idea
 for how to write the world's smallest C# program in .NET 6/C# 10 by
 abusing the [global usings](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-10#global-using-directives) 
@@ -32,7 +40,7 @@ If you are anything like me, this question only raises more questions:
     small self-contained [SeeSharpSnake](https://github.com/MichalStrehovsky/SeeSharpSnake).
   - Lines? Characters?
   - One or more files?
-- What C# and .NET version?
+- Which C# and .NET version?
 
 ## Challenge: The Devil is in the Details
 Hence, let's make the challenge more clear. Given:
@@ -48,12 +56,14 @@ Hence, let's make the challenge more clear. Given:
   cd SmallestPossibleCSharpProgram
   dotnet new console
   ```
+
+Then:
  - Write the smallest possible program in `Program.cs` that compiles and runs 
    without adding any other code files to the project and with the contents of 
    `Main` (or actually `<Main>$`) solely defined by the contents of `Program.cs`. 
    Any nuget package can be added to the project. No other changes can be made.
  
-I'm sure readers can guess the add any nuget package part is key 😉 
+I'm sure readers can guess the add any nuget package part is key later on 😉 
 
 The project created is very simple, it has two files:
 ```
@@ -236,11 +246,14 @@ an empty return.
 .method private hidebysig static void  '<Main>$'(string[] args) cil managed
 ```
 
+
+Now where was I? Right, lying face down on a mat. Can we not do better by
+going off the rails here and apply some trickery? Absolutely.
+
 ## World's Smallest C# Program with `N`
-We can do better, though. Introducing `N`! 
-See [https://github.com/nietras/N](https://github.com/nietras/N).
-*The* library for World's Smallest C# Program.
-Available in a nuget package. Let's add it to the project with
+Introducing `N` ([github](https://github.com/nietras/N), [nuget](https://www.nuget.org/packages/N/))! 
+*The* library for writing the world's smallest C# programs. 
+Let's add it to the project with:
 ```
 dotnet add SmallestPossibleCSharpProgram.csproj package N
 ```
@@ -324,3 +337,14 @@ N(args);
 
 ## How
 TBD
+
+
+## Why
+NOTES: why not. let's examine, discuss whats important with code, should be read, 
+intent, context and scope. It depends!
+
+
+## Conclusion
+
+PS: I don't pretend to be the first or only one who thought of this, 
+I am sure others have. Just haven't found anyone reporting it.
