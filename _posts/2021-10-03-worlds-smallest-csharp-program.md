@@ -455,7 +455,7 @@ This compiles with warning `CS0642	Possible mistaken empty statement`.
 How does `N` work? This brings us back to the idea involving 
 [global usings](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-10#global-using-directives).
 To have something smaller we need to "pull in" variables, properties, methods or similar
-to the scope of `Main` i.e. top-level statement `Program.cs`. There are many ways to do
+to the scope of `Main` i.e. top-level statements in `Program.cs`. There are many ways to do
 this but the simple one is to add something like:
 ```csharp
 global using static NAMESPACE.CLASSNAME;
@@ -469,9 +469,76 @@ the `<Using>` item in MSBuild as discussed in
     <Using Include="NAMESPACE.CLASSNAME" Static="true"  />
   </ItemGroup>
 ```
-
 Basically, cheating. This is what the `N` library and nuget package does 
 and in fact it does both ways just to show case the ways you can abuse this.
+The library consists of the following files:
+
+ - `C.cs` - ordinary C# file with the code providing the class `C` with properties, methods etc.
+ - `N.csproj` - project file with a few customization to use the `N.nuspec` file.
+ - `N.nuspec` - nuspec file to customize the nuget package and apply the above mentioned global using hacks.
+ - `N.props` - properties file included in the nuget package to hack the consuming project.
+ - `NGlobalUsings.cs` - the file containing the `global using static` statements for consuming project.
+
+ Let's start with the project file `N.csproj`.
+ ```xml
+ <Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>nietras</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>10</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <Version>0.2.0</Version>
+    <PackageVersion>$(Version)</PackageVersion>
+
+    <NuspecFile>N.nuspec</NuspecFile>
+    <NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>
+  </PropertyGroup>
+
+</Project>
+```
+note the following:
+ - `<ImplicitUsings>enable</ImplicitUsings>` enable the implicit usings defined for this project type.
+ - `<NuspecFile>N.nuspec</NuspecFile>` specifies we use a custom nuspec file for nuget package.
+ - `<NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>` forwards properties to
+   the nuspec file when building, making it easier to test. And  only have version here.
+the rest is pretty standard.
+
+The `N.nuspec` file (with some details omitted) is:
+```xml
+<?xml version="1.0"?>
+<package>
+  <metadata minClientVersion="4.0">
+    <id>N</id>
+    <version>$version$</version>
+    <description>Tired of boilerplate? Then N is for you! The Library for World's Smallest C# Programs.</description>
+    <authors>nietras</authors>
+    <!-- details omitted -->
+    <contentFiles>
+      <files include="contentFiles/any/any/NGlobalUsings.cs" buildAction="Compile" copyToOutput="false" flatten="false" />
+    </contentFiles>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\$configuration$\netstandard2.0\N.dll" target="lib/netstandard2.0" />
+    <file src="NGlobalUsings.cs" target="contentFiles/any/any" />
+    <file src="N.props" target="build" />
+    <file src="Icon.png" target="" />
+  </files>
+</package>
+```
+alright there is a little to unpack here:
+ - `<file src="bin\$configuration$\netstandard2.0\N.dll" target="lib/netstandard2.0" />` 
+   simply defines `N.dll` as a dll to be copied to target `lib/netstandard2.0`, hence, defining
+   the dll as for `netstandard2.0` per convention.
+ - `<file src="NGlobalUsings.cs" target="contentFiles/any/any" />` copies this source file to
+   target meaning this will be considered a content file for any platform any "framework".
+
 
 
 
