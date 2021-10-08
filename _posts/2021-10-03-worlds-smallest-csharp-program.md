@@ -6,9 +6,10 @@ title: World's Smallest C# Program (featuring `N`)
 smallest possible C# program appears to be `{}` or 2 characters long. 
 This doesn't do much, though. 
 Using `N` ([github](https://github.com/nietras/N), [nuget](https://www.nuget.org/packages/N/))
-and [global usings](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/using-directive#global-modifier) 
 you can write a program doing something in 4 characters with e.g. `N();`
-in .NET 6 and C# 10. Along the way learn a few C# 10 and nuget packaging tricks.
+in .NET 6 and C# 10. Along the way learn a few C# 10 and nuget packaging tricks incl.
+[global usings](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/using-directive#global-modifier) 
+and [implicit usings](https://docs.microsoft.com/en-us/dotnet/core/tutorials/top-level-templates#implicit-using-directives).
 
 ---
 
@@ -30,7 +31,7 @@ So let's start with the challenge:
 > What is the world's smallest C# program?
 
 ## Questions
-If you are anything like me, this question only raises more questions:
+If you are anything like me this question only raises more questions:
 
 - Smallest in what way?
   - Bytes? I doubt I can beat [Michal Strehovský](https://twitter.com/mstrehovsky)s 
@@ -110,7 +111,8 @@ compile:
 ```
 CS1002	; expected
 ```
-Of course, we love those. So?
+Of course, we love those. Really, I do. Parenthesis and braces too. 
+So?
 ```csharp
 ;
 ```
@@ -273,7 +275,8 @@ to empty? A comment?
 ```
 This, of course, fails as it is equivalent to an empty file:
 ```
-CS5001	Program does not contain a static 'Main' method suitable for an entry point
+CS5001 Program does not contain a static 'Main' method 
+       suitable for an entry point
 ```
 We are, however, close.
 
@@ -298,7 +301,6 @@ In IL this becomes:
 ```
 It runs but of course does nothing:
 ```
-
 SmallestPossibleCSharpProgram.exe (process 8044) exited with code 0.
 ```
 
@@ -322,8 +324,7 @@ In fact this compiles fine in .NET 5 and C# 9 with the following.
 {}
 ```
 
-I'm sure plenty of people have figured that out before. 
-I have not seen it mentioned anywhere, though.
+I'm sure plenty of people have figured that out before.
 
 ## Extended Challenge: Do Something
 Let's make the challenge more interesting and also require that `Main`
@@ -341,7 +342,6 @@ dotnet add SmallestPossibleCSharpProgram.csproj package N
 this means `SmallestPossibleCSharpProgram.csproj` becomes:
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
@@ -352,7 +352,6 @@ this means `SmallestPossibleCSharpProgram.csproj` becomes:
   <ItemGroup>
     <PackageReference Include="N" Version="0.2.0" />
   </ItemGroup>
-
 </Project>
 ```
 We can then change `Program.cs` to:
@@ -449,7 +448,7 @@ Need to dispose with using:
 ```csharp
 using(D);
 ```
-This compiles with warning `CS0642	Possible mistaken empty statement`.
+This compiles with warning `CS0642	Possible mistaken empty statement`, though.
 
 ## How
 Now where was I? Yes, lying facedown on an exercise mat and the idea involving 
@@ -470,10 +469,10 @@ the `<Using>` item in MSBuild as discussed in
   </ItemGroup>
 ```
 Basically, cheating. This is what the `N` library and nuget package does 
-and in fact it does both ways just to show case the ways you can abuse this.
+and in fact it does both ways just to showcase the ways you can abuse this.
 The library consists of the following files:
 
- - `N.csproj` - project file with a few customization to use the `N.nuspec` file.
+ - `N.csproj` - project file with a few customizations to use the `N.nuspec` file.
  - `N.nuspec` - nuspec file to customize the nuget package and apply the above mentioned global using hacks.
  - `N.props` - properties file included in the nuget package to hack the consuming project.
  - `NGlobalUsings.cs` - the file containing the `global using static` statements for consuming project.
@@ -481,8 +480,7 @@ The library consists of the following files:
  
  Let's start with the project file `N.csproj`.
  ```xml
- <Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>nietras</RootNamespace>
@@ -497,14 +495,13 @@ The library consists of the following files:
     <NuspecFile>N.nuspec</NuspecFile>
     <NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>
   </PropertyGroup>
-
 </Project>
 ```
 Note the following:
 
  - Line 6: `<ImplicitUsings>enable</ImplicitUsings>` <br/> enable the implicit usings defined for this project type.
- - Line 14: `<NuspecFile>N.nuspec</NuspecFile>` <br/> specifies we use a custom nuspec file for nuget package.
- - Line 15: `<NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>` <br/> forwards properties to
+ - Line 13: `<NuspecFile>N.nuspec</NuspecFile>` <br/> specifies we use a custom nuspec file for nuget package.
+ - Line 14: `<NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>` <br/> forwards properties to
    the nuspec file when building, making it easier to test. And  only have version here.
 
 The rest is pretty standard.
@@ -742,7 +739,7 @@ using Contoso.Orders.WebApi;
 using Contoso.Fulfilment.WebApi;
 ```
 Establishes context about what this code file is using and hence what it is about.
-Code should be written for reading it again. It should [read like a book](https://www.google.com/search?q=clean+code+book). 
+Code should be written for **reading**. It should [read like a book](https://www.google.com/search?q=clean+code+book). 
 While [fitting in your head](https://blog.ploeh.dk/2021/06/14/new-book-code-that-fits-in-your-head/).
 
 
