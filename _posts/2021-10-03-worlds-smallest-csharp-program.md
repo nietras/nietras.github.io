@@ -8,7 +8,7 @@ This doesn't do much, though.
 Using `N` ([github](https://github.com/nietras/N), [nuget](https://www.nuget.org/packages/N/))
 and [global usings](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/using-directive#global-modifier) 
 you can write a program doing something in 4 characters with e.g. `N();`
-in .NET 6 and C# 10.
+in .NET 6 and C# 10. Along the way learn a few C# 10 and nuget packaging tricks.
 
 ---
 
@@ -331,7 +331,7 @@ actually does something i.e. it must have more than `nop` and `ret`
 in the compiled IL. We've seen examples of that above, but we can do 
 better.
 
-## World's Smallest C# Program Doing Something (featuring `N`)
+## World's Smallest C# Programs Doing Something (featuring `N`)
 Introducing `N` ([github](https://github.com/nietras/N), [nuget](https://www.nuget.org/packages/N/))! 
 *The* library for writing the world's smallest C# programs "that do something"™.
 Let's add it to the project with:
@@ -452,7 +452,7 @@ using(D);
 This compiles with warning `CS0642	Possible mistaken empty statement`.
 
 ## How
-How does `N` work? This brings us back to the idea involving 
+Now where was I? Yes, lying facedown on an exercise mat and the idea involving 
 [global usings](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-10#global-using-directives).
 To have something smaller we need to "pull in" variables, properties, methods or similar
 to the scope of `Main` i.e. top-level statements in `Program.cs`. There are many ways to do
@@ -473,12 +473,12 @@ Basically, cheating. This is what the `N` library and nuget package does
 and in fact it does both ways just to show case the ways you can abuse this.
 The library consists of the following files:
 
- - `C.cs` - ordinary C# file with the code providing the class `C` with properties, methods etc.
  - `N.csproj` - project file with a few customization to use the `N.nuspec` file.
  - `N.nuspec` - nuspec file to customize the nuget package and apply the above mentioned global using hacks.
  - `N.props` - properties file included in the nuget package to hack the consuming project.
  - `NGlobalUsings.cs` - the file containing the `global using static` statements for consuming project.
-
+ - `C.cs` - ordinary C# file with the code providing the class `C` with properties, methods etc.
+ 
  Let's start with the project file `N.csproj`.
  ```xml
  <Project Sdk="Microsoft.NET.Sdk">
@@ -500,12 +500,14 @@ The library consists of the following files:
 
 </Project>
 ```
-note the following:
- - `<ImplicitUsings>enable</ImplicitUsings>` enable the implicit usings defined for this project type.
- - `<NuspecFile>N.nuspec</NuspecFile>` specifies we use a custom nuspec file for nuget package.
- - `<NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>` forwards properties to
+Note the following:
+
+ - Line 6: `<ImplicitUsings>enable</ImplicitUsings>` <br/> enable the implicit usings defined for this project type.
+ - Line 14: `<NuspecFile>N.nuspec</NuspecFile>` <br/> specifies we use a custom nuspec file for nuget package.
+ - Line 15: `<NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>` <br/> forwards properties to
    the nuspec file when building, making it easier to test. And  only have version here.
-the rest is pretty standard.
+
+The rest is pretty standard.
 
 The `N.nuspec` file (with some details omitted) is:
 ```xml
@@ -532,23 +534,259 @@ The `N.nuspec` file (with some details omitted) is:
   </files>
 </package>
 ```
-alright there is a little to unpack here:
- - `<file src="bin\$configuration$\netstandard2.0\N.dll" target="lib/netstandard2.0" />` 
-   simply defines `N.dll` as a dll to be copied to target `lib/netstandard2.0`, hence, defining
-   the dll as for `netstandard2.0` per convention.
- - `<file src="NGlobalUsings.cs" target="contentFiles/any/any" />` copies this source file to
-   target meaning this will be considered a content file for any platform any "framework".
+Alright there is a little to unpack here (just remember a nuget package is a zip-file 
+defined by it's contents by conventions for different directories):
 
+ - Line 17: `<file src="bin\$configuration$\netstandard2.0\N.dll" target="lib/netstandard2.0" />` <br/>
+   simply defines `N.dll` as a dll to be copied to target `lib/netstandard2.0`,
+   which per convention defines the dll for `netstandard2.0`.
+ - Line 18: `<file src="NGlobalUsings.cs" target="contentFiles/any/any" />` <br/>
+   ensures this source file will be added as a content file for any platform and "framework".
+ - Line 10: `<files include="contentFiles/any/any/NGlobalUsings.cs" buildAction="Compile" copyToOutput="false" flatten="false" />`  <br/>
+   adds `NGlobalUsings.cs` to compilation and hence this file becomes 
+   part of the source files of the project consuming the package.
+ - Line 19: `<file src="N.props" target="build" />` <br/>
+   add the `N.props` file to `build` directory, which by convention adds 
+   it to build of the consuming project.
 
+The `N.props` file is defined with:
+```xml
+<Project>
+  <!-- Wickedly allow unsafe blocks -->
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  
+  <!-- Define global usings see https://github.com/dotnet/sdk/issues/19521 -->
+  <ItemGroup>
+    <Using Include="System.Runtime.CompilerServices" />
+    <Using Include="System.Console" Static="true"  />
+    <Using Include="System.Int32" Alias="J" />
+  </ItemGroup>
 
+  <!--
+  Hide files added to compile from being visible in e.g. Visual Studio
+  See https://til.cazzulino.com/dotnet/nuget/hide-contentfiles-from-your-nuget-packages
+  -->
+  <ItemGroup>
+    <Compile Update="@(Compile)">
+      <Visible Condition="'%(NuGetItemType)' == 'Compile' and '%(NuGetPackageId)' == 'N'">false</Visible>
+    </Compile>
+  </ItemGroup>
+</Project>
+```
+This does 3 things. First, it exemplifies how a props file can set or 
+define any property just like you can normally. Here by setting 
+`AllowUnsafeBlocks` to `true`. Allowing the consuming project to use
+`unsafe` code.
 
+Second, it defines 3 different types of global or implicit usings. 
+Equivalent to:
+```csharp
+global using System.Runtime.CompilerServices;
+global using static System.Console;
+global using J = System.Int32;
+```
+
+Third, it uses a trick as discussed in 
+[Hide contentFiles from your nuget packages](https://til.cazzulino.com/dotnet/nuget/hide-contentfiles-from-your-nuget-packages)
+to hide the `NGlobalUsings.cs` file in Visual Studio, as shown below.
+
+![Smallestpossiblecsharpprogram In Vs]({{ site.baseurl }}/images/2021-10-worlds-smallest-csharp-program/smallestpossiblecsharpprogram-in-vs.png)
+
+If you expand the **Dependencies** in Solution Explorer you can see this file
+under **Content Files**, though.
+
+![Smallestpossiblecsharpprogram In Vs Expanded]({{ site.baseurl }}/images/2021-10-worlds-smallest-csharp-program/smallestpossiblecsharpprogram-in-vs-expanded.png)
+
+The `NGlobalUsings.cs` file is just a single line:
+```csharp
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
+namespace nietras;
+
+public static class C
+{
+    public static void N(string[]? args = default)
+    {
+        Console.WriteLine($"Hello friend from nietras!\n{string.Join("\n", args ?? Array.Empty<string>())}");
+    }
+
+    public static bool B { get; set; } = false;
+
+    public static E D { get; set; } = new ();
+
+    public record E : IDisposable
+    {
+        public void Dispose() { }
+    }
+
+    public static int I { get; set; } = 42;
+
+    public unsafe static byte* P { get; set; } = (byte*)Marshal.AllocHGlobal(1);
+
+    public record O;
+
+    static int _r = 0;
+    public static ref int R { get => ref _r; }
+
+    public readonly record struct S;
+
+    public static Task T { get; set; } = Task.CompletedTask;
+
+    public static Int32Awaiter GetAwaiter(this int i)
+    {
+        return new Int32Awaiter(i);
+    }
+
+    public readonly struct Int32Awaiter : INotifyCompletion
+    {
+        readonly int _i;
+
+        public Int32Awaiter(int i) => _i = i;
+
+        public bool IsCompleted { get; } = true;
+        public int GetResult() => _i;
+        public void OnCompleted(Action continuation) => continuation();
+    }
+}
+```
+This simply defines a lot of properties and types to be able to write the
+world's smallest C# programs.
+
+Of note here, are a few C# 10 features:
+
+ - `namespace nietras;` namespace without `{}` so no more namespace indentation. 
+  This is called [File-scoped namespace declaration](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-10#file-scoped-namespace-declaration).
+ - `readonly record struct` as covered in [C# 10 - `record struct` Deep Dive & Performance Implications]({{ site.baseurl }}/2021/06/14/csharp-10-record-struct)
+
+For more see [What's new in C# 10.0](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-10).
+
+All in all this allows you to write a `Program.cs` with such code as:
+```csharp
+{}
+N();
+++I;
+I++;
+--I;
+I--;
+I=0;
+I=I;
+O o;
+S s;
+J j=1;
+await T;
+while(B);
+for(;B;);
+do{}while(B);
+new O();
+N(args);
+await 1;
+using(D);
+unsafe{*P=2;}
+Unsafe.As<int,byte>(ref R)=3;
+WriteLine("wicked implicit global usings");
+return I;
+```
+you don't need `N` for `{}` of course. 😃
+
+Note in above that I didn't have to make an assembly `N.dll` for this.
+I could just have added all the code in `NGlobalUsings.cs`, 
+but what fun would that have been. And you don't actually need
+`NGlobalUsings.cs` since you can just use the `props` trick instead,
+which is certainly a better way.
+
+But why do this? And is it a good idea? Definitely don't think
+it is a good idea to make a nuget package that does this, but
+let's discuss this a bit more.
 
 ## Why
-NOTES: why not. let's examine, discuss whats important with code, should be read, 
-intent, context and scope. It depends!
+Why look at the world's smallest possible program? Why not 🤷‍ 
+Mainly I saw this as a fun exercise and hopefully learn something
+new along the way. I don't pretend to be the first or only one who 
+thought of this and the worlds smallest C# program `{}`. 
+I am sure others have. Just haven't found anyone reporting it.
 
+Perhaps the most controversial feature of C# 10 and .NET 6 are
+[global usings](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/using-directive#global-modifier)
+and
+[implicit using directives](https://docs.microsoft.com/en-us/dotnet/core/tutorials/top-level-templates#implicit-using-directives).
+With any new feature, innovation or development there are questions around 
+whether this is "good" or "bad". In my view it depends. Let's look at `Program.cs`:
+```csharp
+N();
+```
+Does this convey any context about what this program does or it's intent? 
+No, so clearly this is a bad idea. But if you have a project called
+`SimpleHelloWorldWebApi` with `Program.cs`:
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+ 
+if (app.Environment.IsDevelopment()){ app.UseDeveloperExceptionPage(); }
+ 
+app.MapGet("/", () => "Hello World!");
+ 
+app.Run();
+```
+is the context and intent not clear? I think so. Do we need a long list
+of `using`s at the top of the file to help us define context here? No, that's
+probably fine. But what if we had a big application with many different concerns
+and externals, would it then be a good idea to use global usings for all
+possible namespaces? I don't think so. `using`s can help establish context
+for a given source file. What things does this code use etc.? E.g. 
+a file with:
+```csharp
+using Contoso.Orders.WebApi;
+using Contoso.Fulfilment.WebApi;
+```
+Establishes context about what this code file is using and hence what it is about.
+Code should be written for reading it again. It should [read like a book](https://www.google.com/search?q=clean+code+book). 
+While [fitting in your head](https://blog.ploeh.dk/2021/06/14/new-book-code-that-fits-in-your-head/).
+
+
+In C# `using`s are part of this. But do you need any of:
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+```
+in every file? Probably not. On the other hand effectively pulling in any of:
+```csharp
+using System.IO;
+using System.Net.Http;
+using System.Threading;
+using System.Net.Http.Json;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+```
+in every file, as discussed in 
+[Exploring a minimal Web API with ASP.NET Core 6](https://www.hanselman.com/blog/exploring-a-minimal-web-api-with-aspnet-core-6) 
+seems excessive to me. At least I like to have using scope clearly defined
+for a given file as a way to understand what a given file might be "touching".
+Especially, as a code reviewer this can help define much needed context and 
+scope of the code in question. Why does this code related to say sorting a
+list of values use `System.IO` for example? It shouldn't so let's keep an
+eye out for this.
+
+It all depends on what application you are building and the scope of it.
+The more different concerns, the larger the context, the more precise I would
+want the `using`s to be. The smaller and more focused an application is, like
+a small micro-service, the less would I need context from `using`s.
+
+In a long book a table of contents is nice. In a short article, 
+there is no need. It depends, as always.
 
 ## Conclusion
-
-PS: I don't pretend to be the first or only one who thought of this, 
-I am sure others have. Just haven't found anyone reporting it.
+`{}` or `N();` featuring [`N`](https://github.com/nietras/N) -
+ perhaps the shortest named nuget library in the world 😉.
