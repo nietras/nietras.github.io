@@ -444,7 +444,7 @@ Remember the `GetAwaiter()` loop hole? `N` let's you await an integer (8 charact
 ```csharp
 await 1;
 ```
-Need to dispose with using:
+Need to dispose with using (9 characters):
 ```csharp
 using(D);
 ```
@@ -499,7 +499,7 @@ The library consists of the following files:
 ```
 Note the following:
 
- - Line 6: `<ImplicitUsings>enable</ImplicitUsings>` <br/> enable the implicit usings defined for this project type.
+ - Line 5: `<ImplicitUsings>enable</ImplicitUsings>` <br/> enable the implicit usings defined for this project type.
  - Line 13: `<NuspecFile>N.nuspec</NuspecFile>` <br/> specifies we use a custom nuspec file for nuget package.
  - Line 14: `<NuspecProperties>version=$(Version);configuration=$(Configuration)</NuspecProperties>` <br/> forwards properties to
    the nuspec file when building, making it easier to test. And  only have version here.
@@ -572,12 +572,12 @@ The `N.props` file is defined with:
   </ItemGroup>
 </Project>
 ```
-This does 3 things. First, it exemplifies how a props file can set or 
+This does three things. First, it exemplifies how a props file can set or 
 define any property just like you can normally. Here by setting 
 `AllowUnsafeBlocks` to `true`. Allowing the consuming project to use
 `unsafe` code.
 
-Second, it defines 3 different types of global or implicit usings. 
+Second, it defines three different types of global or implicit usings. 
 Equivalent to:
 ```csharp
 global using System.Runtime.CompilerServices;
@@ -597,6 +597,12 @@ under **Content Files**, though.
 ![Smallestpossiblecsharpprogram In Vs Expanded]({{ site.baseurl }}/images/2021-10-worlds-smallest-csharp-program/smallestpossiblecsharpprogram-in-vs-expanded.png)
 
 The `NGlobalUsings.cs` file is just a single line:
+```csharp
+global using static nietras.C;
+```
+
+Finally, the `C.cs` file simply defines the static class `C` with all
+the methods, properties and similar needed to write small C# programs.
 ```csharp
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -649,9 +655,6 @@ public static class C
     }
 }
 ```
-This simply defines a lot of properties and types to be able to write the
-world's smallest C# programs.
-
 Of note here, are a few C# 10 features:
 
  - `namespace nietras;` namespace without `{}` so no more namespace indentation. 
@@ -699,7 +702,7 @@ it is a good idea to make a nuget package that does this, but
 let's discuss this a bit more.
 
 ## Why
-Why look at the world's smallest possible program? Why not 🤷‍ 
+Why look at the world's smallest possible program? 
 Mainly I saw this as a fun exercise and hopefully learn something
 new along the way. I don't pretend to be the first or only one who 
 thought of this and the worlds smallest C# program `{}`. 
@@ -787,3 +790,8 @@ there is no need. It depends, as always.
 ## Conclusion
 `{}` or `N();` featuring [`N`](https://github.com/nietras/N) -
  perhaps the shortest named nuget library in the world 😉.
+
+PS: Remember .NET 6 and C# 10 will be released in exactly one
+month at [.NET Conf 2021](https://www.dotnetconf.net/) November 9-11.
+While we are at please do check out the excellent recordings from
+[dotnetos conf 2021](https://www.youtube.com/playlist?list=PLpUkQYy-K8Y98ml5H4xzhP7aRmLa9rggB).
