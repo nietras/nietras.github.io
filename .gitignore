@@ -12,3 +12,4 @@ package.json
 bin
 obj
 **/BenchmarkDotNet.Artifacts/*.log
+/images/2021-11-bendingdotnet-common-flat-build-output/build
