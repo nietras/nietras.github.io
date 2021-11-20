@@ -78,8 +78,8 @@ The files created can be seen with:
 ```powershell
 gci -Recurse *.* | Resolve-Path -Relative
 ```
-ooops, I forget I already built the solution and we know have a ton of files
-and a deep hierarchy.
+ooops, I forget I already built the solution and now there are a ton of files
+and a deep hierarchy mixed together with the code files.
 ```
 .\src\CommonFlatBuild\bin\Debug\net6.0
 .\src\CommonFlatBuild\bin\Debug\net6.0\ref\CommonFlatBuild.dll
@@ -105,7 +105,7 @@ and a deep hierarchy.
 ```
 I find this really annoying and don't want to waste my time having to navigate
 so deep - 5 directories `\src\CommonFlatBuild\bin\Debug\net6.0\` - either 
-in console or file explorer to find the built output. Even if you run:
+in console or file explorer to find the built output. Additionally, even if you run:
 ```
 dotnet clean
 ```
@@ -133,7 +133,34 @@ the output is still full of files from the build.
 Therefore, I also prefer being able to delete all this output by running
 a simple `rmdir` command. While we now have [git clean](https://git-scm.com/docs/git-clean)
 you still have to remember options 
-([git clean -d -X](https://stackoverflow.com/questions/673407/how-do-i-clear-my-local-working-directory-in-git)) 
+([git clean -d -X -f](https://stackoverflow.com/questions/673407/how-do-i-clear-my-local-working-directory-in-git)) 
 to run this and you risk deleting untracked code files, so I don't like this option either.
-
+I'll use it now to show the files generated with the above script, though.
+```
+.\src\CommonFlatBuild\Class1.cs
+.\src\CommonFlatBuild\CommonFlatBuild.csproj
+.\src\CommonFlatBuild.AppConsole
+.\src\CommonFlatBuild.AppConsole\CommonFlatBuild.AppConsole.csproj
+.\src\CommonFlatBuild.AppConsole\Program.cs
+.\src\CommonFlatBuild.AppWinForms
+.\src\CommonFlatBuild.AppWinForms\CommonFlatBuild.AppWinForms.csproj
+.\src\CommonFlatBuild.AppWinForms\CommonFlatBuild.AppWinForms.csproj.user
+.\src\CommonFlatBuild.AppWinForms\Form1.cs
+.\src\CommonFlatBuild.AppWinForms\Form1.Designer.cs
+.\src\CommonFlatBuild.AppWinForms\Program.cs
+.\src\CommonFlatBuild.AppWpf
+.\src\CommonFlatBuild.AppWpf\App.xaml
+.\src\CommonFlatBuild.AppWpf\App.xaml.cs
+.\src\CommonFlatBuild.AppWpf\AssemblyInfo.cs
+.\src\CommonFlatBuild.AppWpf\CommonFlatBuild.AppWpf.csproj
+.\src\CommonFlatBuild.AppWpf\MainWindow.xaml
+.\src\CommonFlatBuild.AppWpf\MainWindow.xaml.cs
+.\src\CommonFlatBuild.Test
+.\src\CommonFlatBuild.Test\CommonFlatBuild.Test.csproj
+.\src\CommonFlatBuild.Test\UnitTest1.cs
+.\CommonFlatBuild.sln
+```
 Luckily, there is a somewhat easy solution to this by using `Directory.Build.props`
+and `Directory.Build.targets`, which we will place in the `src` directory,
+so all sub-projects will pick these up.
+
