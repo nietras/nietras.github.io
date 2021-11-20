@@ -409,3 +409,7 @@ causing build issues or similar.
 rmdir build
 ```
 No more rebel humans (build artefacts) 😉
+
+PS: Example source code can be found in the GitHub 
+repo for this blog [nietras.github.io](https://github.com/nietras/nietras.github.io)
+and as a zip-file [CommonFlatBuild.zip]({{ site.baseurl }}/images/2021-11-bendingdotnet-common-flat-build-output/CommonFlatBuild.zip).
