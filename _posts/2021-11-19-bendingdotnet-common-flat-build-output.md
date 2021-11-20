@@ -315,11 +315,91 @@ The end result in tree form (with details omitted) then is:
 
 Nice and flat. Now granted this can get a bit busy in big solutions with lots of
 projects, so you may want to customize for that e.g. separate published output 
-(which goes even deeper than I've shown above 😅) from
-normal build output, but for small
-and focused libraries this is exactly what I want.
+from normal build output, but for small
+and focused libraries this is exactly what I want. 
 
-Run the below and you can be very certain there is no build output lingering
+Compare this to how the default
+output looks like below (again with details omitted).
+Note how published output goes 7 levels deep with
+`src\CommonFlatBuild.AppWpf\bin\Release\net6.0-windows\win-x64\publish` 😅
+Length is actually a bit longer for the flattened output due to adding the platform `AnyCPU`
+to the path, this is because I need this in some projects.
+
+```
+└───src
+    ├───CommonFlatBuild
+    │   ├───bin
+    │   │   ├───Debug
+    │   │   │   └───net6.0
+    │   │   └───Release
+    │   │       └───net6.0
+    │   │           └───win-x64
+    │   │               ├───publish
+    │   └───obj
+    │       ├───Debug
+    │       │   └───net6.0
+    │       └───Release
+    │           └───net6.0
+    │               └───win-x64
+    ├───CommonFlatBuild.AppConsole
+    │   ├───bin
+    │   │   ├───Debug
+    │   │   │   └───net6.0
+    │   │   └───Release
+    │   │       └───net6.0
+    │   │           └───win-x64
+    │   │               ├───publish
+    │   └───obj
+    │       ├───Debug
+    │       │   └───net6.0
+    │       └───Release
+    │           └───net6.0
+    │               └───win-x64
+    ├───CommonFlatBuild.AppWinForms
+    │   ├───bin
+    │   │   ├───Debug
+    │   │   │   └───net6.0-windows
+    │   │   └───Release
+    │   │       └───net6.0-windows
+    │   │           └───win-x64
+    │   │               ├───publish
+    │   └───obj
+    │       ├───Debug
+    │       │   └───net6.0-windows
+    │       └───Release
+    │           └───net6.0-windows
+    │               └───win-x64
+    ├───CommonFlatBuild.AppWpf
+    │   ├───bin
+    │   │   ├───Debug
+    │   │   │   └───net6.0-windows
+    │   │   └───Release
+    │   │       └───net6.0-windows
+    │   │           └───win-x64
+    │   │               ├───publish
+    │   └───obj
+    │       ├───Debug
+    │       │   └───net6.0-windows
+    │       └───Release
+    │           └───net6.0-windows
+    │               └───win-x64
+    └───CommonFlatBuild.Test
+        ├───bin
+        │   ├───Debug
+        │   │   └───net6.0
+        │   └───Release
+        │       └───net6.0
+        │           ├───win-x64
+        │           │   ├───publish
+        └───obj
+            ├───Debug
+            │   └───net6.0
+            └───Release
+                └───net6.0
+                    └───win-x64
+```
+
+Run the below and there will be no build output lingering
 causing build issues or similar.
 ```
 rmdir build
