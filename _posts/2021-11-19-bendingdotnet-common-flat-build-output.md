@@ -2,17 +2,19 @@
 layout: post
 title: Bending .NET - Common Flat Build Output
 ---
+or [how to gather all rebel humans in Zion so the machine Sentinels can destroy them all](https://matrix.fandom.com/wiki/Battle_of_Zion).
+
 In this post, part of the [Bending .NET]({{ site.baseurl }}/2021/11/18/bendingdotnet-series) 
-series, I will cover a quick and simple way to move and flatten all build output from
-.NET - so it is not [Mariana Trench](https://en.wikipedia.org/wiki/Mariana_Trench) deep - 
-to a common `build` directory .
+series, I will cover a general top-level way to move and flatten  - so it is not 
+[Mariana Trench](https://en.wikipedia.org/wiki/Mariana_Trench) deep - 
+all build output from .NET to a common `build` directory .
 
 ![mariana trench]({{ site.baseurl }}/images/2021-11-bendingdotnet-common-flat-build-output/mariana-trench.jpg)
 Source: [wikimedia](https://commons.wikimedia.org/wiki/File:Mariana-trench.jpg)
 
 
-I have the recently released awesome .NET 6 installed and copy a `global.json` file
-to a directory to ensure I am running fully specified.
+I have the recently released [awesome .NET 6](https://devblogs.microsoft.com/dotnet/announcing-net-6/) 
+installed and copy a `global.json` file to a directory to ensure I am running fully specified.
 ```json
 {
   "sdk": {
@@ -135,7 +137,7 @@ a simple `rmdir` command. While we now have [git clean](https://git-scm.com/docs
 you still have to remember options 
 ([git clean -d -X -f](https://stackoverflow.com/questions/673407/how-do-i-clear-my-local-working-directory-in-git)) 
 to run this and you risk deleting untracked code files, so I don't like this option either.
-I'll use it now to show the files generated with the above script, though.
+I'll use it now to show only the files generated with the above script, though.
 ```
 .\src\CommonFlatBuild\Class1.cs
 .\src\CommonFlatBuild\CommonFlatBuild.csproj
@@ -160,8 +162,9 @@ I'll use it now to show the files generated with the above script, though.
 .\src\CommonFlatBuild.Test\UnitTest1.cs
 .\CommonFlatBuild.sln
 ```
-Luckily, there is a somewhat easy solution to this by using `Directory.Build.props`
-and `Directory.Build.targets`, which we will place in the `src` directory,
+Luckily, there is a somewhat easy solution to the build output issue 
+by using `Directory.Build.props` and `Directory.Build.targets`, 
+which we will place in the `src` directory,
 so all sub-projects will pick these up. How to use these is covered in
 [Customize your build](https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build?view=vs-2022).
 An important take-away from this is:
@@ -198,7 +201,7 @@ covers default build targets.
 * The excellent [MSBuild Binary and Structured Log Viewer](https://msbuildlog.com/) tool 
   was extremely helpful in debugging build errors and finding targets and what properties
   to override. Thanks to [Kirill Osenkov](https://twitter.com/KirillOsenkov) for this and 
-  a tip to use it. 👍
+  a tip to use it. 👍 Kirill has his own take on how to define [common build output](https://gist.github.com/KirillOsenkov/1b8e1bc592f84abf4b7f2cedd5e569c6).
 
 `Directory.Build.props` is shown below and is pretty straight-forward.
 ```xml
@@ -272,7 +275,8 @@ incl. packing nuget packages, since the evaluation of properties differs from ta
   </Target>  
 ```
 This also includes a "hack" needed to cleanup WPF temporary output, 
-as is discussed in the linked issue. This is unfortunate, and if anyone
+as is discussed in the [linked issue](https://github.com/dotnet/wpf/issues/2930). 
+This is unfortunate, and if anyone
 knows how this could be solved differently please let me know.
 
 Let's build, publish and pack to be sure output is as expected.
@@ -404,3 +408,4 @@ causing build issues or similar.
 ```
 rmdir build
 ```
+No more rebel humans (build artefacts) 😉
