@@ -259,111 +259,68 @@ incl. packing nuget packages, since the evaluation of properties differs from ta
     <PublishDir>$(BaseOutDir)_$(TargetFramework)_$(RuntimeIdentifier)</PublishDir>
   </PropertyGroup>
 </Project>
-```
 
-Let's build and publish.
+  <!--
+  WPF projects output temporary assemblies in directories that are not deleted after use.
+  See https://github.com/dotnet/wpf/issues/2930
+  -->
+  <Target Name="RemoveWpfTemp" AfterTargets="Build">
+    <ItemGroup>
+      <WpfTempDirectories Include="$([System.IO.Directory]::GetDirectories(&quot;$(BuildDir)&quot;,&quot;$(MSBuildProjectName)*_wpftmp_*&quot;))"/>
+    </ItemGroup>
+    <RemoveDir Directories="@(WpfTempDirectories)" />
+  </Target>  
+```
+This also includes a "hack" needed to cleanup WPF temporary output, 
+as is discussed in the linked issue. This is unfortunate, and if anyone
+knows how this could be solved differently please let me know.
+
+Let's build, publish and pack to be sure output is as expected.
 ```
 dotnet build -c Debug
 dotnet build -c Release
-dotnet publish -r win-x64
-dotnet publish -r win-x86
+dotnet publish -c Release -r win-x64
+dotnet pack -c Release
 ```
 The end result in tree form (with details omitted) then is:
 ```
 ├───build
 │   ├───CommonFlatBuild.AppConsole_AnyCPU_Debug_net6.0
-│   ├───CommonFlatBuild.AppConsole_AnyCPU_Debug_net6.0_win-x64
-│   ├───CommonFlatBuild.AppConsole_AnyCPU_Debug_net6.0_win-x86
+│   ├───CommonFlatBuild.AppConsole_AnyCPU_Release
 │   ├───CommonFlatBuild.AppConsole_AnyCPU_Release_net6.0
+│   ├───CommonFlatBuild.AppConsole_AnyCPU_Release_net6.0_win-x64
 │   ├───CommonFlatBuild.AppWinForms_AnyCPU_Debug_net6.0-windows
-│   ├───CommonFlatBuild.AppWinForms_AnyCPU_Debug_net6.0-windows_win-x64
-│   ├───CommonFlatBuild.AppWinForms_AnyCPU_Debug_net6.0-windows_win-x86
+│   ├───CommonFlatBuild.AppWinForms_AnyCPU_Release
 │   ├───CommonFlatBuild.AppWinForms_AnyCPU_Release_net6.0-windows
-│   ├───CommonFlatBuild.AppWpf_3akvusog_wpftmp_AnyCPU_Debug_net6.0-windows
+│   ├───CommonFlatBuild.AppWinForms_AnyCPU_Release_net6.0-windows_win-x64
 │   ├───CommonFlatBuild.AppWpf_AnyCPU_Debug_net6.0-windows
-│   ├───CommonFlatBuild.AppWpf_AnyCPU_Debug_net6.0-windows_win-x64
-│   ├───CommonFlatBuild.AppWpf_AnyCPU_Debug_net6.0-windows_win-x86
+│   ├───CommonFlatBuild.AppWpf_AnyCPU_Release
 │   ├───CommonFlatBuild.AppWpf_AnyCPU_Release_net6.0-windows
-│   ├───CommonFlatBuild.AppWpf_rv4sdy3o_wpftmp_AnyCPU_Release_net6.0-windows
-│   ├───CommonFlatBuild.AppWpf_wzcixywt_wpftmp_AnyCPU_Debug_net6.0-windows
-│   ├───CommonFlatBuild.AppWpf_xzle3m2c_wpftmp_AnyCPU_Debug_net6.0-windows
+│   ├───CommonFlatBuild.AppWpf_AnyCPU_Release_net6.0-windows_win-x64
 │   ├───CommonFlatBuild.Test_AnyCPU_Debug_net6.0
-│   ├───CommonFlatBuild.Test_AnyCPU_Debug_net6.0_win-x64
-│   ├───CommonFlatBuild.Test_AnyCPU_Debug_net6.0_win-x86
 │   ├───CommonFlatBuild.Test_AnyCPU_Release_net6.0
+│   ├───CommonFlatBuild.Test_AnyCPU_Release_net6.0_win-x64
 │   ├───CommonFlatBuild_AnyCPU_Debug_net6.0
-│   ├───CommonFlatBuild_AnyCPU_Debug_net6.0_win-x64
-│   ├───CommonFlatBuild_AnyCPU_Debug_net6.0_win-x86
+│   ├───CommonFlatBuild_AnyCPU_Release
 │   ├───CommonFlatBuild_AnyCPU_Release_net6.0
+│   ├───CommonFlatBuild_AnyCPU_Release_net6.0_win-x64
 │   └───obj
-│       ├───CommonFlatBuild.AppConsole_Debug
-│       │   └───net6.0
-│       │       ├───ref
-│       │       ├───win-x64
-│       │       │   └───ref
-│       │       └───win-x86
-│       │           └───ref
-│       ├───CommonFlatBuild.AppConsole_Release
-│       │   └───net6.0
-│       │       └───ref
-│       ├───CommonFlatBuild.AppWinForms_Debug
-│       │   └───net6.0-windows
-│       │       ├───ref
-│       │       ├───win-x64
-│       │       │   └───ref
-│       │       └───win-x86
-│       │           └───ref
-│       ├───CommonFlatBuild.AppWinForms_Release
-│       │   └───net6.0-windows
-│       │       └───ref
-│       ├───CommonFlatBuild.AppWpf_3akvusog_wpftmp_Debug
-│       │   └───net6.0-windows
-│       │       └───win-x86
-│       │           └───ref
-│       ├───CommonFlatBuild.AppWpf_Debug
-│       │   └───net6.0-windows
-│       │       ├───ref
-│       │       ├───win-x64
-│       │       │   └───ref
-│       │       └───win-x86
-│       │           └───ref
-│       ├───CommonFlatBuild.AppWpf_Release
-│       │   └───net6.0-windows
-│       │       └───ref
-│       ├───CommonFlatBuild.AppWpf_rv4sdy3o_wpftmp_Release
-│       │   └───net6.0-windows
-│       │       └───ref
-│       ├───CommonFlatBuild.AppWpf_wzcixywt_wpftmp_Debug
-│       │   └───net6.0-windows
-│       │       └───win-x64
-│       │           └───ref
-│       ├───CommonFlatBuild.AppWpf_xzle3m2c_wpftmp_Debug
-│       │   └───net6.0-windows
-│       │       └───ref
-│       ├───CommonFlatBuild.Test_Debug
-│       │   └───net6.0
-│       │       ├───ref
-│       │       ├───win-x64
-│       │       │   └───ref
-│       │       └───win-x86
-│       │           └───ref
-│       ├───CommonFlatBuild.Test_Release
-│       │   └───net6.0
-│       │       └───ref
-│       ├───CommonFlatBuild_Debug
-│       │   └───net6.0
-│       │       ├───ref
-│       │       ├───win-x64
-│       │       │   └───ref
-│       │       └───win-x86
-│       │           └───ref
-│       └───CommonFlatBuild_Release
-│           └───net6.0
-│               └───ref
 └───src
     ├───CommonFlatBuild
     ├───CommonFlatBuild.AppConsole
     ├───CommonFlatBuild.AppWinForms
     ├───CommonFlatBuild.AppWpf
     └───CommonFlatBuild.Test
+```
+
+Nice and flat. Now granted this can get a bit busy in big solutions with lots of
+projects, so you may want to customize for that e.g. separate published output 
+(which goes even deeper than I've shown above 😅) from
+normal build output, but for small
+and focused libraries this is exactly what I want.
+
+Run the below and you can be very certain there is no build output lingering
+causing build issues or similar.
+```
+rmdir build
 ```
