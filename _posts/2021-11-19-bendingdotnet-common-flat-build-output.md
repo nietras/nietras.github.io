@@ -132,5 +132,8 @@ the output is still full of files from the build.
 ```
 Therefore, I also prefer being able to delete all this output by running
 a simple `rmdir` command. While we now have [git clean](https://git-scm.com/docs/git-clean)
-you risk deleting potential untracked code files using that and it would necessarily delete
-files that you ignore with a `.gitignore` file.
+you still have to remember options 
+([git clean -d -X](https://stackoverflow.com/questions/673407/how-do-i-clear-my-local-working-directory-in-git)) 
+to run this and you risk deleting untracked code files, so I don't like this option either.
+
+Luckily, there is a somewhat easy solution to this by using `Directory.Build.props`
