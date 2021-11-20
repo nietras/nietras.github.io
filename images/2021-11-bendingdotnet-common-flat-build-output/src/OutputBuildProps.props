@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup Label="OutputBuildProps">
+    <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
+    <BuildDir>$(MSBuildThisFileDirectory)..\build\</BuildDir>
+    <BaseIntermediateOutputPath>$(BuildDir)obj\$(MSBuildProjectName)_$(Configuration)\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
+    <ProjectBuildDirectoryName>$(MSBuildProjectName)_$(Platform)_$(Configuration)</ProjectBuildDirectoryName>
+    <OutputPathWithoutEndSlash>$(BuildDir)$(ProjectBuildDirectoryName)</OutputPathWithoutEndSlash>
+    <OutputPath>$(OutputPathWithoutEndSlash)</OutputPath>
+  </PropertyGroup>
+</Project>

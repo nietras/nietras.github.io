@@ -38,3 +38,7 @@ superceeded by the unified
 [microsoft/onnxruntime](https://github.com/microsoft/onnxruntime).
 * I always assemble my own developer PC.
 * Dark mode always.
+
+For questions, comments, opportunities and more feel free
+to contact me via direct message on [twitter](https://www.twitter.com/nietras1)
+or email me at [domain name without www] at googles thingy dot com. 😉
