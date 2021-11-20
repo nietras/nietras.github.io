@@ -24,4 +24,4 @@ popd
 popd
 dotnet new sln -n CommonFlatBuild
 $projects = gci -Recurse *.csproj
-$projects | % { Invoke-Expression -Command "dotnet sln add ""$_""" }
+$projects | % { Invoke-Expression -Command "dotnet sln add --in-root ""$_""" }
