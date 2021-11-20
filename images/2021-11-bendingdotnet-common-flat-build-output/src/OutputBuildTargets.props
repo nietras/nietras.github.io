@@ -1,0 +1,10 @@
+﻿<Project>
+  <PropertyGroup Label="OutputBuildTargets">
+    <BaseOutDir>$(OutputPathWithoutEndSlash)</BaseOutDir>
+    <OutDir>$(BaseOutDir)_$(TargetFramework)\</OutDir>
+    <TargetDir>$(OutDir)</TargetDir>
+    <TargetPath>$(TargetDir)$(TargetFileName)</TargetPath>
+    <TargetRefPath>$(TargetDir)ref\$(TargetFileName)</TargetRefPath>
+    <PublishDir>$(BaseOutDir)_$(TargetFramework)_$(RuntimeIdentifier)</PublishDir>
+  </PropertyGroup>
+</Project>
