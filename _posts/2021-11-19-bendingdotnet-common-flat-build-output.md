@@ -261,7 +261,6 @@ incl. packing nuget packages, since the evaluation of properties differs from ta
     <TargetRefPath>$(TargetDir)ref\$(TargetFileName)</TargetRefPath>
     <PublishDir>$(BaseOutDir)_$(TargetFramework)_$(RuntimeIdentifier)</PublishDir>
   </PropertyGroup>
-</Project>
 
   <!--
   WPF projects output temporary assemblies in directories that are not deleted after use.
@@ -273,6 +272,7 @@ incl. packing nuget packages, since the evaluation of properties differs from ta
     </ItemGroup>
     <RemoveDir Directories="@(WpfTempDirectories)" />
   </Target>  
+</Project>
 ```
 This also includes a "hack" needed to cleanup WPF temporary output, 
 as is discussed in the [linked issue](https://github.com/dotnet/wpf/issues/2930). 
