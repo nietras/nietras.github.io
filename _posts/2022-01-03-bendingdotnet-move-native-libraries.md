@@ -253,3 +253,7 @@ Hence, the application now starts as expected and we can go back to hunting
 rebel humans.
 
 ![Move Native Libraries Wpf App]({{ site.baseurl }}/images/2022-01-bendingdotnet-move-native-libraries-to-sub-directory/move-native-libraries-wpf-app.png)
+
+PS: Example source code can be found in the GitHub 
+repo for this blog [nietras.github.io](https://github.com/nietras/nietras.github.io)
+and as a zip-file [MoveNativeLibraries.zip]({{ site.baseurl }}/images/2022-01-bendingdotnet-move-native-libraries-to-sub-directory/MoveNativeLibraries.zip).
