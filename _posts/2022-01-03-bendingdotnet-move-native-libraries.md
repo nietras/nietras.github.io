@@ -1,16 +1,16 @@
 ﻿---
 layout: post
-title: Bending .NET - Move Native Libraries to Sub-directory
+title: Bending .NET - Move Native Libraries to Sub-directory After Publish
 ---
-or [how to find rebel humans even when they are trying to hide from sentinels](https://www.youtube.com/watch?v=pQ0db2ERil8).
+or [how to make rebel humans hide due to hunting sentinels and still find them](https://www.youtube.com/watch?v=pQ0db2ERil8).
 
 In this post, part of the [Bending .NET]({{ site.baseurl
-}}/2021/11/18/bendingdotnet-series) series, I will cover a quick trick to move
-native libraries (like WPF dependencies) to a sub-directory on publish and
-ensure these are loaded during startup using
+}}/2021/11/18/bendingdotnet-series) series, I will cover how to move native
+libraries (like WPF dependencies) to a sub-directory on publish and ensure these
+are properly loaded during startup using
 [`NativeLibrary`](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.nativelibrary?view=net-6.0).
 The goal is to have only the single exe-file in the top-level directory and
-sweeping everything else under the rug in sub-directories.
+sweeping everything else under the rug in a sub-directory.
 
 ![sweep under rug]({{ site.baseurl }}/images/2022-01-bendingdotnet-move-native-libraries-to-sub-directory/sweep-under-rug.jpg)
 Source: [flickr](https://www.flickr.com/photos/gomattolson/4321594214/)
@@ -66,11 +66,12 @@ this will output:
 .\vcruntime140_cor3.dll
 .\wpfgfx_cor3.dll
 ```
-in the flat build output at
+in the flat output at
 `build\MoveNativeLibraries.AppWpf_AnyCPU_Release_net6.0-windows_win-x64`
 when running:
 ```powershell
-dotnet publish --nologo -c Release -r win-x64 /p:Platform=AnyCPU --self-contained true ./src/MoveNativeLibraries.AppWpf/MoveNativeLibraries.AppWpf.csproj
+dotnet publish --nologo -c Release -r win-x64 /p:Platform=AnyCPU \
+  --self-contained true ./src/MoveNativeLibraries.AppWpf/MoveNativeLibraries.AppWpf.csproj
 ```
 
 Now above is just an example. For a real application we have a large number of
@@ -81,11 +82,11 @@ exe-file. While .NET 6 does have an option
 and
 executable](https://docs.microsoft.com/en-us/dotnet/core/deploying/single-file),
 this means native libraries are extracted to a temporary directory that is hard
-to find. With a couple of GBs this can quickly add up. It also makes the exe
-itself much larger, which adds friction doing updates where you don't need to
-update native libraries. Note that there is an option to exclude certain files
-from being embedded with `ExcludeFromSingleFile`, as discussed in the link,
-but this doesn't work for our case either.
+to find. With a couple of GBs this can quickly add up. It also makes the
+executable itself much larger, which adds friction when doing updates where you
+don't need to update native libraries. Note that there is an option to exclude
+certain files from being embedded with `ExcludeFromSingleFile`, as discussed in
+the link, but this doesn't work for our case either.
 
 What we really want is for the dll-files to be moved to a sub-directory that for
 example is named according to the `RuntimeIdentifier` like `win-x64` so we get:
@@ -97,7 +98,10 @@ example is named according to the `RuntimeIdentifier` like `win-x64` so we get:
 .\win-x64\wpfgfx_cor3.dll
 .\MoveNativeLibraries.AppWpf.exe
 ```
-This is very easy to do with a simple target that is run after publish.
+Note that you can name the sub-directory whatever you want; `bin`, `libs` or
+just `x64` and `x86` which is actually what we do due to pre-existing native
+library conventions. Moving the files is very easy to do with a simple target
+that is run after publish.
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
 
@@ -121,8 +125,10 @@ This is very easy to do with a simple target that is run after publish.
     <ItemGroup>
       <NativeDllsToMove Include="$(PublishDir)*.dll" />
     </ItemGroup>
-    <Move SourceFiles="@(NativeDllsToMove)" DestinationFolder="$(PublishDir)\$(NativeDllSubDir)\" />
-    <Message Text="Moved native dlls to sub-directory '$(NativeDllSubDir)'" Importance="high" />
+    <Move SourceFiles="@(NativeDllsToMove)" 
+          DestinationFolder="$(PublishDir)\$(NativeDllSubDir)\" />
+    <Message Text="Moved native dlls to sub-directory '$(NativeDllSubDir)'" 
+             Importance="high" />
   </Target>
 
 </Project>
@@ -130,7 +136,7 @@ This is very easy to do with a simple target that is run after publish.
 
 However, if we then try to run the executable nothing happens 🤦‍ Or to be
 precise, the application crashes on startup. The exception that occurs can be
-found in `EventViewer` under **Windows logs -> Application** and can look like
+found with `EventViewer` under **Windows logs -> Application** and can look like
 (from source **.NET Runtime**):
 ```
 Application: MoveNativeLibraries.AppWpf.exe
@@ -143,14 +149,14 @@ Exception Info: System.DllNotFoundException: Dll was not found.
    at MS.Win32.HwndSubclass.HookWindowProc(IntPtr hwnd, WndProc newWndProc, IntPtr oldWndProc)
    at MS.Win32.HwndSubclass.SubclassWndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam)
 ```
-The exception message is not useful at all. It doesn't say which dll was not
-found. As far I can tell the `DllNotFoundException` for P/Invoke methods has
-been changed in .NET 6 (Core?) to no longer include the dll file name in
-question, which is a bit annoying. Fortunately, the stack trace gives us a clue
-that this is due to WPF (`WindowsBase`) not being able to find a native library.
-It is not a big issue here since we know that we have moved some dlls and what
-they are, but in a large application with lots of native dependencies this can
-be troublesome.
+The exception message `Dll was not found` is not useful at all. It doesn't say
+which dll was not found. As far I can tell the `DllNotFoundException` for
+P/Invoke methods has been changed in .NET 6 (Core?) to no longer include the dll
+file name in question, which is a bit annoying. Fortunately, the stack trace
+gives us a clue that this is due to WPF (`WindowsBase`) not being able to find a
+native library. It is not a big issue here since we know that we have moved some
+dlls and what they are, but in a large application with lots of native
+dependencies this can be troublesome.
 
 Normally, I would fix this by simply adding the `win-x64` sub-directory to the
 list of directories searched with
@@ -159,9 +165,11 @@ list of directories searched with
 [SetDllDirectory](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setdlldirectorya))
 as also discussed in [Load native libraries from a dynamic
 location](https://www.meziantou.net/load-native-libraries-from-a-dynamic-location.htm).
-However, for some reason does not work without further changes. Instead, I had
-to manually pre-load the WPF native libraries using
-[`NativeLibrary.TryLoad`](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.nativelibrary?view=net-6.0)
+Another approach is discussed in [Native bindings in
+C#](https://www.lostindetails.com/articles/Native-Bindings-in-CSharp). However,
+for some reason none of these work without further changes for the WPF native
+libraries. Instead, I had to manually pre-load the WPF native libraries using
+[NativeLibrary.TryLoad](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.nativelibrary?view=net-6.0)
 meaning the `Program.cs` ends up looking like:
 ```csharp
 using System;
@@ -177,7 +185,6 @@ class Program
     [STAThread]
     static void Main()
     {
-        // MUST BE FIRST: Pre-load .NET 6+ native library dependencies.
         PreloadDotnetDependenciesFromSubdirectoryManually();
 
         RunApp();
@@ -227,7 +234,6 @@ class Program
         if (!loaded)
         {
             Trace.WriteLine($"Failed loading {libraryName}");
-            throw new DllNotFoundException(libraryName);
         }
         else
         {
@@ -238,7 +244,12 @@ class Program
 ```
 
 Note that we've only had to manually pre-load the WPF native libraries, all the
-other native libraries are loaded fine without this trick. Hence, the
-application now starts as expected and we can go back to hunting rebel humans.
+other native libraries are loaded fine without this trick. Additionally, one
+could forego using `AddDllDirectory` and simply load the dlls directly from
+sub-directory e.g. by absolute path, but with the above approach we are leaving
+open the option of still finding the dlls in some other path. 
+
+Hence, the application now starts as expected and we can go back to hunting
+rebel humans.
 
 ![Move Native Libraries Wpf App]({{ site.baseurl }}/images/2022-01-bendingdotnet-move-native-libraries-to-sub-directory/move-native-libraries-wpf-app.png)
