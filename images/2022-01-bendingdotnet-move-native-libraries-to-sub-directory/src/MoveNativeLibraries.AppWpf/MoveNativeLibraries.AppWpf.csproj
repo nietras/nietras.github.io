@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <DebugType>embedded</DebugType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UseWinForms>true</UseWinForms>
+    <StartupObject>MoveNativeLibaries.AppWpf.Program</StartupObject>
+    
+    <PublishSingleFile>true</PublishSingleFile>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+  </PropertyGroup>
+
+  <Target Name="MoveNativeDllsToSubDirectory" AfterTargets="Publish">
+    <PropertyGroup>
+      <NativeDllSubDir>$(RuntimeIdentifier)</NativeDllSubDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <NativeDllsToMove Include="$(PublishDir)*.dll" />
+    </ItemGroup>
+    <Move SourceFiles="@(NativeDllsToMove)" DestinationFolder="$(PublishDir)\$(NativeDllSubDir)\" />
+    <Message Text="Moved native dlls to sub-directory '$(NativeDllSubDir)'" Importance="high" />
+  </Target>
+
+</Project>
