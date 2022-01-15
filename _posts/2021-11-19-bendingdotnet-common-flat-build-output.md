@@ -4,6 +4,21 @@ title: Bending .NET - Common Flat Build Output
 ---
 or [how to gather all rebel humans in Zion so the machine Sentinels can destroy them all](https://matrix.fandom.com/wiki/Battle_of_Zion).
 
+**UPDATE 2022-01-15: The approach defined here has a serious flaw that causes go
+to definition (F12) to fail across projects in the solution.** That is, given
+`CommonFlatBuild.Test` in a test method `UnitTest1.TestMethod` refers to class
+`Class1` in `CommonFlatBuild`, then hitting **Go To Definition (F12)** on
+`Class1` will jump to the metadata definition or source link derived source and
+not the actual source code part of the project and hence cannot be edited. This
+I initially thought was an issue in Visual Studio as reported in [F12 not
+working across C# projects in solution perhaps due to customized output paths in
+VS22](https://developercommunity.visualstudio.com/t/f12-not-working-across-c-projects-in-solution-perh/1629596),
+however the issue appears to be the reassignment of key output properties (e.g.
+`OutDir`) in `Directory.Build.targets/OutputBuildTargets.props`. While this
+works for building it does not work for the project system used in Visual Studio
+since it appears these reassignments do not take effect as part of the project
+system evaluation of properties.
+
 In this post, part of the [Bending .NET]({{ site.baseurl }}/2021/11/18/bendingdotnet-series) 
 series, I will cover a general top-level way to move and flatten  - so it is not 
 [Mariana Trench](https://en.wikipedia.org/wiki/Mariana_Trench) deep - 
