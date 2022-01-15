@@ -15,14 +15,16 @@ post.
 ![ship wreck]({{ site.baseurl }}/images/2022-01-bendingdotnet-corrected-common-flat-build-output/ship-wreck.jpg)
 Source: [pixabay](https://pixabay.com/photos/ship-wreck-stranded-wreck-shipwreck-1882087/)
 
-In the previous blog post I finally thought I found a way to define common flat
-build output without having to change anything in `csproj`-files. Unfortunately
-that had issues and I have found no way to accomplish this, so in this blog post
-I present the for now best solution I could find; including a common
-`props`-file at the end of each `csproj`-file. At the same time I try to
-simplify the properties changed to only focus on flattening the final build and
-publish output. Prerequisites are the same as in the previous blog post, so
-without further adue I will present the new approach.
+In the previous blog post I thought I had finally found a way to define common
+flat build output without having to change anything in `csproj`-files.
+Unfortunately that had issues and I have found no way to accomplish this without
+changing `csproj`-files, so in this blog post I present the for now best
+solution I could find; including a common `props`-file at the end of each
+`csproj`-file. 
+
+At the same time I try to simplify the properties changed to only focus on
+flattening the final build and publish output. Prerequisites are the same as in
+the previous blog post, so without further ado I will present the new approach.
 
 A new file `OutputBuildProject.props` is added to the `src` level common files.
 ```
@@ -216,11 +218,15 @@ The end result in tree form (with details omitted) then is:
 Note that for intermediate build output the deep hierarchical output is not changed.
 The focus with the new approach is primarily on the final output files.
 
-With this build and publish can be easily and quick found and deleted like below:
+With this build and publish can be easily found and deleted like below:
 ```
 rmdir build;rmdir publish
 ```
-No more rebel humans and no more agent complaints 😉
+No more rebel humans and no more agent issues... I hope 🤞
+
+In the hope that we might in the future be able to define common flat build
+output without changing `csproj`-files I have [filed an issue on Github for
+MSBuild](https://github.com/dotnet/msbuild/issues/7300).
 
 PS: Example source code can be found in the GitHub 
 repo for this blog [nietras.github.io](https://github.com/nietras/nietras.github.io)
