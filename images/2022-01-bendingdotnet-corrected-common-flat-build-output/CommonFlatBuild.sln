@@ -17,8 +17,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{59C9301F-57E
 	ProjectSection(SolutionItems) = preProject
 		src\Directory.Build.props = src\Directory.Build.props
 		src\Directory.Build.targets = src\Directory.Build.targets
+		src\OutputBuildProject.props = src\OutputBuildProject.props
 		src\OutputBuildProps.props = src\OutputBuildProps.props
 		src\OutputBuildTargets.props = src\OutputBuildTargets.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{BD25AB7F-F49F-42FC-AED8-C91EB56DBCF7}"
+	ProjectSection(SolutionItems) = preProject
+		all.ps1 = all.ps1
+		build.ps1 = build.ps1
+		global.json = global.json
+		pack.ps1 = pack.ps1
+		publish.ps1 = publish.ps1
 	EndProjectSection
 EndProject
 Global
