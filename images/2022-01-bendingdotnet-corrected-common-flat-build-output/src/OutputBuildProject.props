@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <OutDir>$(BaseOutDir)_$(TargetFramework)\</OutDir>
+    <TargetDir>$(OutDir)</TargetDir>
+  </PropertyGroup>
+</Project>

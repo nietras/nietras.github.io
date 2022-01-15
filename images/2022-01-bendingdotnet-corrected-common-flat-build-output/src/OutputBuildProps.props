@@ -1,0 +1,46 @@
+<Project>
+  <PropertyGroup Label="OutputBuildProps">
+    <Platform Condition="$(Platform) == ''">AnyCPU</Platform>
+    <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
+    
+    <!--Custom properties-->
+    <BuildDir>$(MSBuildThisFileDirectory)..\build\</BuildDir>
+    <ProjectBuildDirectoryName>$(MSBuildProjectName)_$(Platform)_$(Configuration)</ProjectBuildDirectoryName>
+    <OutputPathWithoutEndSlash>$(BuildDir)$(ProjectBuildDirectoryName)</OutputPathWithoutEndSlash>
+    <BaseOutDir>$(OutputPathWithoutEndSlash)</BaseOutDir>
+
+    <!--MSBuild defined properties we define-->
+    <BaseIntermediateOutputPath>$(BuildDir)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(BuildDir)bin\$(MSBuildProjectName)\</BaseOutputPath>
+  </PropertyGroup>
+
+
+  <!--https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-targets?view=vs-2022-->
+  <!--<Target Name="AfterGetTargetFrameworkVersion" AfterTargets="GetTargetFrameworkVersion">-->
+  <!--<Target Name="AfterGetTargetFrameworkVersion" AfterTargets="Build">-->
+  <!--When is target framework defined at the earliest
+  https://github.com/dotnet/project-system/issues/4284
+  -->
+  <!--CollectPackageReferences-->
+  
+  <Target Name="OverrideOuts" BeforeTargets="BeforeBuild" Condition="$(TargetFramework) != ''">
+    <Message Importance="high" Text="!! TargetFramework = '$(TargetFramework)'" />
+    <Message Importance="high" Text="BEFORE OutDir = '$(OutDir)'" />
+    <!--<Message Importance="high" Text="BEFORE OutputPath = '$(OutputPath)'" />-->
+    <PropertyGroup>
+      <!--<OutDir>$(BaseOutDir)_$(TargetFramework)\</OutDir>
+      <TargetDir>$(OutDir)</TargetDir>
+      <TargetPath>$(TargetDir)$(TargetFileName)</TargetPath>
+      <TargetRefPath>$(TargetDir)ref\$(TargetFileName)</TargetRefPath>-->
+      <!--<OutDir>$(BaseOutDir)_$(TargetFramework)\</OutDir>
+      <TargetDir>$(OutDir)</TargetDir>
+      <TargetPath>$(TargetDir)$(TargetFileName)</TargetPath>
+      <TargetRefPath>$(TargetDir)ref\$(TargetFileName)</TargetRefPath>
+      <PublishDir>$(BaseOutDir)_$(TargetFramework)_$(RuntimeIdentifier)</PublishDir>-->
+      <!--<OutputPath>$(OutputPathWithoutEndSlash)</OutputPath>-->
+    </PropertyGroup>
+    <Message Importance="high" Text="AFTER OutDir = '$(OutDir)'" />
+    <!--<Message Importance="high" Text="AFTER OutputPath = '$(OutputPath)'" />-->
+  </Target>
+  
+</Project>
