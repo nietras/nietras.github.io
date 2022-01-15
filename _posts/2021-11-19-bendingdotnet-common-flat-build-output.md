@@ -17,7 +17,10 @@ however the issue appears to be the reassignment of key output properties (e.g.
 `OutDir`) in `Directory.Build.targets/OutputBuildTargets.props`. While this
 works for building it does not work for the project system used in Visual Studio
 since it appears these reassignments do not take effect as part of the project
-system evaluation of properties.
+system evaluation of properties. In [Bending .NET - Corrected Common Flat Build
+Output]({{
+site.baseurl}}/2022/01/15/bendingdotnet-corrected-common-flat-build-output/) a
+new corrected approach is described.
 
 In this post, part of the [Bending .NET]({{ site.baseurl }}/2021/11/18/bendingdotnet-series) 
 series, I will cover a general top-level way to move and flatten  - so it is not 
