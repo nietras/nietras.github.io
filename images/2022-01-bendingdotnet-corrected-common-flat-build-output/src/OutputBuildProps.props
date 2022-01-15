@@ -13,5 +13,6 @@
     <!-- MSBuild defined properties redefined -->
     <BaseIntermediateOutputPath>$(BuildDir)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
     <BaseOutputPath>$(BuildDir)bin\$(MSBuildProjectName)\</BaseOutputPath>
+    <PackageOutputPath>$(BaseOutDir)</PackageOutputPath>
   </PropertyGroup>
 </Project>
