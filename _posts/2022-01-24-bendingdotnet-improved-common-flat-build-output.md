@@ -104,6 +104,7 @@ code navigation still works in Visual Studio. Great.
 
 Back to siphoning energy off rebel humans (thanks for helping out!).
 
-PS: Example source code can be found in the GitHub 
-repo for this blog [nietras.github.io](https://github.com/nietras/nietras.github.io)
-and as a zip-file [CommonFlatBuild.zip]({{ site.baseurl }}/images/2022-01-bendingdotnet-improved-common-flat-build-output/CommonFlatBuild.zip).
+PS: Example source code can be found in the GitHub repo for this blog
+[nietras.github.io](https://github.com/nietras/nietras.github.io) and as a
+zip-file [CommonFlatBuild.zip]({{ site.baseurl
+}}/images/2022-01-bendingdotnet-improved-common-flat-build-output/CommonFlatBuild.zip).
