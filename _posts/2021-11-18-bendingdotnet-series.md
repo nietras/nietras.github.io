@@ -14,6 +14,7 @@ Source: [pixabay](https://pixabay.com/photos/spoon-spoon-bending-bent-1717469/)
 * [Common Flat Build Output]({{ site.baseurl }}/2021/11/19/bendingdotnet-common-flat-build-output)
 * [Move Native Libraries to Sub-directory After Publish]({{ site.baseurl }}/2022/01/03/bendingdotnet-move-native-libraries)
 * [Corrected Common Flat Build Output]({{ site.baseurl }}/2022/01/15/bendingdotnet-corrected-common-flat-build-output)
+* [Improved Common Flat Build Output]({{ site.baseurl }}/2022/01/24/bendingdotnet-improved-common-flat-build-output)
 
 
 [//]: # * []({{ site.baseurl }}/)

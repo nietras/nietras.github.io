@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32104.313
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonFlatBuild", "src\CommonFlatBuild\CommonFlatBuild.csproj", "{948B7858-DD53-4AF0-833B-1F113BFFF428}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonFlatBuild.AppConsole", "src\CommonFlatBuild.AppConsole\CommonFlatBuild.AppConsole.csproj", "{6BC444C5-150C-400C-9566-DF9AD5078F83}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonFlatBuild.AppWinForms", "src\CommonFlatBuild.AppWinForms\CommonFlatBuild.AppWinForms.csproj", "{6F869F3D-8BE8-4942-BB77-DFB01A4D4B66}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonFlatBuild.AppWpf", "src\CommonFlatBuild.AppWpf\CommonFlatBuild.AppWpf.csproj", "{519DE86E-7525-4ED4-898C-2F3EDF305194}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonFlatBuild.Test", "src\CommonFlatBuild.Test\CommonFlatBuild.Test.csproj", "{E0B58A6A-69A5-439E-8555-8CEC1208901E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{59C9301F-57EE-4243-A887-5665AD8EEE60}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.props = src\Directory.Build.props
+		src\Directory.Build.targets = src\Directory.Build.targets
+		src\OutputBuildProject.props = src\OutputBuildProject.props
+		src\OutputBuildProps.props = src\OutputBuildProps.props
+		src\OutputBuildTargets.props = src\OutputBuildTargets.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{BD25AB7F-F49F-42FC-AED8-C91EB56DBCF7}"
+	ProjectSection(SolutionItems) = preProject
+		all.ps1 = all.ps1
+		build.ps1 = build.ps1
+		global.json = global.json
+		pack.ps1 = pack.ps1
+		publish.ps1 = publish.ps1
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{948B7858-DD53-4AF0-833B-1F113BFFF428}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{948B7858-DD53-4AF0-833B-1F113BFFF428}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{948B7858-DD53-4AF0-833B-1F113BFFF428}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{948B7858-DD53-4AF0-833B-1F113BFFF428}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BC444C5-150C-400C-9566-DF9AD5078F83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BC444C5-150C-400C-9566-DF9AD5078F83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BC444C5-150C-400C-9566-DF9AD5078F83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BC444C5-150C-400C-9566-DF9AD5078F83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F869F3D-8BE8-4942-BB77-DFB01A4D4B66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F869F3D-8BE8-4942-BB77-DFB01A4D4B66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F869F3D-8BE8-4942-BB77-DFB01A4D4B66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F869F3D-8BE8-4942-BB77-DFB01A4D4B66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{519DE86E-7525-4ED4-898C-2F3EDF305194}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{519DE86E-7525-4ED4-898C-2F3EDF305194}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{519DE86E-7525-4ED4-898C-2F3EDF305194}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{519DE86E-7525-4ED4-898C-2F3EDF305194}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0B58A6A-69A5-439E-8555-8CEC1208901E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0B58A6A-69A5-439E-8555-8CEC1208901E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0B58A6A-69A5-439E-8555-8CEC1208901E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0B58A6A-69A5-439E-8555-8CEC1208901E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B72D6C8B-7739-4011-AEE1-79686E61EBF6}
+	EndGlobalSection
+EndGlobal

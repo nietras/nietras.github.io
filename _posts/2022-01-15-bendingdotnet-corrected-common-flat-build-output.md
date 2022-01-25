@@ -5,6 +5,10 @@ title: Bending .NET - Corrected Common Flat Build Output
 or [how gathering and destroying all human rebels in Zion failed due to renegade
 program](https://matrix.fandom.com/wiki/Battle_of_Zion).
 
+**UPDATE 2022-01-24: The approach defined here has been improved in [Bending
+.NET - Improved Common Flat Build Output]({{ site.baseurl
+}}/2022/01/24/bendingdotnet-improved-common-flat-build-output/)**
+
 In this post, part of the [Bending .NET]({{ site.baseurl
 }}/2021/11/18/bendingdotnet-series) series, I try to correct the ship wreck that
 was [Bending .NET - Common Flat Build Output]({{ site.baseurl
