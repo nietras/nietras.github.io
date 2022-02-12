@@ -50,6 +50,7 @@ Why not just use F#? I like paranthesis and brace and dislike allocations. 🤷�
 * [The RyuJIT transition is complete!](https://devblogs.microsoft.com/dotnet/the-ryujit-transition-is-complete/)
 * [Announcing .NET Core 3.1](https://devblogs.microsoft.com/dotnet/announcing-net-core-3-1/)
 * [Announcing .NET 5.0](https://devblogs.microsoft.com/dotnet/announcing-net-5-0/)
+* [Announcing .NET 6 — The Fastest .NET Yet](https://devblogs.microsoft.com/dotnet/announcing-net-6/)
 * []()
 * []()
 * []()
