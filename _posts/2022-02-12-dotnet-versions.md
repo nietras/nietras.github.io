@@ -12,6 +12,7 @@ title: .NET and C# Versions - 20th Anniversary
 * Features depicted as part of a version are probably not always representative.
 * It is not a timeline since .NET Framework and .NET Core releases overlap.
 * No room to mention all the amazing performance improvements.
+* Loosely based on the wikipedia drawing of .NET Framework versions.
 
 ### Sources
 * [.NET Framework version history](https://en.wikipedia.org/wiki/.NET_Framework_version_history)
