@@ -32,3 +32,15 @@ members vs locals
 * `Void` as a type so no more Func vs Action. 
 
 Why not just use F#? I like paranthesis and brace and dislike allocations. 🤷‍
+
+## Sources
+* [.NET Framework version history](https://en.wikipedia.org/wiki/.NET_Framework_version_history)
+* [.NET Framework versions and dependencies](https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/versions-and-dependencies)
+* [What's new in .NET Framework](https://docs.microsoft.com/en-us/dotnet/framework/whats-new/)
+* [A History of .NET Runtimes](https://mattwarren.org/2018/10/02/A-History-of-.NET-Runtimes/)
+* [Microsoft .NET Core Versions History](https://executecommands.com/microsoft-net-core-versions/)
+* [Announcing .NET Core 1.0](https://devblogs.microsoft.com/dotnet/announcing-net-core-1-0/)
+* [Announcing .NET Core 1.1](https://devblogs.microsoft.com/dotnet/announcing-net-core-1-1/)
+* []()
+* []()
+
