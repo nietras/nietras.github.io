@@ -43,3 +43,5 @@ title: .NET and C# Versions - 20th Anniversary ♥
 * [Announcing .NET 6 — The Fastest .NET Yet](https://devblogs.microsoft.com/dotnet/announcing-net-6/)
 * [The history of C#](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-version-history)
 * [C Sharp (programming language)](https://en.wikipedia.org/wiki/C_Sharp_(programming_language))
+* [Roslyn (compiler)](https://en.wikipedia.org/wiki/Roslyn_(compiler))
+* [The Rough History of The So Many C# Compilers](https://blog.lextudio.com/the-rough-history-of-the-so-many-c-compilers-f3a85500707c)
