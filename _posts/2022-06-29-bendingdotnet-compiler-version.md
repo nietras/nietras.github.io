@@ -143,15 +143,17 @@ Where I currently work we do machine learning with 100% reproducible training
 (on same GPU) down to the bit of each floating point in the model and results.
 Basically, you can `git clone` and `dotnet run` and training will be 100%
 reproducible. This works since we version everything and have ground truth in
-versioned nuget packages. And use deterministic randomization. With
-`global.json` you can then also be sure the .NET SDK is as expected. 
+versioned nuget packages. And use deterministic randomization (even in the face
+of multi-threading). With `global.json` you can then also be sure the .NET SDK
+is as expected.
 
 Shouldn't this be possible inside Visual Studio too? Decoupling the compiler
-version from the Visual Studio version. Of course this is large order to ask
-for, since Visual Studio features like IntelliCode have a tight relationship to
+version from the Visual Studio version. Of course this is large order to ask for
+since Visual Studio features like IntelliSense have a tight relationship to
 Roslyn, so at the very least I would think it possible to express in some file
-(`sln`) or whatever that you must have Visual Studio 2022 17.2 or later
-installed or an error is provided.
+(`csproj`/`Directory.Build.props`) or whatever that you must have Visual Studio
+2022 17.2 or later installed or you cannot build the project. Maybe there is a
+way?
 
 
 #### Links
