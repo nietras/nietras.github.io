@@ -120,10 +120,46 @@ says:
 
 The key being "**.NET CLI commands**".
 
-Links
+Why should I care? If you specify `LangVersion` to say `10.0` you get a
+predefined C# version right? Yes. And everything works? Yes... but the C#
+compiler is constantly changing, which means the generated IL might be changing
+too.
 
-> One way of checking the version of your compiler is to add #error version in a
-> source file, then looking at the error message output in your build logs.
+Not just IL inside methods, but also compiler generated code for say `record`s
+(see [C# 10 - `record struct` Deep Dive & Performance Implications]({{
+ site.baseurl }}/2021/06/14/csharp-10-record-struct/) for example). In 99% of
+ cases that's perhaps not important, but recently I stumbled upon such a case,
+which I will not go into detail with here. Perhaps I'll get back to that in a
+later blog post.
 
-[How to use Microsoft.CodeAnalysis.PublicApiAnalyzers](https://github.com/dotnet/roslyn-analyzers/blob/main/src/PublicApiAnalyzers/PublicApiAnalyzers.Help.md)
-[Display effective language version for #error version](https://github.com/dotnet/roslyn/pull/51880)
+It then surprised me that I could not find a way to express or constrain this
+"dependency" to be sure a certain specific (perhaps minimum) version of the C#
+compiler was present/used to ensure code generated would contain what was
+needed. And not just that if you want fully reproducible builds/runs (including
+when building/debugging from Visual Studio) you very much want the output to be
+100% identical which requires every tool and dependency to be "fixed".
+
+Where I currently work we do machine learning with 100% reproducible training
+(on same GPU) down to the bit of each floating point in the model and results.
+Basically, you can `git clone` and `dotnet run` and training will be 100%
+reproducible. This works since we version everything and have ground truth in
+versioned nuget packages. And use deterministic randomization. With
+`global.json` you can then also be sure the .NET SDK is as expected. 
+
+Shouldn't this be possible inside Visual Studio too? Decoupling the compiler
+version from the Visual Studio version. Of course this is large order to ask
+for, since Visual Studio features like IntelliCode have a tight relationship to
+Roslyn, so at the very least I would think it possible to express in some file
+(`sln`) or whatever that you must have Visual Studio 2022 17.2 or later
+installed or an error is provided.
+
+
+#### Links
+* [How to use Microsoft.CodeAnalysis.PublicApiAnalyzers](https://github.com/dotnet/roslyn-analyzers/blob/main/src/PublicApiAnalyzers/PublicApiAnalyzers.Help.md)
+  in which I first stumbled on this to me unknown feature:
+  > One way of checking the version of your compiler is to add `#error version` in a
+  > source file, then looking at the error message output in your build logs.
+
+* [Display effective language version for #error version](https://github.com/dotnet/roslyn/pull/51880)
+
+* [Overview of .NET, MSBuild, and Visual Studio versioning](https://docs.microsoft.com/en-us/dotnet/core/porting/versioning-sdk-msbuild-vs)
