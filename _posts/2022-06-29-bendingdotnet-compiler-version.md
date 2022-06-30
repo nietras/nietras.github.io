@@ -37,9 +37,13 @@ Program.cs(1,8): error CS8304:
 ```
 This is the only way I have found to determine the C# compiler version directly
 in code. There does not appear to be a symbol defined. You cannot write
-`#warning version` to avoid build to fail.
+`#warning version` to avoid build to fail or similar.
 
-Add `LangVersion` like below:
+We could stop now, but while we are at it, let's explore what changes impact the
+output of this and hence how we can change compiler version and language
+version. Both from CLI and inside Visual Studio.
+
+First, let's add `LangVersion` like below:
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
@@ -94,9 +98,13 @@ Program.cs(1,8): error CS8304:
   Compiler version: '4.2.0-4.22220.5 (432d17a8)'.
   Language version: 10.0.
 ```
-By default we get the latest version of whatever .NET SDK I have installed which
-in my case is (as reported by `dotnet --version`):
+
+
+NOT TRUE!!! REVISE: By default we get the latest version of whatever .NET SDK I
+have installed that matches the target framework?, which in my case is (as
+reported by `dotnet --version`):
 ```
+6.0.400-preview.22301.10
 7.0.100-preview.5.22307.18
 ```
 Changing SDK version again to `6.0.106` and output is:
