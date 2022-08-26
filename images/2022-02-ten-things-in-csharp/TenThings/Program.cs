@@ -2,23 +2,29 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using static Logger;
 
 using var reader = new StringReader("a;b;c;d");
 var line = reader.ReadLine()!;
-
-var split = line.Split(';');
-var nameToIndex = Enumerable.Range(0, split.Length)
-    .ToDictionary(i => split[i], i => i);
+var names = line.Split(';');
+var nameToIndex = MakeNameToIndex(names);
 
 Log(nameToIndex);
+
+static IReadOnlyDictionary<string, int> MakeNameToIndex(ReadOnlySpan<string> names)
+{
+    var nameToIndex = new Dictionary<string, int>(names.Length);
+    for (var i = 0; i < names.Length; i++)
+    {
+        nameToIndex.Add(names[i], i);
+    }
+    return nameToIndex;
+}
 
 static class Logger
 {
     static readonly Action<string> _log = 
-        static (string t) =>
-        { Console.WriteLine(t); Trace.WriteLine(t); };
+        static (string t) => { Console.WriteLine(t); Trace.WriteLine(t); };
     static int _logCount = 0;
 
     public static void Log(IReadOnlyDictionary<string, int> nameToIndex)
