@@ -24,7 +24,10 @@ both C# and .NET naming
   ```csharp
   var nameToIndex = new Map<string, int>();
   ```
-3. `KeyValuePair<,>` should be named `KeyValue<,>`.
+3. `KeyValuePair<,>` should be named `KeyValue<,>`. `Pair` is simply redundant, it's a key and value. That's it.
+  ```csharp
+  KeyValue<string, int> nameIndex = new("E", 4);
+  ``` 
 4. Add `let` as a compliment to `var` but where the declared variable cannot be mutated/re-assigned. This
    is not the same as `const`.
 5. `use` without `var` or `let` should be short-hand for `use let` 
