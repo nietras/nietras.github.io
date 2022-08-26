@@ -1,0 +1,41 @@
+﻿<pre style="font-family:Consolas;font-size:13px;color:gainsboro;background:#141414;"><span style="color:#569cd6;">using</span>&nbsp;System;
+<span style="color:#569cd6;">using</span>&nbsp;System<span style="color:#b4b4b4;">.</span>Collections<span style="color:#b4b4b4;">.</span>Generic;
+<span style="color:#569cd6;">using</span>&nbsp;System<span style="color:#b4b4b4;">.</span>Diagnostics;
+<span style="color:#569cd6;">using</span>&nbsp;System<span style="color:#b4b4b4;">.</span>IO;
+<span style="color:#569cd6;">using</span>&nbsp;System<span style="color:#b4b4b4;">.</span>Linq;
+<span style="color:#569cd6;">using</span>&nbsp;<span style="color:#569cd6;">static</span>&nbsp;Logger;
+ 
+<span style="color:#569cd6;">using</span>&nbsp;<span style="color:#569cd6;">var</span>&nbsp;<span style="color:#9cdcfe;">reader</span>&nbsp;<span style="color:#b4b4b4;">=</span>&nbsp;<span style="color:#569cd6;">new</span>&nbsp;StringReader(<span style="color:#d69d85;">&quot;a;b;c;d&quot;</span>);
+<span style="color:#569cd6;">var</span>&nbsp;<span style="color:#9cdcfe;">line</span>&nbsp;<span style="color:#b4b4b4;">=</span>&nbsp;reader<span style="color:#b4b4b4;">.</span>ReadLine()<span style="color:#b4b4b4;">!</span>;
+ 
+<span style="color:#569cd6;">var</span>&nbsp;<span style="color:#9cdcfe;">split</span>&nbsp;<span style="color:#b4b4b4;">=</span>&nbsp;line<span style="color:#b4b4b4;">.</span>Split(<span style="color:#d69d85;">&#39;;&#39;</span>);
+<span style="color:#569cd6;">var</span>&nbsp;<span style="color:#9cdcfe;">nameToIndex</span>&nbsp;<span style="color:#b4b4b4;">=</span>&nbsp;Enumerable<span style="color:#b4b4b4;">.</span>Range(<span style="color:#b5cea8;">0</span>,&nbsp;split<span style="color:#b4b4b4;">.</span>Length)
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#b4b4b4;">.</span>ToDictionary(<span style="color:#9cdcfe;">i</span>&nbsp;<span style="color:#b4b4b4;">=&gt;</span>&nbsp;split[i],&nbsp;<span style="color:#9cdcfe;">i</span>&nbsp;<span style="color:#b4b4b4;">=&gt;</span>&nbsp;i);
+ 
+Log(nameToIndex);
+ 
+nameToIndex[<span style="color:#d69d85;">&quot;e&quot;</span>]&nbsp;<span style="color:#b4b4b4;">=</span>&nbsp;<span style="color:#b5cea8;">4</span>;
+ 
+Log(nameToIndex);
+ 
+<span style="color:#569cd6;">static</span>&nbsp;<span style="color:#569cd6;">class</span>&nbsp;<span style="color:#4ec9b0;">Logger</span>
+{
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#569cd6;">static</span>&nbsp;<span style="color:#569cd6;">readonly</span>&nbsp;Action&lt;<span style="color:#569cd6;">string</span>&gt;&nbsp;_log&nbsp;<span style="color:#b4b4b4;">=</span>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#569cd6;">static</span>&nbsp;(<span style="color:#569cd6;">string</span>&nbsp;<span style="color:#9cdcfe;">t</span>)&nbsp;<span style="color:#b4b4b4;">=&gt;</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;Console<span style="color:#b4b4b4;">.</span>WriteLine(t);&nbsp;Trace<span style="color:#b4b4b4;">.</span>WriteLine(t);&nbsp;};
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#569cd6;">static</span>&nbsp;<span style="color:#569cd6;">int</span>&nbsp;_logCount&nbsp;<span style="color:#b4b4b4;">=</span>&nbsp;<span style="color:#b5cea8;">0</span>;
+ 
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#569cd6;">public</span>&nbsp;<span style="color:#569cd6;">static</span>&nbsp;<span style="color:#569cd6;">void</span>&nbsp;<span style="color:#dcdcaa;">Log</span>(IReadOnlyDictionary&lt;<span style="color:#569cd6;">string</span>,&nbsp;<span style="color:#569cd6;">int</span>&gt;&nbsp;<span style="color:#9cdcfe;">nameToIndex</span>)
+&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#d8a0df;">foreach</span>&nbsp;(var&nbsp;<span style="color:#9cdcfe;">pair</span>&nbsp;<span style="color:#d8a0df;">in</span>&nbsp;nameToIndex)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Log(pair);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+ 
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#569cd6;">private</span>&nbsp;<span style="color:#569cd6;">static</span>&nbsp;<span style="color:#569cd6;">void</span>&nbsp;<span style="color:#dcdcaa;">Log</span>(KeyValuePair&lt;<span style="color:#569cd6;">string</span>,&nbsp;<span style="color:#569cd6;">int</span>&gt;&nbsp;<span style="color:#9cdcfe;">pair</span>)
+&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_log(<span style="color:#d69d85;">$&quot;</span>{_logCount:<span style="color:#d69d85;">D3</span>}<span style="color:#d69d85;">:&nbsp;&#39;</span>{pair<span style="color:#b4b4b4;">.</span>Key}<span style="color:#d69d85;">&#39;&nbsp;=&nbsp;</span>{pair<span style="color:#b4b4b4;">.</span>Value}<span style="color:#d69d85;">&quot;</span>);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#b4b4b4;">++</span>_logCount;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+}</pre>
