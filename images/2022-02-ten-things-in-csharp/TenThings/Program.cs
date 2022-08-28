@@ -4,33 +4,28 @@ using System.IO;
 using System.Linq;
 using static DemonstrativeLetterSplitter;
 
-Split("a;b;c;d\ne;f;g", char.ToUpper);
+using var reader = new StringReader("a;b;c;d");
+Split(reader, char.ToUpper);
 
 static class DemonstrativeLetterSplitter
 {
     static readonly Action<string> Log;
     static DemonstrativeLetterSplitter() => Log = Console.WriteLine;
+    static int _count = 0;
 
-    public static void Split(string text, Func<char, char> change)
+    public static void Split(TextReader reader, Func<char, char> change)
     {
-        using var reader = new StringReader(text);
-        int lineNumber = 1;
-        string? line;
-        while ((line = reader.ReadLine()) is not null)
+        var text = reader.ReadToEnd();
+        var letters = text.Split(';').Select(n => n[0]).ToArray();
+        Do(letters, change);
+        var letterToIndex = MakeLetterToIndex(letters);
+        foreach (var pair in letterToIndex)
         {
-            Log($"Line {lineNumber}:'{line}'");
-            var letters = line.Split(';').Select(n => n[0]).ToArray();
-            Apply(letters, change);
-            var letterToIndex = MakeLetterToIndex(letters);
-            foreach (var pair in letterToIndex)
-            {
-                Log($"{pair.Key} = {pair.Value}");
-            }
-            ++lineNumber;
+            Log($"{_count++:D3}: {pair.Key} = {pair.Value}");
         }
     }
 
-    private unsafe static void Apply(Span<char> letters, Func<char, char> change)
+    private unsafe static void Do(Span<char> letters, Func<char, char> change)
     {
         fixed (char* letterPtr = letters)
         {
