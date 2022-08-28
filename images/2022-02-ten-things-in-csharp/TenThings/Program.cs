@@ -23,9 +23,17 @@ static IReadOnlyDictionary<string, int> MakeNameToIndex(ReadOnlySpan<string> nam
 
 static class Logger
 {
-    static readonly Action<string> _log = 
-        static (string t) => { Console.WriteLine(t); Trace.WriteLine(t); };
+    static readonly Action<string> _log;
     static int _logCount = 0;
+
+    static Logger()
+    {
+        _log = static (string t) => 
+        { 
+            Console.WriteLine(t);
+            Trace.WriteLine(t); 
+        };
+    }
 
     public static void Log(IReadOnlyDictionary<string, int> nameToIndex)
     {
