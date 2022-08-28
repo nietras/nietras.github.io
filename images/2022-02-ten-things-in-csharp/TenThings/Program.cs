@@ -1,76 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using static Logger;
+using static DemonstrativeLetterSplitter;
 
-using var reader = new StringReader("a;b;c;d\ne;f;g");
-string line;
-while ((line = reader.ReadLine()) != null)
+Split("a;b;c;d\ne;f;g", char.ToUpper);
+
+static class DemonstrativeLetterSplitter
 {
-    var letters = line.Split(';').Select(n => n[0]).ToArray();
-    var letterToIndex = MakeLetterToIndex(letters);
-    Log(letterToIndex);
+    static readonly Action<string> Log;
+    static DemonstrativeLetterSplitter() => Log = Console.WriteLine;
 
-    var upperCaseLetters = UnsafeUpperCase(letters);
-    letterToIndex = MakeLetterToIndex(upperCaseLetters);
-    Log(letterToIndex);
-}
-
-static IReadOnlyDictionary<char, int> MakeLetterToIndex(
-    ReadOnlySpan<char> letters)
-{
-    var nameToIndex = new Dictionary<char, int>(letters.Length);
-    for (var i = 0; i < letters.Length; i++)
+    public static void Split(string text, Func<char, char> change)
     {
-        nameToIndex.Add(letters[i], i);
+        using var reader = new StringReader(text);
+        int lineNumber = 1;
+        string? line;
+        while ((line = reader.ReadLine()) is not null)
+        {
+            Log($"Line {lineNumber}:'{line}'");
+            var letters = line.Split(';').Select(n => n[0]).ToArray();
+            Apply(letters, change);
+            var letterToIndex = MakeLetterToIndex(letters);
+            foreach (var pair in letterToIndex)
+            {
+                Log($"{pair.Key} = {pair.Value}");
+            }
+            ++lineNumber;
+        }
     }
-    return nameToIndex;
-}
 
-unsafe static ReadOnlySpan<char> UnsafeUpperCase(Span<char> letters)
-{
-    fixed (char* letterPtr = letters)
+    private unsafe static void Apply(Span<char> letters, Func<char, char> change)
     {
+        fixed (char* letterPtr = letters)
+        {
+            for (var i = 0; i < letters.Length; i++)
+            {
+                ref var letter = ref letterPtr[i];
+                letter = change(letter);
+            }
+        }
+    }
+
+    private static IReadOnlyDictionary<char, int> MakeLetterToIndex(
+        ReadOnlySpan<char> letters)
+    {
+        var nameToIndex = new Dictionary<char, int>(letters.Length);
         for (var i = 0; i < letters.Length; i++)
         {
-            letterPtr[i] -= (char)('a' - 'A');
+            nameToIndex.Add(letters[i], i);
         }
-    }
-    return letters;
-}
-
-static class Logger
-{
-    static readonly Action<string> _log;
-    private static int _logCount = 0;
-
-    static Logger()
-    {
-        _log = static (string t) => 
-        { 
-            Console.WriteLine(t);
-            Trace.WriteLine(t); 
-        };
-    }
-
-    public static void Log(string message)
-    {
-        _log($"{_logCount:D3}: {message}");
-        ++_logCount;
-    }
-
-    public static void Log(IReadOnlyDictionary<char, int> nameToIndex)
-    {
-        foreach (var pair in nameToIndex)
-        {
-            Log(pair);
-        }
-    }
-
-    private static void Log(KeyValuePair<char, int> pair)
-    {
-        Log($"{pair.Key} = {pair.Value}");
+        return nameToIndex;
     }
 }
