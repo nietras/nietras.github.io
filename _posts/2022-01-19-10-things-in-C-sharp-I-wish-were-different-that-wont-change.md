@@ -2,15 +2,15 @@
 layout: post
 title: 10 Tiny Things in C# I Wish Were Different
 ---
-As an exercise in futility in this blog post I look at a few things I wish were
-different in C# (and .NET as I am including BCL type names or similar too). I
-consider this an anti-post in the sense that I actually believe there is an
-"unsound" obsession in programming circles with counting lines or characters as
+In this blog post I look at a few things I wish were different in C# (and .NET
+as I am including BCL type names or similar too). I consider this an
+anti-pattern-post in the sense that I actually believe there is an "unsound"
+obsession in programming circles with counting code lines or characters as
 exemplified in my own blog post [World's Smallest C# Program (featuring `N`)]({{
 site.baseurl }}/2021/10/09/worlds-smallest-csharp-program). 
 
-It's fun but has less relevance to writing good code than correctness,
-readability, debuggability, observability and performance. However, when
+It's fun but has less relevance to writing good code than *correctness,
+readability, debuggability, observability and performance*. However, when
 possible one should choose the most succinct way to express code as long as the
 code is equivalent with regards to the mentioned points of merit. To be
 concrete this:
@@ -30,14 +30,10 @@ It makes me sad when I see the above `ToList()` given the allocations involved.
 There is a [reason LINQ doesn't include a `ForEach` extension
 method](https://ericlippert.com/2009/05/18/foreach-vs-foreach/). And both
 snippets of code can be written in pretty much the same time in Visual Studio.
-The above can be expressed using `Array.ForEach` now of course, and I'm fine
-with that, but what happens if the type of `letters` changes to `List<char>`?  
-```csharp
-Array.ForEach(letters, Console.WriteLine);
-```
+
 In any case for any developers out there please:
- * Stop counting lines 🤞
- * Stop counting characters 🤞
+ * Stop counting lines *only* 🤞
+ * Stop counting characters *only* 🤞
 
 Yet here I am nagging about minor issues in C# and .NET regarding things that
 could be more succinct. The difference is these are things at the foundation of
@@ -46,10 +42,9 @@ could have been better defaults that would not impact readability in a negative
 way. It is, however, pretty futile giving these are also things that probably
 won't be changed or implemented. So please indulge me.
 
-Below I show a before and after example demonstrating the 10 things I wish were
-different (in some way not necessarily all uses). Just after I go through each
-of them one by one. There could be more or less and they are not particularly
-well prioritized. Just off the top of my mind.
+Below I show a before and after example demonstrating the things I wish were
+different. Just after I go through each of the 10 things one by one. There could
+be more or less and they are not particularly well prioritized.
 
 BEFORE
 
@@ -115,18 +110,19 @@ AFTER
        mut int _index = 0;
    }
    ```
-7. `ReadOnly` should be abbreviated `RO` in type names e.g. `IReadOnlyList<>`,
+8. `ReadOnly` should be abbreviated `RO` in type names e.g. `IReadOnlyList<>`,
    `ReadOnlySpan<>` should be `IROList<>`, `ROSpan<>`. At first this may feel
-   quite un-C#'esque, but there are plenty of abbreviations already like `Tcp`
-   and `Http`, however, `ReadOnly` is quite a bit more pervasive in modern C#.
-   The naming standard says 2 letter abbreviations should be all caps while 3 or
-   more only have the first letter capitalized. I'd be fine with relaxing this
-   to `Ro` in this case though. 😎
+   quite un-C#-esque, but there are plenty of abbreviations already like `Tcp`
+   and `Http` in .NET. However, `ReadOnly` is quite a bit more pervasive in
+   modern C#. The naming standard says 2 letter abbreviations should be all caps
+   while 3 or more only have the first letter capitalized. I'd be fine with
+   relaxing this to `Ro` in this case though. 😱
    ```csharp
    IROList<char> letters = new char[] { 'a', 'b' };
    ```
-8. `private` should be implicit only (it's almost always redundant and while you
-   can remove it with `dotnet format` why not just say it simply can't be used):
+9. `private` should be implicit only (it's almost always redundant and while you
+   can remove it with `dotnet format` why not just say it simply can't be used -
+   I'm disregarding `private protected` or similar here):
    ```csharp
    class C
    {
@@ -136,9 +132,22 @@ AFTER
        private int Triple(int i) => i * 3; // ERROR: 'private' is not valid
    }
    ``` 
+10. `fixed` should be `fix`. Same as 1. Use imperative present tense.
+    ```csharp
+    var letters = new [] { 'a', 'b' };
+    fix (mut char* ptr = letters)
+    {
+        for (var i = 0; i < letters.Length; ++i)
+        {
+            ptr[i] += (char)2;
+        }
+    }
+    ```
+
+
+10. Introduce `IFunc<>` and `IAction<>` interfaces in BCL and let delegates
+    implement them.
 9. dictionary array initializor is an abomination - 1. harder to read (subjective), harder to refactor/change 3 vs 2 changes, its a lie!! 
-11. delegates don't implement interface e. g. IFunc
-12. `fixed` should be `fix`
 13. `Void` as a type so no more Func vs Action. 
 14. Allow alias for open generic types
 15. Some form of automatic RAII

@@ -19,4 +19,15 @@ foreach (var letter in letters)
 
 letters.ToList().ForEach(Console.WriteLine);
 
-Array.ForEach(letters, static n => Console.WriteLine(n)));
+Array.ForEach(letters, Console.WriteLine);
+
+unsafe
+{
+    fixed (char* ptr = letters)
+    {
+        for (var i = 0; i < letters.Length; ++i)
+        {
+            ptr[i] += (char)2;
+        }
+    }
+}
