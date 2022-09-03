@@ -99,6 +99,7 @@ Program.cs(1,8): error CS8304:
   Language version: 10.0.
 ```
 
+`6.0.400-preview.22301.10` then `4.3.0-3.22281.14 (b4fa0937)`
 
 NOT TRUE!!! REVISE: By default we get the latest version of whatever .NET SDK I
 have installed that matches the target framework?, which in my case is (as
@@ -296,9 +297,25 @@ And not the least is there some way to define a minimum compiler version for a
 project in source code, so users will be notified that they should update Visual
 Studio if the compiler version is too low?
 
+```
+7.0.100-preview.3.22179.4
+Microsoft (R) Build Engine version 17.2.0-preview-22175-02+058a0262c for .NET
+Program.cs(4,8): error CS1029: #error: 'version' [C:\Users\Niels\source\repos\CompilerVersionTest\CompilerVersionTest\CompilerVersionTest.csproj]
+Program.cs(4,8): error CS8304: Compiler version: '4.2.0-2.22172.6 (f81a859b)'. Language version: 10.0.
+```
 
+summary
 
-
+|global.json sdk version|dotnet build|VS 17.3 Preview 2.0 build|
+|-|-|-|
+|N/A|4.3.0-2.22307.7|4.3.0-2.22307.7|
+|6.0.106|4.0.1-1.22181.2|4.3.0-2.22307.7|
+|6.0.203|4.1.0-5.22128.4|4.3.0-2.22307.7|
+|6.0.301|4.2.0-4.22220.5|4.3.0-2.22307.7|
+|6.0.400-preview.22301.10|4.3.0-2.22307.7|4.3.0-2.22307.7|
+|7.0.100-preview.3.22179.4|4.2.0-2.22172.6|4.3.0-2.22307.7|
+|7.0.100-preview.4.22252.9|4.3.0-2.22225.9|4.3.0-2.22307.7|
+|7.0.100-preview.5.22307.18|4.3.0-2.22302.14|4.3.0-2.22307.7|
 
 # REVISIT
 Why should I care? If you specify `LangVersion` to say `10.0` you get a
