@@ -2,12 +2,11 @@
 layout: post
 title: 10 Tiny Things in C#/.NET I Wish Were Different
 ---
-In this blog post I look at a few things I wish were different in C# and .NET as
-I am looking at both language and types. I consider this an anti-pattern-post in
-the sense that I actually believe there is an "unsound" obsession in programming
-circles with counting code lines or characters as exemplified in my own blog
-post [World's Smallest C# Program (featuring `N`)]({{ site.baseurl
-}}/2021/10/09/worlds-smallest-csharp-program).
+In this blog post I look at a few things I wish were different in C# and .NET. I
+consider this an anti-pattern-post in the sense that I actually believe there is
+an "unsound" obsession in programming circles with counting code lines or
+characters as exemplified in my own blog post [World's Smallest C# Program
+(featuring `N`)]({{ site.baseurl }}/2021/10/09/worlds-smallest-csharp-program).
 
 It's fun but has less relevance to writing good code than *correctness,
 readability, debuggability, observability and performance*. However, when
@@ -38,17 +37,16 @@ In any case for any developers out there please:
 Yet here I am nagging about minor issues in C# and .NET regarding things that
 could be more succinct. The difference is these are things at the foundation of
 the developer platform. Things we use every single day, and where I think there
-could have been better defaults that would not impact readability in a negative
-way. It is, however, pretty futile giving these are also things that probably
-won't be changed or implemented. So please indulge me.
+could have been better defaults that would not impact readability. It is,
+however, pretty futile giving these are also things that most likely won't be
+changed or implemented. So please indulge me.
 
-Below I show a before and after example demonstrating the things I wish were
-different. Just after I go through each of the 10 things one by one.
+Below I show a before and after example as a gif demonstrating the things I wish
+were different (sorry for the lack of syntax highlighting in the after code).
+Just after I go through each of the 10 things one by one. At the end the example
+code is also listed as text both before and after.
 
-BEFORE
-
-AFTER
-
+![]({{ site.baseurl }}/images/2022-09-ten-tiny-things-in-csharp-dotnet/example-before-after.gif)
 
  1. `using` should be `use`. Just like git commit messages should be in the
     [imperative present
@@ -123,7 +121,7 @@ AFTER
    ```
    can be seen in [sharplab.io](https://sharplab.io/#v2:EYLgtghglgdgNAFxFANgHwAICYCMBYAKAwFYAeWBOAAgoD4qJgBnKgXioFkIEALAOgCCzANyEAbhABOVAK5sGzABQBaACxYAlKIJA===)
    to generate the following IL:
-   ```msil
+   ```
    IL_0000: ldsfld class [System.Runtime]System.Func`2<int32, int32> Program/'<>O'::'<0>__Abs'
    IL_0005: dup
    IL_0006: brtrue.s IL_001b
@@ -140,7 +138,7 @@ AFTER
    IL_0022: pop
    IL_0023: ret
    ```
-   the `abs(-42)` is simply lowered to calling `Invoke(-42)` on the delegate.
+   the `abs(-42)` is lowered to calling `Invoke(-42)` on the delegate.
    Instead, C# should recognize **any** method called `Invoke` as invokeable, so
    you can write for example:
    ```csharp
@@ -178,7 +176,7 @@ AFTER
 10. `fixed` should be `fix`. Same as 1. Use imperative present tense.
     ```csharp
     var letters = new [] { 'a', 'b' };
-    fix (mut char* ptr = letters)
+    fix (char* ptr = letters)
     {
         for (var i = 0; i < letters.Length; ++i)
         {
@@ -187,3 +185,126 @@ AFTER
     }
     ```
 
+### C# (original)
+```csharp
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using static DemonstrativeLetterSplitter;
+
+using var reader = new StringReader("a;b;c;d");
+Split(reader, new ToUpper());
+
+interface IFunc<T, TResult> { TResult Invoke(T arg1); }
+readonly record struct ToUpper : IFunc<char, char>
+{
+    public char Invoke(char c) => char.ToUpper(c);
+}
+
+static class DemonstrativeLetterSplitter
+{
+    static readonly Action<string> Log;
+    static DemonstrativeLetterSplitter() => Log = Console.WriteLine;
+    static int _count = 0;
+
+    public static void Split<TFunc>(TextReader reader, TFunc change)
+        where TFunc : IFunc<char, char>
+    {
+        var text = reader.ReadToEnd();
+        var letters = text.Split(';').Select(n => n[0]).ToArray();
+        Do(letters, change);
+        var letterToIndex = MakeLetterToIndex(letters);
+        foreach (var pair in letterToIndex)
+        {
+            Log($"{_count++:D3}: {pair.Key} = {pair.Value}");
+        }
+    }
+
+    private static unsafe void Do<TFunc>(Span<char> letters, TFunc change)
+        where TFunc : IFunc<char, char>
+    {
+        fixed (char* letterPtr = letters)
+        {
+            for (var i = 0; i < letters.Length; i++)
+            {
+                ref var letter = ref letterPtr[i];
+                letter = change.Invoke(letter);
+            }
+        }
+    }
+
+    private static IReadOnlyDictionary<char, int> MakeLetterToIndex(
+        ReadOnlySpan<char> letters)
+    {
+        var letterToIndex = new Dictionary<char, int>(letters.Length);
+        for (var i = 0; i < letters.Length; i++)
+        {
+            letterToIndex.Add(letters[i], i);
+        }
+        return letterToIndex;
+    }
+}
+```
+
+### C# (nietras)
+```csharp
+use System;
+use System.Collections.Generic;
+use System.IO;
+use System.Linq;
+use static DemonstrativeLetterSplitter;
+
+use let reader = new StringReader("a;b;c;d");
+Split(reader, new ToUpper());
+
+interface IFunc<T, TResult> { TResult Invoke(T arg1); }
+record struct ToUpper : IFunc<char, char>
+{
+    public char Invoke(char c) => char.ToUpper(c);
+}
+
+static class DemonstrativeLetterSplitter
+{
+    static Action<string> Log;
+    static this() => Log = Console.WriteLine;
+    static mut int _count = 0;
+
+    public static void Split<TFunc>(TextReader reader, TFunc change)
+        where TFunc : IFunc<char, char>
+    {
+        let text = reader.ReadToEnd();
+        let letters = text.Split(';').Select(n => n[0]).ToArray();
+        Do(letters, change);
+        let letterToIndex = MakeLetterToIndex(letters);
+        foreach (let pair in letterToIndex)
+        {
+            Log($"{_count++:D3}: {pair.Key} = {pair.Value}");
+        }
+    }
+
+    static unsafe void Do<TFunc>(Span<char> letters, TFunc change)
+        where TFunc : IFunc<char, char>
+    {
+        fix (char* letterPtr = letters)
+        {
+            for (var i = 0; i < letters.Length; i++)
+            {
+                ref var letter = ref letterPtr[i];
+                letter = change(letter);
+            }
+        }
+    }
+
+    static IROMap<char, int> MakeLetterToIndex(
+        ROSpan<char> letters)
+    {
+        let letterToIndex = new Map<char, int>(letters.Length);
+        for (var i = 0; i < letters.Length; i++)
+        {
+            letterToIndex.Add(letters[i], i);
+        }
+        return letterToIndex;
+    }
+}
+```

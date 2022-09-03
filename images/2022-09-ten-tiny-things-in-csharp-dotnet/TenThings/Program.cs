@@ -5,7 +5,13 @@ using System.Linq;
 using static DemonstrativeLetterSplitter;
 
 using var reader = new StringReader("a;b;c;d");
-Split(reader, char.ToUpper);
+Split(reader, new ToUpper());
+
+interface IFunc<T, TResult> { TResult Invoke(T arg1); }
+readonly record struct ToUpper : IFunc<char, char>
+{
+    public char Invoke(char c) => char.ToUpper(c);
+}
 
 static class DemonstrativeLetterSplitter
 {
@@ -13,7 +19,8 @@ static class DemonstrativeLetterSplitter
     static DemonstrativeLetterSplitter() => Log = Console.WriteLine;
     static int _count = 0;
 
-    public static void Split(TextReader reader, Func<char, char> change)
+    public static void Split<TFunc>(TextReader reader, TFunc change)
+        where TFunc : IFunc<char, char>
     {
         var text = reader.ReadToEnd();
         var letters = text.Split(';').Select(n => n[0]).ToArray();
@@ -25,14 +32,15 @@ static class DemonstrativeLetterSplitter
         }
     }
 
-    private unsafe static void Do(Span<char> letters, Func<char, char> change)
+    private static unsafe void Do<TFunc>(Span<char> letters, TFunc change)
+        where TFunc : IFunc<char, char>
     {
         fixed (char* letterPtr = letters)
         {
             for (var i = 0; i < letters.Length; i++)
             {
                 ref var letter = ref letterPtr[i];
-                letter = change(letter);
+                letter = change.Invoke(letter);
             }
         }
     }
@@ -40,11 +48,11 @@ static class DemonstrativeLetterSplitter
     private static IReadOnlyDictionary<char, int> MakeLetterToIndex(
         ReadOnlySpan<char> letters)
     {
-        var nameToIndex = new Dictionary<char, int>(letters.Length);
+        var letterToIndex = new Dictionary<char, int>(letters.Length);
         for (var i = 0; i < letters.Length; i++)
         {
-            nameToIndex.Add(letters[i], i);
+            letterToIndex.Add(letters[i], i);
         }
-        return nameToIndex;
+        return letterToIndex;
     }
 }
