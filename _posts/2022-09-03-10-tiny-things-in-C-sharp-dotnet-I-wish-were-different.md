@@ -3,10 +3,10 @@ layout: post
 title: 10 Tiny Things in C#/.NET I Wish Were Different
 ---
 In this blog post I look at a few things I wish were different in C# and .NET. I
-consider this an anti-pattern-post in the sense that I actually believe there is
-an "unsound" obsession in programming circles with counting code lines or
-characters as exemplified in my own blog post [World's Smallest C# Program
-(featuring `N`)]({{ site.baseurl }}/2021/10/09/worlds-smallest-csharp-program).
+consider this an anti-post in the sense that I actually believe there is an
+unsound obsession in programming circles with counting code lines or characters
+as exemplified in my own blog post [World's Smallest C# Program (featuring
+`N`)]({{ site.baseurl }}/2021/10/09/worlds-smallest-csharp-program).
 
 It's fun but has less relevance to writing good code than *correctness,
 readability, debuggability, observability and performance*. However, when
@@ -30,16 +30,17 @@ There is a [reason LINQ doesn't include a `ForEach` extension
 method](https://ericlippert.com/2009/05/18/foreach-vs-foreach/). And both
 snippets of code can be written in pretty much the same time in Visual Studio.
 
-In any case for any developers out there please:
+In any case for any developers out there please (unless [code
+golfing](https://en.wikipedia.org/wiki/Code_golf) 😉):
  * Stop counting lines *only* 🤞
  * Stop counting characters *only* 🤞
 
-Yet here I am nagging about minor issues in C# and .NET regarding things that
-could be more succinct. The difference is these are things at the foundation of
-the developer platform. Things we use every single day, and where I think there
-could have been better defaults that would not impact readability. It is,
-however, pretty futile giving these are also things that most likely won't be
-changed or implemented. So please indulge me.
+Yet here I am nagging about minor issues in C# and .NET (a developer platform I
+♥) regarding things that could be more succinct. The difference is these are
+things at the foundation of the developer platform. Things we use every single
+day, and where I think there could have been better defaults that would not
+impact readability. It is, however, pretty futile giving these are also things
+that most likely won't be changed or implemented. So please indulge me.
 
 Below I show a before and after example as a gif demonstrating the things I wish
 were different (sorry for the lack of syntax highlighting in the after code).
@@ -81,7 +82,7 @@ code is also listed as text both before and after.
 4. `KeyValuePair<,>` should be `KeyValue<,>`. `Pair` is simply redundant. It's a
    key and value.
    ```csharp
-   KeyValue<char, int> nameIndex = new('E', 4);
+   KeyValue<char, int> letterIndex = new('E', 4);
    ``` 
 5. Add `let` as a compliment to `var` but where the declared variable cannot be
    mutated/reassigned. This is not the same as `const` as the declared variable
@@ -91,8 +92,9 @@ code is also listed as text both before and after.
    text = "def"; // ERROR: Cannot re-assign 'text'
    use let reader = new StringReader("a;b;c;d");
    ``` 
-6. `readonly` should not exist instead by default all declarations by
-   default are readonly and mutable ones should be defined with `mut`.
+6. `readonly` should not exist instead by default all declarations by default
+   are readonly and mutable ones should be defined with `mut` (or `mutable`).
+   Note that `var` variables by default are mutable.
    ```csharp
    struct RO            // readonly struct by default
    {
@@ -160,7 +162,10 @@ code is also listed as text both before and after.
    for value type functor based algoritms. An old example can be seen in
    [RyuJIT: Poor code quality for tight generic loop with many inlineable calls
    (factor x8 slower than non-generic few calls
-   loop)](https://github.com/dotnet/runtime/issues/5252). 
+   loop)](https://github.com/dotnet/runtime/issues/5252). This is simular to how
+   C# recognizes types with a `GetEnumerator()` method without implementing
+   `IEnumerable<>` as in
+   [System.Private.CoreLib/src/System/Span.cs](https://github.com/dotnet/runtime/blob/2d1e29bdd3183b2e33026ad0606dded83583846e/src/libraries/System.Private.CoreLib/src/System/Span.cs#L221-L261).
 9. `private` should be implicit only (it's almost always redundant and while you
    can remove it with `dotnet format` why not just say it simply can't be used -
    I'm disregarding `private protected` or similar here):
@@ -308,3 +313,13 @@ static class DemonstrativeLetterSplitter
     }
 }
 ```
+### Output
+```
+000: A = 0
+001: B = 1
+002: C = 2
+003: D = 3
+```
+
+PS: The example program is solely intended to exemplify the C#/.NET changes as
+suggested here not good code.
