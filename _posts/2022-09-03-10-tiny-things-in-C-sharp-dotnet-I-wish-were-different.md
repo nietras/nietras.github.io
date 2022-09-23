@@ -49,13 +49,27 @@ code is also listed as text both before and after.
 
 ![]({{ site.baseurl }}/images/2022-09-ten-tiny-things-in-csharp-dotnet/example-before-after.gif)
 
+UPDATE: To clarify based on [responses to the post on
+twitter](https://twitter.com/nietras1/status/1566762707281481730) this post is a
+**thought experiment**. Not a list of proposals for changing C#/.NET. It's a
+"what if?" these things were different. From the inception of the platform for
+example. *Some* of the mentioned things could potentially be implemented but
+others should clearly not since they would break backwards compatibility or
+similar like removing `readonly` and making it default. It's a tremendous value
+add of the .NET/C# developer platform that you can take [20 year
+old](https://nietras.com/2022/02/13/dotnet-and-csharp-versions/) code and in
+most cases it still compiles today on the most recent version of the platform
+and compiler. Hence, it is wishful thinking and "pretty futile" 😅
+
  1. `using` should be `use`. Just like git commit messages should be in the
     [imperative present
     tense](https://git.kernel.org/pub/scm/git/git.git/tree/Documentation/SubmittingPatches?h=v2.36.1#n181)
     like `"Add X"`, `"Remove Y"`, `"Fix Z"` C# should be the same. I don't know
-    the reason for why C# selected `using` vs `use` but both read fine when read
-    out. **"Using namespace System in this file"** vs **"Use namespace System in
-    this file"** but arguably `use` is more succinct:
+    the reason for why C# selected `using` vs `use` (besides [C++
+    heritage](https://en.cppreference.com/w/cpp/language/namespace#Using-directives))
+    but both read fine when read out. **"Using namespace System in this file"**
+    vs **"Use namespace System in this file"** but arguably `use` is more
+    succinct:
     ```csharp
     use System;
     use System.IO;
