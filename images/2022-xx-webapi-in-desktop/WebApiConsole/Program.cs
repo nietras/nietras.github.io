@@ -1,4 +1,7 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using System.Diagnostics;
+
+Action<string> log = t => { Trace.WriteLine($"T{Environment.CurrentManagedThreadId:D2} {t}"); };
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -23,29 +26,52 @@ var slidersStore = new SlidersStore(new Dictionary<string, int>()
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("/sliders", () =>
+app.MapGet("/sliders", async () =>
 {
-    // HACK FOR NOW
-    lock (slidersStore)
-    {
-        return slidersStore.Sliders;
-    }
+    log("GET /sliders");
+    var tcs = new TaskCompletionSource<IReadOnlyDictionary<string, int>>();
+
+#pragma warning disable CS4014 // Ignore Task returned here since we just use Task.Run as hack of sending action to another thread
+    Task.Run(() => GetSliders(tcs));
+#pragma warning restore CS4014
+
+    return await tcs.Task;
 })
 .WithName("GetSliders");
 
-app.MapPut("/sliders", (Dictionary<string, int> newSliders) =>
+app.MapPut("/sliders", async (Dictionary<string, int> newSliders) =>
 {
-    // HACK FOR NOW
-    lock (slidersStore)
-    {
-        slidersStore.Sliders = newSliders;
-    }
+    log("PUT /sliders");
+    var tcs = new TaskCompletionSource();
+
+#pragma warning disable CS4014 // Ignore Task returned here since we just use Task.Run as hack of sending action to another thread
+    Task.Run(() => PutSliders(newSliders, tcs));
+#pragma warning restore CS4014
+
+    await tcs.Task;
 })
 .WithName("PutSliders");
 
+void GetSliders(TaskCompletionSource<IReadOnlyDictionary<string, int>> tcs)
+{
+    log(nameof(GetSliders));
+    lock (slidersStore)
+    {
+        tcs.SetResult(slidersStore.Sliders);
+    }
+}
+
+void PutSliders(IReadOnlyDictionary<string, int> sliders, TaskCompletionSource tcs)
+{
+    log(nameof(PutSliders));
+    lock (slidersStore)
+    {
+        slidersStore.Sliders = sliders;
+        tcs.SetResult();
+    }
+}
 
 var cts = new CancellationTokenSource();
-
 await app.RunAsync(cts.Token);
 
 public class SlidersStore
