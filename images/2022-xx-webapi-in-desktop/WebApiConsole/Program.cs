@@ -16,32 +16,46 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+var slidersStore = new SlidersStore(new Dictionary<string, int>()
+    {
+        { "S0", 000 },
+        { "S1", 010 },
+        { "S2", 020 },
+    });
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("/weatherforecast", () =>
+app.MapGet("/sliders", () =>
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateTime.Now.AddDays(index),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    // HACK FOR NOW
+    lock (slidersStore)
+    {
+        return slidersStore.Sliders;
+    }
 })
-.WithName("GetWeatherForecast");
+.WithName("GetSliders");
+
+app.MapPut("/sliders", (Dictionary<string, int> newSliders) =>
+{
+    // HACK FOR NOW
+    lock (slidersStore)
+    {
+        slidersStore.Sliders = newSliders;
+    }
+})
+.WithName("PutSliders");
+
 
 var cts = new CancellationTokenSource();
 
 await app.RunAsync(cts.Token);
 
-record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)
+public class SlidersStore
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    public SlidersStore(IReadOnlyDictionary<string, int> sliders)
+    {
+        Sliders = sliders;
+    }
+
+    public IReadOnlyDictionary<string, int> Sliders { get; set; }
 }
