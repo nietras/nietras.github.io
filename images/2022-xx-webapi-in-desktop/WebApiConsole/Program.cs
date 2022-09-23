@@ -14,8 +14,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 var slidersStore = new SlidersStore(new Dictionary<string, int>()
     {
         { "S0", 000 },
