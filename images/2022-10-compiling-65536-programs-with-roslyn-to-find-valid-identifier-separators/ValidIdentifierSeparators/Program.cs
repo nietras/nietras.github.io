@@ -11,16 +11,13 @@ var validChars = new List<char>();
 var invalidChars = new List<char>();
 
 using var dllStream = new MemoryStream();
-var max = char.MaxValue;
 var stopwatch = Stopwatch.StartNew();
-for (int i = char.MinValue; i <= max; ++i)
+for (int i = char.MinValue; i <= char.MaxValue; ++i)
 {
     var c = (char)i;
 
     var source = GetSource(c);
-
     var syntaxTree = CSharpSyntaxTree.ParseText(source, encoding: encoding);
-
     var compilation = CSharpCompilation.Create("assemblyName",
         new[] { syntaxTree },
         new[] { MetadataReference.CreateFromFile(typeof(object).Assembly.Location) },
@@ -40,16 +37,11 @@ for (int i = char.MinValue; i <= max; ++i)
 }
 var elapsed_s = stopwatch.ElapsedMilliseconds;
 
-var validCsv = ToCsv(validChars);
-var invalidCsv = ToCsv(invalidChars);
-File.WriteAllText("ValidChars.csv", validCsv, encoding);
-File.WriteAllText("InvalidChars.csv", invalidCsv, encoding);
-log(validCsv);
+File.WriteAllText("ValidChars.csv", ToCsv(validChars), encoding);
+File.WriteAllText("InvalidChars.csv", ToCsv(invalidChars), encoding);
 
-var validTable = ToMarkdownTable(validChars);
-var invalidTable = ToMarkdownTable(invalidChars);
-File.WriteAllText("ValidChars.md", validTable, encoding);
-File.WriteAllText("InvalidChars.md", invalidTable, encoding);
+File.WriteAllText("ValidChars.md", ToMarkdownTable(validChars), encoding);
+File.WriteAllText("InvalidChars.md", ToMarkdownTable(invalidChars), encoding);
 
 log($"Found {validChars.Count} valid and {invalidChars.Count} invalid " +
     $"separator chars among {validChars.Count + invalidChars.Count} " +
@@ -58,13 +50,13 @@ log($"Found {validChars.Count} valid and {invalidChars.Count} invalid " +
 static string GetSource(char c) => $"var _{c}_ = 42;";
 
 static string ToCsv(List<char> chars) => string.Join(Environment.NewLine,
-        new[] { CsvHeader() }.Concat(chars.Select(c => CsvLine(c))));
+    new[] { CsvHeader() }.Concat(chars.Select(c => CsvLine(c))));
 
 static string CsvHeader() => "Decimal,Hex,Char,Source";
 static string CsvLine(char c) => $"{(int)c:D5},0x{(int)c:X4},{c},{GetSource(c)}";
 
 static string ToMarkdownTable(List<char> chars) => string.Join(Environment.NewLine,
-        new[] { TableHeader() }.Concat(chars.Select(c => TableLine(c))));
+    new[] { TableHeader() }.Concat(chars.Select(c => TableLine(c))));
 
 static string TableHeader() => $"|Decimal|Hex|Char|Source|{Environment.NewLine}|-:|-:|-:|-|";
 static string TableLine(char c) => $"|{(int)c:D5}|`0x{(int)c:X4}`|`{c}`|`{GetSource(c)}`|";
