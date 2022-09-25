@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Globalization;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -8,65 +7,64 @@ var encoding = Encoding.UTF8;
 Console.OutputEncoding = encoding;
 Action<string> log = t => { Console.WriteLine(t); Trace.WriteLine(t); };
 
-// https://www.unicode.org/Public/15.0.0/ucd/UnicodeData.txt
-// The set of Unicode character categories containing non-rendering,
-// unknown, or incomplete characters.
-// !! Unicode.Format and Unicode.PrivateUse can NOT be included in
-// !! this set, because they may be (private-use) or do (format)
-// !! contain at least *some* rendering characters.
-var nonRenderingCategories = new UnicodeCategory[]
-{
-    UnicodeCategory.Control,
-    UnicodeCategory.OtherNotAssigned,
-    UnicodeCategory.Surrogate
-};
-
 var validChars = new List<char>();
 var invalidChars = new List<char>();
 
 using var dllStream = new MemoryStream();
-var max = 256; //char.MaxValue;
+var max = char.MaxValue;
+var stopwatch = Stopwatch.StartNew();
 for (int i = char.MinValue; i <= max; ++i)
 {
     var c = (char)i;
 
-    // Char.IsWhiteSpace() includes the ASCII whitespace characters that
-    // are categorized as control characters. Any other character is
-    // printable, unless it falls into the non-rendering categories.
-    var maybeUseable = !char.IsWhiteSpace(c)
-        && !nonRenderingCategories.Contains(char.GetUnicodeCategory(c));
-    if (maybeUseable)
+    var source = GetSource(c);
+
+    var syntaxTree = CSharpSyntaxTree.ParseText(source, encoding: encoding);
+
+    var compilation = CSharpCompilation.Create("assemblyName",
+        new[] { syntaxTree },
+        new[] { MetadataReference.CreateFromFile(typeof(object).Assembly.Location) },
+        new CSharpCompilationOptions(OutputKind.ConsoleApplication));
+
+    dllStream.Position = 0;
+    var emitResult = compilation.Emit(dllStream);
+    if (emitResult.Success)
     {
-        var source = GetSourceLine(c);
-
-        var syntaxTree = CSharpSyntaxTree.ParseText(source, encoding: encoding);
-
-        var compilation = CSharpCompilation.Create("assemblyName",
-            new[] { syntaxTree },
-            new[] { MetadataReference.CreateFromFile(typeof(object).Assembly.Location) },
-            new CSharpCompilationOptions(OutputKind.ConsoleApplication));
-
-        dllStream.Position = 0;
-        var emitResult = compilation.Emit(dllStream);
-        if (emitResult.Success)
-        {
-            validChars.Add(c);
-            log(Format(c));
-        }
-        else
-        {
-            invalidChars.Add(c);
-            //log($"INVALID: {Format(c)}");
-        }
+        validChars.Add(c);
+        log(CsvLine(c));
+    }
+    else
+    {
+        invalidChars.Add(c);
     }
 }
+var elapsed_s = stopwatch.ElapsedMilliseconds;
 
-var validText = string.Join(Environment.NewLine, validChars.Select(c => Format(c)));
-var invalidText = string.Join(Environment.NewLine, invalidChars.Select(c => Format(c)));
-File.WriteAllText("ValidChars.txt", validText, encoding);
-File.WriteAllText("InvalidChars.txt", invalidText, encoding);
-log(validText);
+var validCsv = ToCsv(validChars);
+var invalidCsv = ToCsv(invalidChars);
+File.WriteAllText("ValidChars.csv", validCsv, encoding);
+File.WriteAllText("InvalidChars.csv", invalidCsv, encoding);
+log(validCsv);
 
-static string GetSourceLine(char c) => $"var _{c}_ = 42;";
+var validTable = ToMarkdownTable(validChars);
+var invalidTable = ToMarkdownTable(invalidChars);
+File.WriteAllText("ValidChars.md", validTable, encoding);
+File.WriteAllText("InvalidChars.md", invalidTable, encoding);
 
-static string Format(char c) => $"{(int)c:D5},{(int)c:X4},{c},{GetSourceLine(c)}";
+log($"Found {validChars.Count} valid and {invalidChars.Count} invalid " +
+    $"separator chars among {validChars.Count + invalidChars.Count} " +
+    $"in {elapsed_s} ms");
+
+static string GetSource(char c) => $"var _{c}_ = 42;";
+
+static string ToCsv(List<char> chars) => string.Join(Environment.NewLine,
+        new[] { CsvHeader() }.Concat(chars.Select(c => CsvLine(c))));
+
+static string CsvHeader() => "Decimal,Hex,Char,Source";
+static string CsvLine(char c) => $"{(int)c:D5},0x{(int)c:X4},{c},{GetSource(c)}";
+
+static string ToMarkdownTable(List<char> chars) => string.Join(Environment.NewLine,
+        new[] { TableHeader() }.Concat(chars.Select(c => TableLine(c))));
+
+static string TableHeader() => $"|Decimal|Hex|Char|Source|{Environment.NewLine}|-:|-:|-:|-|";
+static string TableLine(char c) => $"|{(int)c:D5}|`0x{(int)c:X4}`|`{c}`|`{GetSource(c)}`|";
