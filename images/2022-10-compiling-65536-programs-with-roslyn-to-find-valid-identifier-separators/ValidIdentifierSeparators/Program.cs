@@ -19,7 +19,7 @@ for (int i = char.MinValue; i <= char.MaxValue; ++i)
     var c = (char)i;
     var program = Program(c);
 
-    var compiles = Compiles(program);
+    var compiles = Compiles(program, encoding);
     (compiles ? validSeparatorChars : invalidSeparatorChars).Add(c);
 
     if (!invalidFileNameChars.Contains(c)) { validFileNameChars.Add(c); }
@@ -28,25 +28,20 @@ for (int i = char.MinValue; i <= char.MaxValue; ++i)
 }
 var elapsed_s = stopwatch.ElapsedMilliseconds;
 
-var baseDir = "../../../../";
-File.WriteAllText(baseDir + "ValidSeparatorChars.csv", ToCsv(validSeparatorChars), encoding);
-File.WriteAllText(baseDir + "ValidSeparatorChars.md", ToTable(validSeparatorChars), encoding);
-
-File.WriteAllText(baseDir + "InvalidSeparatorChars.csv", ToCsv(invalidSeparatorChars), encoding);
-File.WriteAllText(baseDir + "InvalidSeparatorChars.md", ToTable(invalidSeparatorChars), encoding);
-
-File.WriteAllText(baseDir + "ValidFileNameChars.csv", ToCsv(validFileNameChars), encoding);
-File.WriteAllText(baseDir + "ValidFileNameChars.md", ToTable(validFileNameChars), encoding);
+WriteFiles(validSeparatorChars, encoding, "ValidSeparatorChars");
+WriteFiles(invalidSeparatorChars, encoding, "InvalidSeparatorChars");
+WriteFiles(validFileNameChars, encoding, "ValidFileNameChars");
 
 log($"Found {validSeparatorChars.Count} valid and {invalidSeparatorChars.Count} invalid " +
     $"separator chars and {validFileNameChars.Count} valid file name chars " +
     $"among {validSeparatorChars.Count + invalidSeparatorChars.Count} " +
     $"in {elapsed_s} ms");
 
+
 static string Program(char c) => $"var {Identifier(c)} = 42;";
 static string Identifier(char c) => $"_{c}_";
 
-bool Compiles(string source)
+static bool Compiles(string source, Encoding encoding)
 {
     var syntaxTree = CSharpSyntaxTree.ParseText(source, encoding: encoding);
     var compilation = CSharpCompilation.Create("assemblyName",
@@ -58,6 +53,13 @@ bool Compiles(string source)
     var emitResult = compilation.Emit(dllStream);
     var compiles = emitResult.Success;
     return compiles;
+}
+
+static void WriteFiles(IReadOnlyList<char> chars, Encoding encoding, string fileName)
+{
+    const string baseDir = "../../../../";
+    File.WriteAllText(baseDir + $"{fileName}.csv", ToCsv(chars), encoding);
+    File.WriteAllText(baseDir + $"{fileName}.md", ToTable(chars), encoding);
 }
 
 static string ToCsv(IReadOnlyList<char> chars) => string.Join(Environment.NewLine,
