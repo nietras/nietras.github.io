@@ -3,12 +3,12 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-var encoding = Encoding.UTF8;
+var encoding = Encoding.Unicode;
 Console.OutputEncoding = encoding;
 Action<string> log = t => { Console.WriteLine(t); Trace.WriteLine(t); };
 
 var validSeparatorChars = new List<char>();
-var validSeparatorDirectoryChars = new List<char>();
+var validDirectoryChars = new List<char>();
 var invalidSeparatorChars = new List<char>();
 
 var stopwatch = Stopwatch.StartNew();
@@ -20,15 +20,12 @@ for (int i = char.MinValue; i <= char.MaxValue; ++i)
     {
         validSeparatorChars.Add(c);
         log(CsvLine(c));
-
-        var pathValid = false;
-        try { Path.GetFullPath($"_{c}_"); pathValid = true; Directory.CreateDirectory($"_{c}_"); } catch { }
-        if (pathValid) { validSeparatorDirectoryChars.Add(c); }
     }
     else
     {
         invalidSeparatorChars.Add(c);
     }
+    if (IsValidInPath(c)) { validDirectoryChars.Add(c); }
 }
 var elapsed_s = stopwatch.ElapsedMilliseconds;
 
@@ -36,14 +33,14 @@ var baseDir = "../../../../";
 File.WriteAllText(baseDir + "ValidSeparatorChars.csv", ToCsv(validSeparatorChars), encoding);
 File.WriteAllText(baseDir + "ValidSeparatorChars.md", ToMarkdownTable(validSeparatorChars), encoding);
 
-File.WriteAllText(baseDir + "ValidSeparatorDirectoryChars.csv", ToCsv(validSeparatorDirectoryChars), encoding);
-File.WriteAllText(baseDir + "ValidSeparatorDirectoryChars.md", ToMarkdownTable(validSeparatorDirectoryChars), encoding);
+File.WriteAllText(baseDir + "ValidDirectoryChars.csv", ToCsv(validDirectoryChars), encoding);
+File.WriteAllText(baseDir + "ValidDirectoryChars.md", ToMarkdownTable(validDirectoryChars), encoding);
 
 File.WriteAllText(baseDir + "InvalidSeparatorChars.csv", ToCsv(invalidSeparatorChars), encoding);
 File.WriteAllText(baseDir + "InvalidSeparatorChars.md", ToMarkdownTable(invalidSeparatorChars), encoding);
 
 log($"Found {validSeparatorChars.Count} valid and {invalidSeparatorChars.Count} invalid " +
-    $"separator chars and {validSeparatorDirectoryChars.Count} valid separator & directory chars " +
+    $"separator chars and {validDirectoryChars.Count} valid directory chars " +
     $"among {validSeparatorChars.Count + invalidSeparatorChars.Count} " +
     $"in {elapsed_s} ms");
 
@@ -74,3 +71,9 @@ static string ToMarkdownTable(List<char> chars) => string.Join(Environment.NewLi
 
 static string TableHeader() => $"|Decimal|Hex|Char|Source|{Environment.NewLine}|-:|-:|-:|-|";
 static string TableLine(char c) => $"|{(int)c:D5}|`0x{(int)c:X4}`|`{c}`|`{GetSource(c)}`|";
+
+static bool IsValidInPath(char c)
+{
+    // Could also use Path.InvalidPathChars
+    try { Path.GetFullPath($"_{c}_"); return true; } catch { return false; }
+}
