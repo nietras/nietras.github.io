@@ -7,47 +7,61 @@ var encoding = Encoding.UTF8;
 Console.OutputEncoding = encoding;
 Action<string> log = t => { Console.WriteLine(t); Trace.WriteLine(t); };
 
-var validChars = new List<char>();
-var invalidChars = new List<char>();
+var validSeparatorChars = new List<char>();
+var validSeparatorDirectoryChars = new List<char>();
+var invalidSeparatorChars = new List<char>();
 
-using var dllStream = new MemoryStream();
 var stopwatch = Stopwatch.StartNew();
 for (int i = char.MinValue; i <= char.MaxValue; ++i)
 {
     var c = (char)i;
-
     var source = GetSource(c);
+    if (Compiles(source))
+    {
+        validSeparatorChars.Add(c);
+        log(CsvLine(c));
+
+        var pathValid = false;
+        try { Path.GetFullPath($"_{c}_"); pathValid = true; Directory.CreateDirectory($"_{c}_"); } catch { }
+        if (pathValid) { validSeparatorDirectoryChars.Add(c); }
+    }
+    else
+    {
+        invalidSeparatorChars.Add(c);
+    }
+}
+var elapsed_s = stopwatch.ElapsedMilliseconds;
+
+var baseDir = "../../../../";
+File.WriteAllText(baseDir + "ValidSeparatorChars.csv", ToCsv(validSeparatorChars), encoding);
+File.WriteAllText(baseDir + "ValidSeparatorChars.md", ToMarkdownTable(validSeparatorChars), encoding);
+
+File.WriteAllText(baseDir + "ValidSeparatorDirectoryChars.csv", ToCsv(validSeparatorDirectoryChars), encoding);
+File.WriteAllText(baseDir + "ValidSeparatorDirectoryChars.md", ToMarkdownTable(validSeparatorDirectoryChars), encoding);
+
+File.WriteAllText(baseDir + "InvalidSeparatorChars.csv", ToCsv(invalidSeparatorChars), encoding);
+File.WriteAllText(baseDir + "InvalidSeparatorChars.md", ToMarkdownTable(invalidSeparatorChars), encoding);
+
+log($"Found {validSeparatorChars.Count} valid and {invalidSeparatorChars.Count} invalid " +
+    $"separator chars and {validSeparatorDirectoryChars.Count} valid separator & directory chars " +
+    $"among {validSeparatorChars.Count + invalidSeparatorChars.Count} " +
+    $"in {elapsed_s} ms");
+
+static string GetSource(char c) => $"var _{c}_ = 42;";
+
+bool Compiles(string source)
+{
     var syntaxTree = CSharpSyntaxTree.ParseText(source, encoding: encoding);
     var compilation = CSharpCompilation.Create("assemblyName",
         new[] { syntaxTree },
         new[] { MetadataReference.CreateFromFile(typeof(object).Assembly.Location) },
         new CSharpCompilationOptions(OutputKind.ConsoleApplication));
 
-    dllStream.Position = 0;
+    using var dllStream = new MemoryStream();
     var emitResult = compilation.Emit(dllStream);
-    if (emitResult.Success)
-    {
-        validChars.Add(c);
-        log(CsvLine(c));
-    }
-    else
-    {
-        invalidChars.Add(c);
-    }
+    var compiles = emitResult.Success;
+    return compiles;
 }
-var elapsed_s = stopwatch.ElapsedMilliseconds;
-
-File.WriteAllText("ValidChars.csv", ToCsv(validChars), encoding);
-File.WriteAllText("InvalidChars.csv", ToCsv(invalidChars), encoding);
-
-File.WriteAllText("ValidChars.md", ToMarkdownTable(validChars), encoding);
-File.WriteAllText("InvalidChars.md", ToMarkdownTable(invalidChars), encoding);
-
-log($"Found {validChars.Count} valid and {invalidChars.Count} invalid " +
-    $"separator chars among {validChars.Count + invalidChars.Count} " +
-    $"in {elapsed_s} ms");
-
-static string GetSource(char c) => $"var _{c}_ = 42;";
 
 static string ToCsv(List<char> chars) => string.Join(Environment.NewLine,
     new[] { CsvHeader() }.Concat(chars.Select(c => CsvLine(c))));
