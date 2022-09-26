@@ -3,7 +3,7 @@
 namespace ValidIdentifierSeparators;
 
 // Initially I thought removing well-known non-useable characters would be
-// interesting but decided against it for instead just brute forcing it
+// interesting but decided against it to instead just brute forcing it.
 static class CharExtensions
 {
     // https://www.unicode.org/Public/15.0.0/ucd/UnicodeData.txt

@@ -46,7 +46,8 @@ log($"Found {validSeparatorChars.Count} valid and {invalidSeparatorChars.Count} 
     $"among {validSeparatorChars.Count + invalidSeparatorChars.Count} " +
     $"in {elapsed_s} ms");
 
-static string Program(char c) => $"var _{c}_ = 42;";
+static string Program(char c) => $"var {Identifier(c)} = 42;";
+static string Identifier(char c) => $"_{c}_";
 
 bool Compiles(string source)
 {
@@ -64,12 +65,10 @@ bool Compiles(string source)
 
 static string ToCsv(List<char> chars) => string.Join(Environment.NewLine,
     new[] { CsvHeader() }.Concat(chars.Select(c => CsvLine(c))));
-
-static string CsvHeader() => "Decimal,Hex,Char,Program";
-static string CsvLine(char c) => $"{(int)c:D5},0x{(int)c:X4},{c},{Program(c)}";
+static string CsvHeader() => "Decimal,Hex,Char,Identifier";
+static string CsvLine(char c) => $"{(int)c:D5},0x{(int)c:X4},{c},{Identifier(c)}";
 
 static string ToMarkdownTable(List<char> chars) => string.Join(Environment.NewLine,
     new[] { TableHeader() }.Concat(chars.Select(c => TableLine(c))));
-
-static string TableHeader() => $"|Decimal|Hex|Char|Program|{Environment.NewLine}|-:|-:|-:|-|";
-static string TableLine(char c) => $"|{(int)c:D5}|`0x{(int)c:X4}`|`{c}`|`{Program(c)}`|";
+static string TableHeader() => $"|Decimal|Hex|Char|Identifier|{Environment.NewLine}|-:|-:|-:|-|";
+static string TableLine(char c) => $"|{(int)c:D5}|`0x{(int)c:X4}`|`{c}`|`{Identifier(c)}`|";
