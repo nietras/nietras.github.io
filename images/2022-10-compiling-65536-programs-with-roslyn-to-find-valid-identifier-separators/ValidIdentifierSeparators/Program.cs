@@ -17,29 +17,26 @@ var stopwatch = Stopwatch.StartNew();
 for (int i = char.MinValue; i <= char.MaxValue; ++i)
 {
     var c = (char)i;
-    var source = Program(c);
-    if (Compiles(source))
-    {
-        validSeparatorChars.Add(c);
-        log(CsvLine(c));
-    }
-    else
-    {
-        invalidSeparatorChars.Add(c);
-    }
+    var program = Program(c);
+
+    var compiles = Compiles(program);
+    (compiles ? validSeparatorChars : invalidSeparatorChars).Add(c);
+
     if (!invalidFileNameChars.Contains(c)) { validFileNameChars.Add(c); }
+
+    if (compiles) { log(CsvLine(c)); }
 }
 var elapsed_s = stopwatch.ElapsedMilliseconds;
 
 var baseDir = "../../../../";
 File.WriteAllText(baseDir + "ValidSeparatorChars.csv", ToCsv(validSeparatorChars), encoding);
-File.WriteAllText(baseDir + "ValidSeparatorChars.md", ToMarkdownTable(validSeparatorChars), encoding);
+File.WriteAllText(baseDir + "ValidSeparatorChars.md", ToTable(validSeparatorChars), encoding);
 
 File.WriteAllText(baseDir + "InvalidSeparatorChars.csv", ToCsv(invalidSeparatorChars), encoding);
-File.WriteAllText(baseDir + "InvalidSeparatorChars.md", ToMarkdownTable(invalidSeparatorChars), encoding);
+File.WriteAllText(baseDir + "InvalidSeparatorChars.md", ToTable(invalidSeparatorChars), encoding);
 
 File.WriteAllText(baseDir + "ValidFileNameChars.csv", ToCsv(validFileNameChars), encoding);
-File.WriteAllText(baseDir + "ValidFileNameChars.md", ToMarkdownTable(validFileNameChars), encoding);
+File.WriteAllText(baseDir + "ValidFileNameChars.md", ToTable(validFileNameChars), encoding);
 
 log($"Found {validSeparatorChars.Count} valid and {invalidSeparatorChars.Count} invalid " +
     $"separator chars and {validFileNameChars.Count} valid file name chars " +
@@ -63,12 +60,12 @@ bool Compiles(string source)
     return compiles;
 }
 
-static string ToCsv(List<char> chars) => string.Join(Environment.NewLine,
+static string ToCsv(IReadOnlyList<char> chars) => string.Join(Environment.NewLine,
     new[] { CsvHeader() }.Concat(chars.Select(c => CsvLine(c))));
 static string CsvHeader() => "Decimal,Hex,Char,Identifier";
 static string CsvLine(char c) => $"{(int)c:D5},0x{(int)c:X4},{c},{Identifier(c)}";
 
-static string ToMarkdownTable(List<char> chars) => string.Join(Environment.NewLine,
+static string ToTable(IReadOnlyList<char> chars) => string.Join(Environment.NewLine,
     new[] { TableHeader() }.Concat(chars.Select(c => TableLine(c))));
 static string TableHeader() => $"|Decimal|Hex|Char|Identifier|{Environment.NewLine}|-:|-:|-:|-|";
 static string TableLine(char c) => $"|{(int)c:D5}|`0x{(int)c:X4}`|`{c}`|`{Identifier(c)}`|";
