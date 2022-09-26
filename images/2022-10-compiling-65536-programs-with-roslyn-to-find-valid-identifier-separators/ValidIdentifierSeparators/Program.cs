@@ -8,14 +8,16 @@ Console.OutputEncoding = encoding;
 Action<string> log = t => { Console.WriteLine(t); Trace.WriteLine(t); };
 
 var validSeparatorChars = new List<char>();
-var validDirectoryChars = new List<char>();
 var invalidSeparatorChars = new List<char>();
+
+var invalidFileNameChars = Path.GetInvalidFileNameChars();
+var validFileNameChars = new List<char>();
 
 var stopwatch = Stopwatch.StartNew();
 for (int i = char.MinValue; i <= char.MaxValue; ++i)
 {
     var c = (char)i;
-    var source = GetSource(c);
+    var source = Program(c);
     if (Compiles(source))
     {
         validSeparatorChars.Add(c);
@@ -25,7 +27,7 @@ for (int i = char.MinValue; i <= char.MaxValue; ++i)
     {
         invalidSeparatorChars.Add(c);
     }
-    if (IsValidInPath(c)) { validDirectoryChars.Add(c); }
+    if (!invalidFileNameChars.Contains(c)) { validFileNameChars.Add(c); }
 }
 var elapsed_s = stopwatch.ElapsedMilliseconds;
 
@@ -33,18 +35,18 @@ var baseDir = "../../../../";
 File.WriteAllText(baseDir + "ValidSeparatorChars.csv", ToCsv(validSeparatorChars), encoding);
 File.WriteAllText(baseDir + "ValidSeparatorChars.md", ToMarkdownTable(validSeparatorChars), encoding);
 
-File.WriteAllText(baseDir + "ValidDirectoryChars.csv", ToCsv(validDirectoryChars), encoding);
-File.WriteAllText(baseDir + "ValidDirectoryChars.md", ToMarkdownTable(validDirectoryChars), encoding);
-
 File.WriteAllText(baseDir + "InvalidSeparatorChars.csv", ToCsv(invalidSeparatorChars), encoding);
 File.WriteAllText(baseDir + "InvalidSeparatorChars.md", ToMarkdownTable(invalidSeparatorChars), encoding);
 
+File.WriteAllText(baseDir + "ValidFileNameChars.csv", ToCsv(validFileNameChars), encoding);
+File.WriteAllText(baseDir + "ValidFileNameChars.md", ToMarkdownTable(validFileNameChars), encoding);
+
 log($"Found {validSeparatorChars.Count} valid and {invalidSeparatorChars.Count} invalid " +
-    $"separator chars and {validDirectoryChars.Count} valid directory chars " +
+    $"separator chars and {validFileNameChars.Count} valid file name chars " +
     $"among {validSeparatorChars.Count + invalidSeparatorChars.Count} " +
     $"in {elapsed_s} ms");
 
-static string GetSource(char c) => $"var _{c}_ = 42;";
+static string Program(char c) => $"var _{c}_ = 42;";
 
 bool Compiles(string source)
 {
@@ -63,17 +65,11 @@ bool Compiles(string source)
 static string ToCsv(List<char> chars) => string.Join(Environment.NewLine,
     new[] { CsvHeader() }.Concat(chars.Select(c => CsvLine(c))));
 
-static string CsvHeader() => "Decimal,Hex,Char,Source";
-static string CsvLine(char c) => $"{(int)c:D5},0x{(int)c:X4},{c},{GetSource(c)}";
+static string CsvHeader() => "Decimal,Hex,Char,Program";
+static string CsvLine(char c) => $"{(int)c:D5},0x{(int)c:X4},{c},{Program(c)}";
 
 static string ToMarkdownTable(List<char> chars) => string.Join(Environment.NewLine,
     new[] { TableHeader() }.Concat(chars.Select(c => TableLine(c))));
 
-static string TableHeader() => $"|Decimal|Hex|Char|Source|{Environment.NewLine}|-:|-:|-:|-|";
-static string TableLine(char c) => $"|{(int)c:D5}|`0x{(int)c:X4}`|`{c}`|`{GetSource(c)}`|";
-
-static bool IsValidInPath(char c)
-{
-    // Could also use Path.InvalidPathChars
-    try { Path.GetFullPath($"_{c}_"); return true; } catch { return false; }
-}
+static string TableHeader() => $"|Decimal|Hex|Char|Program|{Environment.NewLine}|-:|-:|-:|-|";
+static string TableLine(char c) => $"|{(int)c:D5}|`0x{(int)c:X4}`|`{c}`|`{Program(c)}`|";
