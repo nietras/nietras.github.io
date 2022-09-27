@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -6,47 +7,49 @@ using Microsoft.CodeAnalysis.CSharp;
 var encoding = Encoding.Unicode;
 Console.OutputEncoding = encoding;
 Action<string> log = t => { Console.WriteLine(t); Trace.WriteLine(t); };
+// Cache metadata reference since this reduces time from 300 s to 40 s
+var metadataReferences = new[] { MetadataReference.CreateFromFile(
+    typeof(object).Assembly.Location) };
 
 var validSeparatorChars = new List<char>();
 var invalidSeparatorChars = new List<char>();
 
 var invalidFileNameChars = Path.GetInvalidFileNameChars();
+Array.Sort(invalidFileNameChars);
 var validFileNameChars = new List<char>();
 
 var stopwatch = Stopwatch.StartNew();
 for (int i = char.MinValue; i <= char.MaxValue; ++i)
 {
     var c = (char)i;
-    var program = Program(c);
+    var program = $"var {Identifier(c)} = 42;";
 
-    var compiles = Compiles(program, encoding);
-    (compiles ? validSeparatorChars : invalidSeparatorChars).Add(c);
+    (Compiles(program) ? validSeparatorChars : invalidSeparatorChars).Add(c);
 
-    if (!invalidFileNameChars.Contains(c)) { validFileNameChars.Add(c); }
+    if (Array.BinarySearch(invalidFileNameChars, c) < 0)
+    { validFileNameChars.Add(c); }
 
-    if (compiles) { log(CsvLine(c)); }
+    log(CsvLine(c));
 }
-var elapsed_s = stopwatch.ElapsedMilliseconds;
+var elapsed_ms = stopwatch.ElapsedMilliseconds;
 
-WriteFiles(validSeparatorChars, encoding, "ValidSeparatorChars");
-WriteFiles(invalidSeparatorChars, encoding, "InvalidSeparatorChars");
-WriteFiles(validFileNameChars, encoding, "ValidFileNameChars");
+Write(validSeparatorChars);
+Write(invalidSeparatorChars);
+Write(validFileNameChars);
 
+var totalCount = validSeparatorChars.Count + invalidSeparatorChars.Count;
 log($"Found {validSeparatorChars.Count} valid and {invalidSeparatorChars.Count} invalid " +
-    $"separator chars and {validFileNameChars.Count} valid file name chars " +
-    $"among {validSeparatorChars.Count + invalidSeparatorChars.Count} " +
-    $"in {elapsed_s} ms");
+    $"identifier separator chars and {validFileNameChars.Count} valid file name chars " +
+    $"among {totalCount} in {elapsed_ms} ms or " +
+    $"{elapsed_ms / (double)totalCount:F1} ms per program");
 
-
-static string Program(char c) => $"var {Identifier(c)} = 42;";
 static string Identifier(char c) => $"_{c}_";
 
-static bool Compiles(string source, Encoding encoding)
+bool Compiles(string source)
 {
-    var syntaxTree = CSharpSyntaxTree.ParseText(source, encoding: encoding);
+    var syntaxTree = CSharpSyntaxTree.ParseText(source);
     var compilation = CSharpCompilation.Create("assemblyName",
-        new[] { syntaxTree },
-        new[] { MetadataReference.CreateFromFile(typeof(object).Assembly.Location) },
+        new[] { syntaxTree }, metadataReferences,
         new CSharpCompilationOptions(OutputKind.ConsoleApplication));
 
     using var dllStream = new MemoryStream();
@@ -55,7 +58,7 @@ static bool Compiles(string source, Encoding encoding)
     return compiles;
 }
 
-static void WriteFiles(IReadOnlyList<char> chars, Encoding encoding, string fileName)
+void Write(IReadOnlyList<char> chars, [CallerArgumentExpression("chars")] string fileName = "")
 {
     const string baseDir = "../../../../";
     File.WriteAllText(baseDir + $"{fileName}.csv", ToCsv(chars), encoding);
@@ -64,10 +67,10 @@ static void WriteFiles(IReadOnlyList<char> chars, Encoding encoding, string file
 
 static string ToCsv(IReadOnlyList<char> chars) => string.Join(Environment.NewLine,
     new[] { CsvHeader() }.Concat(chars.Select(c => CsvLine(c))));
-static string CsvHeader() => "Decimal,Hex,Char,Identifier";
-static string CsvLine(char c) => $"{(int)c:D5},0x{(int)c:X4},{c},{Identifier(c)}";
+static string CsvHeader() => "Decimal,Hex,Identifier";
+static string CsvLine(char c) => $"{(int)c:D5},0x{(int)c:X4},{Identifier(c)}";
 
 static string ToTable(IReadOnlyList<char> chars) => string.Join(Environment.NewLine,
     new[] { TableHeader() }.Concat(chars.Select(c => TableLine(c))));
-static string TableHeader() => $"|Decimal|Hex|Char|Identifier|{Environment.NewLine}|-:|-:|-:|-|";
-static string TableLine(char c) => $"|{(int)c:D5}|`0x{(int)c:X4}`|`{c}`|`{Identifier(c)}`|";
+static string TableHeader() => $"|Decimal|Hex|Identifier|{Environment.NewLine}|-:|-:|-|";
+static string TableLine(char c) => $"|{(int)c:D5}|`0x{(int)c:X4}`|`{Identifier(c)}`|";
