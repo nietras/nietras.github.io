@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp;
 var encoding = Encoding.Unicode;
 Console.OutputEncoding = encoding;
 Action<string> log = t => { Console.WriteLine(t); Trace.WriteLine(t); };
-// Cache metadata reference since this reduces time from 300 s to 40 s
+// Cache metadata reference since this reduces time significantly!
 var metadataReferences = new[] { MetadataReference.CreateFromFile(
     typeof(object).Assembly.Location) };
 
@@ -19,7 +19,7 @@ Array.Sort(invalidFileNameChars);
 var validFileNameChars = new List<char>();
 
 var stopwatch = Stopwatch.StartNew();
-for (int i = char.MinValue; i <= char.MaxValue; ++i)
+for (int i = char.MinValue; i <= char.MaxValue;)
 {
     var c = (char)i;
     var program = $"var {Identifier(c)} = 42;";
@@ -29,7 +29,7 @@ for (int i = char.MinValue; i <= char.MaxValue; ++i)
     if (Array.BinarySearch(invalidFileNameChars, c) < 0)
     { validFileNameChars.Add(c); }
 
-    log(CsvLine(c));
+    if (++i % 4096 == 0) { log($"Compiled {i:D5} programs"); }
 }
 var elapsed_ms = stopwatch.ElapsedMilliseconds;
 
@@ -38,10 +38,10 @@ Write(invalidSeparatorChars);
 Write(validFileNameChars);
 
 var totalCount = validSeparatorChars.Count + invalidSeparatorChars.Count;
-log($"Found {validSeparatorChars.Count} valid and {invalidSeparatorChars.Count} invalid " +
-    $"identifier separator chars and {validFileNameChars.Count} valid file name chars " +
-    $"among {totalCount} in {elapsed_ms} ms or " +
-    $"{elapsed_ms / (double)totalCount:F1} ms per program");
+log($"Found {validSeparatorChars.Count}/{totalCount} valid identifier separator chars.");
+log($"Found {invalidSeparatorChars.Count}/{totalCount} invalid identifier separator chars.");
+log($"Found {validFileNameChars.Count}/{totalCount} valid file name chars.");
+log($"In {elapsed_ms} ms or {elapsed_ms / (double)totalCount:F3} ms per program.");
 
 static string Identifier(char c) => $"_{c}_";
 
@@ -51,7 +51,6 @@ bool Compiles(string source)
     var compilation = CSharpCompilation.Create("assemblyName",
         new[] { syntaxTree }, metadataReferences,
         new CSharpCompilationOptions(OutputKind.ConsoleApplication));
-
     using var dllStream = new MemoryStream();
     var emitResult = compilation.Emit(dllStream);
     var compiles = emitResult.Success;
