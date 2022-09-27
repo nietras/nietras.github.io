@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-var findByCompile = false;
+var findByCompile = true;
 var encoding = Encoding.Unicode;
 Console.OutputEncoding = encoding;
 Action<string> log = t => { Console.WriteLine(t); Trace.WriteLine(t); };
@@ -43,10 +43,10 @@ log($"Found {invalidSeparatorChars.Count}/{totalCount} invalid identifier separa
 log($"Found {validFileNameChars.Count}/{totalCount} valid file name chars.");
 log($"In {elapsed_ms} ms or {elapsed_ms / (double)totalCount:F3} ms per program.");
 
-bool IsValidSeparator(char c) => findByCompile ? Compiles(c)
+bool IsValidSeparator(char c) => findByCompile ? DoesCompile(c)
     : SyntaxFacts.IsValidIdentifier(Identifier(c));
 
-bool Compiles(char c)
+bool DoesCompile(char c)
 {
     var program = $"var {Identifier(c)} = 42;";
     var syntaxTree = CSharpSyntaxTree.ParseText(program);
@@ -55,8 +55,7 @@ bool Compiles(char c)
         new CSharpCompilationOptions(OutputKind.ConsoleApplication));
     using var dllStream = new MemoryStream();
     var emitResult = compilation.Emit(dllStream);
-    var compiles = emitResult.Success;
-    return compiles;
+    return emitResult.Success;
 }
 
 static string Identifier(char c) => $"_{c}_";
