@@ -4,10 +4,11 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
+var findByCompile = false;
 var encoding = Encoding.Unicode;
 Console.OutputEncoding = encoding;
 Action<string> log = t => { Console.WriteLine(t); Trace.WriteLine(t); };
-// Cache metadata reference since this reduces time significantly!
+// Cache metadata reference since this reduces time significantly
 var metadataReferences = new[] { MetadataReference.CreateFromFile(
     typeof(object).Assembly.Location) };
 
@@ -22,14 +23,13 @@ var stopwatch = Stopwatch.StartNew();
 for (int i = char.MinValue; i <= char.MaxValue;)
 {
     var c = (char)i;
-    var program = $"var {Identifier(c)} = 42;";
 
-    (Compiles(program) ? validSeparatorChars : invalidSeparatorChars).Add(c);
+    (IsValidSeparator(c) ? validSeparatorChars : invalidSeparatorChars).Add(c);
 
     if (Array.BinarySearch(invalidFileNameChars, c) < 0)
     { validFileNameChars.Add(c); }
 
-    if (++i % 4096 == 0) { log($"Compiled {i:D5} programs"); }
+    if (++i % 4096 == 0 && findByCompile) { log($"Compiled {i:D5} programs"); }
 }
 var elapsed_ms = stopwatch.ElapsedMilliseconds;
 
@@ -43,11 +43,13 @@ log($"Found {invalidSeparatorChars.Count}/{totalCount} invalid identifier separa
 log($"Found {validFileNameChars.Count}/{totalCount} valid file name chars.");
 log($"In {elapsed_ms} ms or {elapsed_ms / (double)totalCount:F3} ms per program.");
 
-static string Identifier(char c) => $"_{c}_";
+bool IsValidSeparator(char c) => findByCompile ? Compiles(c)
+    : SyntaxFacts.IsValidIdentifier(Identifier(c));
 
-bool Compiles(string source)
+bool Compiles(char c)
 {
-    var syntaxTree = CSharpSyntaxTree.ParseText(source);
+    var program = $"var {Identifier(c)} = 42;";
+    var syntaxTree = CSharpSyntaxTree.ParseText(program);
     var compilation = CSharpCompilation.Create("assemblyName",
         new[] { syntaxTree }, metadataReferences,
         new CSharpCompilationOptions(OutputKind.ConsoleApplication));
@@ -56,6 +58,8 @@ bool Compiles(string source)
     var compiles = emitResult.Success;
     return compiles;
 }
+
+static string Identifier(char c) => $"_{c}_";
 
 void Write(IReadOnlyList<char> chars, [CallerArgumentExpression("chars")] string fileName = "")
 {
