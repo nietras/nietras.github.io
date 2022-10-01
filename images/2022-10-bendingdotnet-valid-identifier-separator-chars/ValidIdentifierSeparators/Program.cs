@@ -4,27 +4,27 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-var findByCompile = true;
-var encoding = Encoding.Unicode;
+var findByCompile = false;
+var encoding = Encoding.UTF8;
 Console.OutputEncoding = encoding;
 Action<string> log = t => { Console.WriteLine(t); Trace.WriteLine(t); };
 // Cache metadata reference since this reduces time significantly
 var metadataReferences = new[] { MetadataReference.CreateFromFile(
     typeof(object).Assembly.Location) };
 
-var validSeparatorChars = new List<char>();
-var invalidSeparatorChars = new List<char>();
+var validSeparators = new List<char>();
+var invalidSeparators = new List<char>();
 
+var validFileNameChars = new List<char>();
 var invalidFileNameChars = Path.GetInvalidFileNameChars();
 Array.Sort(invalidFileNameChars);
-var validFileNameChars = new List<char>();
 
 var stopwatch = Stopwatch.StartNew();
 for (int i = char.MinValue; i <= char.MaxValue;)
 {
     var c = (char)i;
 
-    (IsValidSeparator(c) ? validSeparatorChars : invalidSeparatorChars).Add(c);
+    (IsValidSeparator(c) ? validSeparators : invalidSeparators).Add(c);
 
     if (Array.BinarySearch(invalidFileNameChars, c) < 0)
     { validFileNameChars.Add(c); }
@@ -33,15 +33,16 @@ for (int i = char.MinValue; i <= char.MaxValue;)
 }
 var elapsed_ms = stopwatch.ElapsedMilliseconds;
 
-Write(validSeparatorChars);
-Write(invalidSeparatorChars);
+Write(validSeparators);
+Write(invalidSeparators);
 Write(validFileNameChars);
 
-var totalCount = validSeparatorChars.Count + invalidSeparatorChars.Count;
-log($"Found {validSeparatorChars.Count}/{totalCount} valid identifier separator chars.");
-log($"Found {invalidSeparatorChars.Count}/{totalCount} invalid identifier separator chars.");
-log($"Found {validFileNameChars.Count}/{totalCount} valid file name chars.");
-log($"In {elapsed_ms} ms or {elapsed_ms / (double)totalCount:F3} ms per program.");
+var totalCount = validSeparators.Count + invalidSeparators.Count;
+log($"Found {validSeparators.Count} valid identifier separator chars.");
+log($"Found {invalidSeparators.Count} invalid identifier separator chars.");
+log($"Found {validFileNameChars.Count} valid file name chars.");
+log($"Checked {totalCount} chars in {elapsed_ms} ms or " +
+    $"{elapsed_ms / (double)totalCount:F3} ms per program.");
 
 bool IsValidSeparator(char c) => findByCompile ? DoesCompile(c)
     : SyntaxFacts.IsValidIdentifier(Identifier(c));
@@ -60,11 +61,12 @@ bool DoesCompile(char c)
 
 static string Identifier(char c) => $"_{c}_";
 
-void Write(IReadOnlyList<char> chars, [CallerArgumentExpression("chars")] string fileName = "")
+void Write(IReadOnlyList<char> chars,
+    [CallerArgumentExpression("chars")] string fileName = "")
 {
     const string baseDir = "../../../../";
     File.WriteAllText(baseDir + $"{fileName}.csv", ToCsv(chars), encoding);
-    File.WriteAllText(baseDir + $"{fileName}.md", ToTable(chars), encoding);
+    File.WriteAllText(baseDir + $"{fileName}.txt", ToTable(chars), encoding);
 }
 
 static string ToCsv(IReadOnlyList<char> chars) => string.Join(Environment.NewLine,

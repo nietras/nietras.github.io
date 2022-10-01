@@ -1,4 +1,4 @@
-|Decimal|Hex|Identifier|
+﻿|Decimal|Hex|Identifier|
 |-:|-:|-|
 |00032|`0x0020`|`_ _`|
 |00033|`0x0021`|`_!_`|
