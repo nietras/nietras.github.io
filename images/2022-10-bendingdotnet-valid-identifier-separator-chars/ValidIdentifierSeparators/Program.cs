@@ -36,6 +36,7 @@ var elapsed_ms = stopwatch.ElapsedMilliseconds;
 Write(validSeparators);
 Write(invalidSeparators);
 Write(validFileNameChars);
+Write(invalidFileNameChars);
 
 var totalCount = validSeparators.Count + invalidSeparators.Count;
 log($"Found {validSeparators.Count} valid identifier separator chars.");
