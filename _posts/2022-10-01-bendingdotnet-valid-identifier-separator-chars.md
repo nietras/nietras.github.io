@@ -43,9 +43,9 @@ interoperability with identifiers declared in other languages.
 
 Now this is a perfectly fine answer, but I was just too lazy to go scouring
 through the [Unicode Category Database](https://www.unicode.org/reports/tr44/)
-🦥. What I wanted was a single table of potential valid identifier separators. I
-googled for answers but came up short within a reasonable time, so instead I
-came up with this quick `Program.cs`:
+🦥. What I wanted was a single table of valid identifier separators. I googled
+for answers but came up short within a reasonable time, so instead I came up
+with this `Program.cs` (after some iterations as discussed below):
 
 ```csharp
 using System.Diagnostics;
@@ -54,8 +54,8 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-var findByCompile = true;
-var encoding = Encoding.Unicode;
+var findByCompile = false;
+var encoding = Encoding.UTF8;
 Console.OutputEncoding = encoding;
 Action<string> log = t => { Console.WriteLine(t); Trace.WriteLine(t); };
 // Cache metadata reference since this reduces time significantly
@@ -86,6 +86,7 @@ var elapsed_ms = stopwatch.ElapsedMilliseconds;
 Write(validSeparators);
 Write(invalidSeparators);
 Write(validFileNameChars);
+Write(invalidFileNameChars);
 
 var totalCount = validSeparators.Count + invalidSeparators.Count;
 log($"Found {validSeparators.Count} valid identifier separator chars.");
@@ -116,7 +117,7 @@ void Write(IReadOnlyList<char> chars,
 {
     const string baseDir = "../../../../";
     File.WriteAllText(baseDir + $"{fileName}.csv", ToCsv(chars), encoding);
-    File.WriteAllText(baseDir + $"{fileName}.md", ToTable(chars), encoding);
+    File.WriteAllText(baseDir + $"{fileName}.txt", ToTable(chars), encoding);
 }
 
 static string ToCsv(IReadOnlyList<char> chars) => string.Join(Environment.NewLine,
@@ -202,8 +203,8 @@ for (int i = char.MinValue; i <= char.MaxValue; i++)
 
 
 
-Note Jekyll can't handle the large markdown files so those have given the `txt`
-extension instead.
+Note Jekyll can't handle the large markdown files so those have been given the
+`txt` extension instead.
 
 | CSV | Markdown as txt |
 |-|-|
