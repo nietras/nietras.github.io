@@ -205,9 +205,9 @@ extension instead.
 * [validSeparators.csv]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/validSeparators.csv)
 * [validFileNameChars.csv]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/validFileNameChars.csv)
 * [invalidSeparators.csv]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/invalidSeparators.csv)
-* [validFileNameChars.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/validFileNameChars.md)
-* [validSeparators.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/validSeparators.md)
-* [invalidSeparators.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/invalidSeparators.md)
+* [validFileNameChars.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/validFileNameChars.txt)
+* [validSeparators.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/validSeparators.txt)
+* [invalidSeparators.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/invalidSeparators.txt)
 
 https://stackoverflow.com/questions/950616/what-characters-are-allowed-in-c-sharp-class-name
 
