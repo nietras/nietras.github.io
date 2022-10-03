@@ -205,9 +205,9 @@ for (int i = char.MinValue; i <= char.MaxValue; i++)
 }
 ```
 
-Files with the compilied lists of valid and invalid separator chars and file
+Compiled lists of valid and invalid separator chars and file
 name chars can be found in the below table. Note Jekyll can't handle the large
-markdown files so those have been given the extra `.txt` extension.
+markdown files so files have been given the extra `.txt` extension.
 
 | CSV | Markdown as txt |
 |-|-|
@@ -215,7 +215,37 @@ markdown files so those have been given the extra `.txt` extension.
 | [validFileNameChars.csv.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/validFileNameChars.csv.txt) | [validFileNameChars.md.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/validFileNameChars.md.txt) |
 | [invalidSeparators.csv.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/invalidSeparators.csv.txt) | [invalidSeparators.md.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/invalidSeparators.md.txt) |
 
-For reference below are the first valid separators until 511.
+For reference in the next sections are the first valid separators until decimal
+511 and first invalid separators. It is noteworthy and of course natural that
+most "ascii" non-digit/non-alpha characters are invalid as identifier
+separators. I selected a few that might be used below but these also have issues
+with being easily confused with the "normal" ascii range versions. `_` being the
+obvious one from start. Of course, this assume you use english as a language, so
+this is probably abusing other languages letters.
+
+|Decimal|Hex|Identifier|
+|-:|-:|-|
+|00095|`0x005F`|`___`|
+|00170|`0x00AA`|`_ª_`|
+|00448|`0x01C0`|`_ǀ_`|
+|00449|`0x01C1`|`_ǁ_`|
+|00450|`0x01C2`|`_ǂ_`|
+|00451|`0x01C3`|`_ǃ_`|
+|00713|`0x02C9`|`_ˉ_`|
+|00714|`0x02CA`|`_ˊ_`|
+|00715|`0x02CB`|`_ˋ_`|
+|00716|`0x02CC`|`_ˌ_`|
+|00717|`0x02CD`|`_ˍ_`|
+|00718|`0x02CE`|`_ˎ_`|
+|00719|`0x02CF`|`_ˏ_`|
+|00720|`0x02D0`|`_ː_`|
+|00721|`0x02D1`|`_ˑ_`|
+|00748|`0x02EC`|`_ˬ_`|
+|00926|`0x039E`|`_Ξ_`|
+|01994|`0x07CA`|`_ߊ_`|
+|01997|`0x07CD`|`_ߍ_`|
+
+### Some Valid Identifier Separators
 
 |Decimal|Hex|Identifier|
 |-:|-:|-|
@@ -605,10 +635,67 @@ For reference below are the first valid separators until 511.
 |00510|`0x01FE`|`_Ǿ_`|
 |00511|`0x01FF`|`_ǿ_`|
 
+### Some Invalid Identifier Separators
 
-https://stackoverflow.com/questions/950616/what-characters-are-allowed-in-c-sharp-class-name
+|Decimal|Hex|Identifier|
+|-:|-:|-|
+|00032|`0x0020`|`_ _`|
+|00033|`0x0021`|`_!_`|
+|00034|`0x0022`|`_"_`|
+|00035|`0x0023`|`_#_`|
+|00036|`0x0024`|`_$_`|
+|00037|`0x0025`|`_%_`|
+|00038|`0x0026`|`_&_`|
+|00039|`0x0027`|`_'_`|
+|00040|`0x0028`|`_(_`|
+|00041|`0x0029`|`_)_`|
+|00042|`0x002A`|`_*_`|
+|00043|`0x002B`|`_+_`|
+|00044|`0x002C`|`_,_`|
+|00045|`0x002D`|`_-_`|
+|00046|`0x002E`|`_._`|
+|00047|`0x002F`|`_/_`|
+|00058|`0x003A`|`_:_`|
+|00059|`0x003B`|`_;_`|
+|00060|`0x003C`|`_<_`|
+|00061|`0x003D`|`_=_`|
+|00062|`0x003E`|`_>_`|
+|00063|`0x003F`|`_?_`|
+|00064|`0x0040`|`_@_`|
+|00091|`0x005B`|`_[_`|
+|00092|`0x005C`|`_\_`|
+|00093|`0x005D`|`_]_`|
+|00094|`0x005E`|`_^_`|
+|00096|`0x0060`|backtick|
+|00123|`0x007B`|`_{_`|
+|00124|`0x007C`|`_|_`|
+|00125|`0x007D`|`_}_`|
+|00126|`0x007E`|`_~_`|
+|00127|`0x007F`|`__`|
 
-https://stackoverflow.com/questions/1904252/is-there-a-method-in-c-sharp-to-check-if-a-string-is-a-valid-identifier
+### Related Stack Overflow Questions
 
-https://stackoverflow.com/questions/1829679/how-to-determine-if-a-string-is-a-valid-variable-name
+* [What characters are allowed in C# class
+  name?](https://stackoverflow.com/questions/950616/what-characters-are-allowed-in-c-sharp-class-name)
+  this is what initially led me to go down the wrong rabbit hole, since among
+  others the top answer is given below and I definitely didn't want to go
+  through those. 😅
+  > Essentially, any unicode character (including unicode escapes) in the
+  > character classes Lu, Ll, Lt, Lm, Lo, Nl, Mn, Mc, Nd, Pc, and Cf. The first
+  > character is an exception and it must be a letter (classes Lu, Ll, Lt, Lm,
+  > or Lo) or an underscore. Also, if the identifier is a keyword, you must
+  > stick an @ in front of it. The @ is optional otherwise.
+* [Is there a method in C# to check if a string is a valid identifier
+  [duplicate]](https://stackoverflow.com/questions/1904252/is-there-a-method-in-c-sharp-to-check-if-a-string-is-a-valid-identifier)
+  didn't find this at first and although marked as duplicate the second answer
+  is exactly what I was looking for:
+  ```csharp
+  var isValid = Microsoft.CodeAnalysis.CSharp.
+      SyntaxFacts.IsValidIdentifier("I'mNotValid");
+  Console.WriteLine(isValid);     // False
+  ```
+* [How to determine if a string is a valid variable
+  name?](https://stackoverflow.com/questions/1829679/how-to-determine-if-a-string-is-a-valid-variable-name)
+  this is the question/answer the above was considered a duplicate for, but it
+  does not mention `SyntaxFacts`.
 
