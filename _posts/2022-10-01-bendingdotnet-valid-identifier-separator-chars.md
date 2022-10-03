@@ -6,11 +6,12 @@ or [how to find invalid human batteries so they can be flushed](https://www.yout
 
 In this post, part of the [Bending .NET]({{ site.baseurl
 }}/2021/11/18/bendingdotnet-series) series, I look at compiling a complete list
-of valid and invalid C# identifier separators by using Roslyn and hence by being
-lazy instead of checking unicode specification just try every single character. 
+of valid and invalid C# identifier separators by using Roslyn. That is, by being
+lazy and instead of checking unicode specification just try every single
+character. 
 
-![???]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/???.jpg)
-Source: [pixabay](https://pixabay.com/photos/???)
+![sloth]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/sloth-gac2646fb3_1920.jpg)
+Source: [pixabay](https://pixabay.com/photos/sloth-climb-shimmy-hang-407088/)
 
 Encoding information in file or directory names is a simple way of keeping
 details about a given file. For example, an image or an ONNX model and the
