@@ -10,17 +10,17 @@ of valid and invalid C# identifier separators by using Roslyn. That is, by being
 lazy and instead of checking unicode specification just try every single
 character. 
 
-![sloth]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/sloth-gac2646fb3_1920.jpg)
-Source: [pixabay](https://pixabay.com/photos/sloth-climb-shimmy-hang-407088/)
+![sloth]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/Mother_and_baby_sloth_crossing_the_road.jpg)
+Source: [wikimedia](https://commons.wikimedia.org/wiki/File:Mother_and_baby_sloth_crossing_the_road.jpg)
 
 Encoding information in file or directory names is a simple way of keeping
 details about a given file. For example, an image or an ONNX model and the
 conditions or origins of it. That is, for an ONNX model it might be something
 simple like the version of the ground truth that it was trained on. Assumming
-you of course version your ground truth. Defining a simple schema for this
+you, of course, version your ground truth. Defining a simple schema for this
 encoding using simple separators e.g. `_`, `=` can make it easy to then parse in
 a position independent manner like `M=Surface_V=1.2.1.onnx`. Now these files
-might allow embedding this information in them in some way, but sometimes it
+might allow embedding this information in them in some way, but sometimes it is
 just easier for reference to have it directly in the file name, for example.
 
 Sometimes it is also nice to be able to embed these assets into .NET assemblies
@@ -29,7 +29,9 @@ same name as the file. However, C# naturally has more [strict rules for
 identifier
 names](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/identifier-names)
 than file names, which brings up the question what `char`s are valid separators
-in a C# identifier name? The above link says:
+in a C# identifier name? 
+
+The above link says:
 
 > - Identifiers must start with a letter or underscore (`_`).
 > - Identifiers may contain Unicode letter characters, decimal digit characters,
