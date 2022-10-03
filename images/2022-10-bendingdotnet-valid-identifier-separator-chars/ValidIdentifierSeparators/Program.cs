@@ -43,7 +43,7 @@ log($"Found {validSeparators.Count} valid identifier separator chars.");
 log($"Found {invalidSeparators.Count} invalid identifier separator chars.");
 log($"Found {validFileNameChars.Count} valid file name chars.");
 log($"Checked {totalCount} chars in {elapsed_ms} ms or " +
-    $"{elapsed_ms / (double)totalCount:F3} ms per program.");
+    $"{elapsed_ms / (double)totalCount:F3} ms per char.");
 
 bool IsValidSeparator(char c) => findByCompile ? DoesCompile(c)
     : SyntaxFacts.IsValidIdentifier(Identifier(c));
@@ -66,8 +66,8 @@ void Write(IReadOnlyList<char> chars,
     [CallerArgumentExpression("chars")] string fileName = "")
 {
     const string baseDir = "../../../../";
-    File.WriteAllText(baseDir + $"{fileName}.csv", ToCsv(chars), encoding);
-    File.WriteAllText(baseDir + $"{fileName}.txt", ToTable(chars), encoding);
+    File.WriteAllText(baseDir + $"{fileName}.csv.txt", ToCsv(chars), encoding);
+    File.WriteAllText(baseDir + $"{fileName}.md.txt", ToTable(chars), encoding);
 }
 
 static string ToCsv(IReadOnlyList<char> chars) => string.Join(Environment.NewLine,

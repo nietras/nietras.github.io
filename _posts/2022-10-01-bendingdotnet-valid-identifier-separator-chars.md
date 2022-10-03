@@ -96,7 +96,7 @@ log($"Found {validSeparators.Count} valid identifier separator chars.");
 log($"Found {invalidSeparators.Count} invalid identifier separator chars.");
 log($"Found {validFileNameChars.Count} valid file name chars.");
 log($"Checked {totalCount} chars in {elapsed_ms} ms or " +
-    $"{elapsed_ms / (double)totalCount:F3} ms per program.");
+    $"{elapsed_ms / (double)totalCount:F3} ms per char.");
 
 bool IsValidSeparator(char c) => findByCompile ? DoesCompile(c)
     : SyntaxFacts.IsValidIdentifier(Identifier(c));
@@ -150,7 +150,7 @@ For completeness here also the accompanying `ValidIdentifierSeparators.csproj`:
 As can be seen this references `Microsoft.CodeAnalysis.CSharp` or
 [Roslyn](https://github.com/dotnet/roslyn) as a nuget package. 
 
-The program is fairly self explanatory... as the astute reader might have
+The program is fairly self explanatory. As the astute reader might have
 observed, though, and as it happens with any software development you might
 start out going down the "wrong" rabbit hole. I certainly did that by first
 simply defining a full [top-level
@@ -158,10 +158,10 @@ statement](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/tutorials/t
 single line program like `var _{c}_ = 42;` where `c` would be a given character
 and then use Roslyn to compile that program and check if this would succeed
 using
-[`CSharpCompilation.Emit`}(https://learn.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.csharpcompilation?view=roslyn-dotnet-4.3.0).
+[`CSharpCompilation.Emit`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.csharpcompilation?view=roslyn-dotnet-4.3.0).
 Hence, I ended up compiling 65.536 programs to check if a given identifier was
 valid or not. This took about 300 s or about 5 minutes. Faster than scouring
-through the unicode database I am sure 😅 This seemed a bit slow though. A quick
+through the unicode database I am sure 😅 This seemed a bit slow... a quick
 profiling session revealed that:
 ```csharp
 MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
@@ -169,13 +169,13 @@ MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
 took up most of the time. This basically parses and builds a "metadata
 reference" to the assembly containing `object`, which is the only assembly
 needed for the `var _{c}_ = 42;` program. This was the reason I moved this to
-the top of the program so it only happened once. This brough the run time down
+the top of the program so it only happened once. This brought the run time down
 to ~22 s or 14-15x faster:
 ```
 Found 50683 valid identifier separator chars.
 Found 14853 invalid identifier separator chars.
 Found 65495 valid file name chars.
-Checked 65536 chars in 22076 ms or 0.337 ms per program.
+Checked 65536 chars in 22076 ms or 0.337 ms per char.
 ```
 Later, I finally found out Roslyn has the very nice
 [`SyntaxFacts`](https://learn.microsoft.com/ja-jp/dotnet/api/microsoft.codeanalysis.csharp.syntaxfacts?view=roslyn-dotnet)
@@ -187,11 +187,12 @@ Using this cut down run time to 5 ms or 60,000x faster than the initial program.
 Found 50683 valid identifier separator chars.
 Found 14853 invalid identifier separator chars.
 Found 65495 valid file name chars.
-Checked 65536 chars in 5 ms or 0.000 ms per program.
+Checked 65536 chars in 5 ms or 0.000 ms per char.
 ```
 I've kept both approaches in the above program and this also includes finding
-valid file name `char`'s for completeness. Without all this you could have
-simply written the quick program below to trace valid separator `char`s.
+valid file name `char`'s for completeness. Without all this (and in particular
+all the output related code) you could have simply written the quick program
+below to trace valid separator `char`s. 🙄
 ```csharp
 for (int i = char.MinValue; i <= char.MaxValue; i++)
 {
@@ -204,16 +205,15 @@ for (int i = char.MinValue; i <= char.MaxValue; i++)
 }
 ```
 
-
-
-Note Jekyll can't handle the large markdown files so those have been given the
-`txt` extension instead.
+Files with the compilied lists of valid and invalid separator chars and file
+name chars can be found in the below table. Note Jekyll can't handle the large
+markdown files so those have been given the extra `.txt` extension.
 
 | CSV | Markdown as txt |
 |-|-|
-| [validSeparators.csv]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/validSeparators.csv) | [validSeparators.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/validSeparators.txt) |
-| [validFileNameChars.csv]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/validFileNameChars.csv) | [validFileNameChars.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/validFileNameChars.txt) |
-| [invalidSeparators.csv]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/invalidSeparators.csv) | [invalidSeparators.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/invalidSeparators.txt) |
+| [validSeparators.csv.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/validSeparators.csv.txt) | [validSeparators.md.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/validSeparators.md.txt) |
+| [validFileNameChars.csv.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/validFileNameChars.csv.txt) | [validFileNameChars.md.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/validFileNameChars.md.txt) |
+| [invalidSeparators.csv.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/invalidSeparators.csv.txt) | [invalidSeparators.md.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/invalidSeparators.md.txt) |
 
 For reference below are the first valid separators until 511.
 
