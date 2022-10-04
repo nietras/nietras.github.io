@@ -159,6 +159,10 @@ single line program like `var _{c}_ = 42;` where `c` would be a given character
 and then use Roslyn to compile that program and check if this would succeed
 using
 [`CSharpCompilation.Emit`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.csharpcompilation?view=roslyn-dotnet-4.3.0).
+Carefully encapsulating the char in underscores `_` to handle both the fact the
+first character is limited and if a char being tested is considered white space,
+which the final underscore handles.
+
 Hence, I ended up compiling 65.536 programs to check if a given identifier was
 valid or not. This took about 300 s or about 5 minutes. Faster than scouring
 through the unicode database I am sure 😅 This seemed a bit slow... a quick
@@ -205,9 +209,10 @@ for (int i = char.MinValue; i <= char.MaxValue; i++)
 }
 ```
 
-Compiled lists of valid and invalid separator chars and file
-name chars can be found in the below table. Note Jekyll can't handle the large
-markdown files so files have been given the extra `.txt` extension.
+Compiled lists of valid and invalid separator chars and file name chars can be
+found in the table below. Note [Jekyll](https://jekyllrb.com/) (used for this
+blog) can't handle the large markdown files so files have been given the extra
+`.txt` extension.
 
 | CSV | Markdown as txt |
 |-|-|
@@ -216,12 +221,12 @@ markdown files so files have been given the extra `.txt` extension.
 | [invalidSeparators.csv.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/invalidSeparators.csv.txt) | [invalidSeparators.md.txt]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/invalidSeparators.md.txt) |
 
 For reference in the next sections are the first valid separators until decimal
-511 and first invalid separators. It is noteworthy and of course natural that
-most "ascii" non-digit/non-alpha characters are invalid as identifier
-separators. I selected a few that might be used below but these also have issues
-with being easily confused with the "normal" ascii range versions. `_` being the
-obvious one from start. Of course, this assume you use english as a language, so
-this is probably abusing other languages letters.
+511 and first invalid separators. It is noteworthy - and of course natural -
+that most "ascii" non-digit/non-alpha characters are invalid as identifier
+separators. `_` being the exception. I selected a few that might be used below,
+but these also have issues with being easily confused with the "normal" ascii
+range versions.  Of course, this assume you use English as a language, so this
+is probably abusing other languages letters. They is another issue though...
 
 |Decimal|Hex|Identifier|
 |-:|-:|-|
@@ -244,6 +249,19 @@ this is probably abusing other languages letters.
 |00926|`0x039E`|`_Ξ_`|
 |01994|`0x07CA`|`_ߊ_`|
 |01997|`0x07CD`|`_ߍ_`|
+
+... and that is some characters display as a square or rectangular box, or as a box
+with a dot, question mark or “x” inside depending on system or browser used. As
+can be seen below with screnshots from a desktop browser and on the phone. On
+the phone not all characters are displayed. I am no expert on the matter but as
+far as I know this is a font issue. So the end result is it is very hard to find
+any other good separator char than underscore `_` in C# identifiers. However,
+you could then use multiples of this for separation instead e.g.
+`M_Surface__V_1.2.1.onnx`.
+
+|Desktop|Phone|
+|-|-|
+|![desktop]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/separators-desktop.png)|![phone]({{ site.baseurl }}/images/2022-10-bendingdotnet-valid-identifier-separator-chars/separators-phone.png)|
 
 ### Some Valid Identifier Separators
 
