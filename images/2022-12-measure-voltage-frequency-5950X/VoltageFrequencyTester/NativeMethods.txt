@@ -1,0 +1,3 @@
+GetSystemInfo
+CallNtPowerInformation
+PROCESSOR_POWER_INFORMATION
