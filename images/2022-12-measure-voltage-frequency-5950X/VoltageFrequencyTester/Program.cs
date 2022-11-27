@@ -1,9 +1,112 @@
 ﻿using System.Diagnostics;
+using FlaUI.Core.AutomationElements;
+using FlaUI.Core.Definitions;
+using FlaUI.Core.Exceptions;
+using FlaUI.Core.Identifiers;
+using FlaUI.UIA3;
+using FlaUI.UIA3.Patterns;
 using RyzenMasterBindings;
 
 Action<string> log = t => { Console.WriteLine(t); Trace.WriteLine(t); };
 
-//RyzenMasterMonitoring(log);
+// https://github.com/FlaUI/FlaUI
+
+var processes = Process.GetProcessesByName("cpuz");
+var process = processes.Length > 0 ? processes[0] : null;
+if (process is null)
+{
+    var processStartInfo = new ProcessStartInfo(@"C:\Program Files\CPUID\CPU-Z\cpuz.exe");
+    processStartInfo.WorkingDirectory = @"C:\Program Files\CPUID\CPU-Z\";
+    process = Process.Start(processStartInfo);
+}
+// Not working
+//process!.ProcessorAffinity = (nint)0b01;
+//var threads = process.Threads;
+//foreach (ProcessThread thread in threads)
+//{
+//    thread.ProcessorAffinity = (nint)0b01;
+//}
+using (process)
+{
+    using var app = new FlaUI.Core.Application(process);
+    using var automation = new UIA3Automation();
+
+    // If cpu-z has not started need to wait for splash screen to finish
+    var window = app.GetMainWindow(automation);
+    while (window.IsAvailable && CheckTitleEmpty(window))
+    {
+        await Task.Delay(100);
+    }
+    // Then get window again since new after splash screen
+    window = app.GetMainWindow(automation);
+    log(window.Title);
+
+    var benchTab = window.FindFirstDescendant(cf => cf.ByText("Bench")).AsTabItem();
+    benchTab.Select();
+
+    var threadsCheckBox = window.FindFirstDescendant(cf =>
+        cf.ByText("Threads").And(cf.ByControlType(ControlType.CheckBox))).AsCheckBox();
+    threadsCheckBox.IsChecked = true;
+
+    // Threads combo box has no name (could find by Items but just using AutomationId for now
+    var threadsComboBox = window.FindFirstDescendant(cf => cf.ByAutomationId("1054")).AsComboBox();
+    threadsComboBox.Value = "  1";
+
+    var benchProgressBar = window.FindFirstDescendant(cf => cf.ByAutomationId("1002")
+        .And(cf.ByControlType(ControlType.ProgressBar))).AsProgressBar();
+
+    var progressBars = window.FindAllDescendants(cf => cf.ByControlType(ControlType.ProgressBar)).Select(e => e.AsProgressBar()).ToArray();
+    var textBoxes = window.FindAllDescendants(cf => cf.ByControlType(ControlType.Text)).Select(e => e.AsTextBox()).ToArray();
+
+    //var descendants = window.FindAllDescendants();
+    //var comboBoxes = descendants.Where(d => d.ControlType == ControlType.ComboBox).Select(d => d.AsComboBox()).ToArray();
+    var stressButton = window.FindFirstDescendant(cf => cf.ByName("Stress CPU")
+        .And(cf.ByControlType(ControlType.Button))).AsButton();
+    stressButton.Invoke();
+
+
+    for (int i = 0; i < 100; i++)
+    {
+        await Task.Delay(500);
+        //foreach (var progressBar in progressBars)
+        //{
+        //    log($"{progressBar.Name} {progressBar.AutomationId} {progressBar.Value}");
+        //}
+        foreach (var textBox in textBoxes)
+        {
+            if (textBox.IsAvailable && textBox.IsEnabled && textBox.IsPatternSupported(TextPattern.Pattern))
+            {
+                log($"{textBox.Name} {textBox.Text}");
+            }
+        }
+        // Read bench score, note time for hwinfo log (logs every 2 seconds)
+        var properties = benchProgressBar.Properties;
+
+    }
+
+    await Task.Delay(2000);
+
+    stressButton.Invoke();
+
+
+
+    //RyzenMasterMonitoring(log);
+
+    log("end");
+}
+
+
+static bool CheckTitleEmpty(Window window)
+{
+    try
+    {
+        return string.IsNullOrWhiteSpace(window.Title);
+    }
+    catch (PropertyNotSupportedException)
+    {
+        return false;
+    }
+}
 
 
 // https://developer.amd.com/amd-ryzentm-master-monitoring-sdk/
