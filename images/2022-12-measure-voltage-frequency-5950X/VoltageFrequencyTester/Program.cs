@@ -1,39 +1,23 @@
-﻿using System;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
 using RyzenMasterBindings;
-using Windows.Win32;
-using Windows.Win32.System.Power;
+
+Action<string> log = t => { Console.WriteLine(t); Trace.WriteLine(t); };
+
+//RyzenMasterMonitoring(log);
+
 
 // https://developer.amd.com/amd-ryzentm-master-monitoring-sdk/
-
-unsafe
+// GetCPUParameters does not work, SDK has not been updated since 2020,
+// Ryzen Master has a later version but API has changed so no idea how to
+// use those dlls without new header files.
+static void RyzenMasterMonitoring(Action<string> log)
 {
-    Action<string> log = t => { Console.WriteLine(t); Trace.WriteLine(t); };
-    //PInvoke.GetSystemInfo(out var systemInfo);
-
-    //var processorCount = (int)systemInfo.dwNumberOfProcessors;
-
-    //// PROCESSOR_POWER_INFORMATION.CurrentMhz no longer shows CurrentMhz
-    //// https://github.com/microsoft/Windows-Dev-Performance/issues/100
-    //PROCESSOR_POWER_INFORMATION* infos = stackalloc PROCESSOR_POWER_INFORMATION[processorCount];
-    //var infosSpan = new Span<PROCESSOR_POWER_INFORMATION>(infos, processorCount);
-    //var status = PInvoke.CallNtPowerInformation(Windows.Win32.System.Power.POWER_INFORMATION_LEVEL.ProcessorInformation, null, 0,
-    //    infos, (uint)(Unsafe.SizeOf<PROCESSOR_POWER_INFORMATION>() * processorCount));
-    //if (status.SeverityCode != Windows.Win32.Foundation.NTSTATUS.Severity.Success)
-    //{
-
-    //}
-
-
     //log($"{processorCount} {status.SeverityCode}");
     var libraryInit = RyzenMasterLibrary.Init();
     log($"{nameof(RyzenMasterLibrary)}.{nameof(RyzenMasterLibrary.Init)} {libraryInit}");
-
-    using var platform = Platform.GetPlatform();
+    var platform = Platform.GetPlatform();
     var platformInit = platform.Init();
-    using var deviceManager = platform.GetDeviceManager();
+    var deviceManager = platform.GetDeviceManager();
     var deviceCount = deviceManager.GetTotalDeviceCount();
 
     for (var i = 0u; i < deviceManager.GetTotalDeviceCount(); i++)
@@ -74,8 +58,8 @@ unsafe
             log($"Package: {cpu.GetPackage()}");
             log($"Chipset: {cpu.GetChipsetName()}");
             var parameters = cpu.GetCpuParameters();
-            log($"PeakCoreSpeed: {cpu.GetCpuParameters()?.PeakSpeed}");
-            log($"OCMode: {cpu.GetCpuParameters()?.Mode.Flags}");
+            log($"PeakCoreSpeed: {parameters?.PeakSpeed}");
+            log($"OCMode: {parameters?.Mode.Flags}");
         }
     }
 }
