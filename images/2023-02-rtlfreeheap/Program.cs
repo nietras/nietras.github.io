@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using nietras.SeparatedValues;
 
@@ -20,6 +21,7 @@ int count = 4096;
 const int times = 6;
 
 var stopwatch = new Stopwatch();
+stopwatch.Start();
 var process = Process.GetCurrentProcess();
 using var writer = Sep.Default.Writer().ToFile("../../../NativeHeapStress.csv");
 for (var i = 0; i < times; i++)
@@ -31,7 +33,6 @@ for (var i = 0; i < times; i++)
     var m = Test(count, bytes, sort, process);
 
     {
-        stopwatch.Restart();
         using var perFreeWriter = Sep.Default.Writer().ToFile($"../../../NativeHeapStressPerFreeCall-Bytes-{bytes}-Count-{count}-Sort-{sort}.csv");
         for (var j = 0; j < count; j++)
         {
@@ -41,13 +42,12 @@ for (var i = 0; i < times; i++)
             perFreeRow["HeapFree [us]"].Format(us);
             perFreeRow["PrivateMemorySize [MB]"].Format(privateBytes / (1024 * 1024));
         }
-        stopwatch.Stop();
     }
 
     var t = SortThenComputeStats(m.Times_us, ts => ts.Sum(), ts => ts.Average());
     var p = SortThenComputeStats(m.PrivateMemorySizes, sz => sz.Sum(), sz => sz.Average());
 
-    log($"{count,6} of {bytes} [us]: Total {t.Sum,11:F1} Mean {t.Mean,6:F1} [{t.Min,6:F1}, {t.Median,6:F1}, {t.Max,6:F1}] (per call csv {stopwatch.Elapsed,6:F1})");
+    log($"Test - {count,6} of {bytes} bytes - Total {t.Sum,11:F1} Mean {t.Mean,6:F1} [{t.Min,6:F1}, {t.Median,6:F1}, {t.Max,6:F1}] [us]");
 
     using var row = writer.NewRow();
     row["Bytes"].Format(bytes);
@@ -60,7 +60,6 @@ for (var i = 0; i < times; i++)
     row["Sort [us]"].Set(sort ? $"{m.Sort_us}" : "");
     row["PrivateMemorySize Min [MB]"].Format(p.Min / (1024 * 1024));
     row["PrivateMemorySize Max [MB]"].Format(p.Max / (1024 * 1024));
-
 
     count *= 2;
 }
@@ -89,8 +88,10 @@ static unsafe Measurements Test(int count, nuint bytes, bool sort, Process proce
         var a = Stopwatch.GetTimestamp();
         var us = (a - b) * 1000_000.0 / Stopwatch.Frequency;
         times_us[i] = us;
-        process.Refresh();
-        privateMemorySizes[i] = process.PrivateMemorySize64;
+        //process.Refresh(); // This is really slow!
+        //privateMemorySizes[i] = process.PrivateMemorySize64;
+        GetProcessMemoryInfo(process.Handle, out var counters, (uint)Unsafe.SizeOf<PROCESS_MEMORY_COUNTERS_EX>());
+        privateMemorySizes[i] = (long)counters.PrivateUsage;
     }
     return new(sort_us, times_us, privateMemorySizes);
 }
@@ -120,7 +121,25 @@ static void Shuffle<T>(T[] array, int seed = 72137)
     }
 }
 
+[DllImport("psapi.dll", SetLastError = true)]
+static extern bool GetProcessMemoryInfo(IntPtr hProcess, out PROCESS_MEMORY_COUNTERS_EX counters, uint size);
+
 record Measurements(double Sort_us, double[] Times_us, long[] PrivateMemorySizes);
 
 record Stats<T>(double Sum, double Mean, T Min, T Median, T Max);
 
+[StructLayout(LayoutKind.Sequential, Size = 80)]
+struct PROCESS_MEMORY_COUNTERS_EX
+{
+    public uint cb;
+    public uint PageFaultCount;
+    public UInt64 PeakWorkingSetSize;
+    public UInt64 WorkingSetSize;
+    public UInt64 QuotaPeakPagedPoolUsage;
+    public UInt64 QuotaPagedPoolUsage;
+    public UInt64 QuotaPeakNonPagedPoolUsage;
+    public UInt64 QuotaNonPagedPoolUsage;
+    public UInt64 PagefileUsage;
+    public UInt64 PeakPagefileUsage;
+    public UInt64 PrivateUsage;
+}
