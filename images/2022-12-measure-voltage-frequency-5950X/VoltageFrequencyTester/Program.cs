@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Security.Policy;
 using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Definitions;
 using FlaUI.Core.Exceptions;
@@ -8,6 +9,9 @@ using FlaUI.UIA3.Patterns;
 using RyzenMasterBindings;
 
 Action<string> log = t => { Console.WriteLine(t); Trace.WriteLine(t); };
+
+// start /affinity 1 /b ./y-cruncher.exe bench 500m -PF:none
+// C:\Windows\System32\cmd.exe /c start "" /High /Affinity 1 "C:\Windows\System32\mspaint.exe"
 
 // https://github.com/FlaUI/FlaUI
 
