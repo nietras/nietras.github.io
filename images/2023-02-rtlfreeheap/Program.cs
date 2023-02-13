@@ -19,32 +19,48 @@ const nuint bytes = 19_200;
 int count = 4096;
 const int times = 6;
 
+var stopwatch = new Stopwatch();
 var process = Process.GetCurrentProcess();
 using var writer = Sep.Default.Writer().ToFile("../../../NativeHeapStress.csv");
-for (int i = 0; i < times; i++)
+for (var i = 0; i < times; i++)
 {
-    var sort = false;
+    var sort = true;
 
     GC.Collect();
 
     var m = Test(count, bytes, sort, process);
 
+    {
+        stopwatch.Restart();
+        using var perFreeWriter = Sep.Default.Writer().ToFile($"../../../NativeHeapStressPerFreeCall-Bytes-{bytes}-Count-{count}-Sort-{sort}.csv");
+        for (var j = 0; j < count; j++)
+        {
+            var us = m.Times_us[j];
+            var privateBytes = m.PrivateMemorySizes[j];
+            using var perFreeRow = perFreeWriter.NewRow();
+            perFreeRow["HeapFree [us]"].Format(us);
+            perFreeRow["PrivateMemorySize [MB]"].Format(privateBytes / (1024 * 1024));
+        }
+        stopwatch.Stop();
+    }
+
     var t = SortThenComputeStats(m.Times_us, ts => ts.Sum(), ts => ts.Average());
     var p = SortThenComputeStats(m.PrivateMemorySizes, sz => sz.Sum(), sz => sz.Average());
 
-    log($"{count} of {bytes} [s]: Total {t.Sum,9:F6} Mean {t.Mean,8:F6} [{t.Min,8:F6}, {t.Median,8:F6}, {t.Max,8:F6}]");
+    log($"{count,6} of {bytes} [us]: Total {t.Sum,11:F1} Mean {t.Mean,6:F1} [{t.Min,6:F1}, {t.Median,6:F1}, {t.Max,6:F1}] (per call csv {stopwatch.Elapsed,6:F1})");
 
     using var row = writer.NewRow();
     row["Bytes"].Format(bytes);
     row["Count"].Format(count);
-    row["HeapFree Sum [us]"].Format(t.Sum);
+    row["HeapFree Sum [s]"].Format(t.Sum * 1000_000);
     row["HeapFree Mean [us]"].Format(t.Mean);
     row["HeapFree Min [us]"].Format(t.Min);
     row["HeapFree Median [us]"].Format(t.Median);
     row["HeapFree Max [us]"].Format(t.Max);
     row["Sort [us]"].Set(sort ? $"{m.Sort_us}" : "");
-    row["PrivateMemorySize Min [bytes]"].Format(p.Min);
-    row["PrivateMemorySize Max [bytes]"].Format(p.Max);
+    row["PrivateMemorySize Min [MB]"].Format(p.Min / (1024 * 1024));
+    row["PrivateMemorySize Max [MB]"].Format(p.Max / (1024 * 1024));
+
 
     count *= 2;
 }
@@ -73,6 +89,7 @@ static unsafe Measurements Test(int count, nuint bytes, bool sort, Process proce
         var a = Stopwatch.GetTimestamp();
         var us = (a - b) * 1000_000.0 / Stopwatch.Frequency;
         times_us[i] = us;
+        process.Refresh();
         privateMemorySizes[i] = process.PrivateMemorySize64;
     }
     return new(sort_us, times_us, privateMemorySizes);
