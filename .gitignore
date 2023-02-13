@@ -9,6 +9,7 @@ Gemfile.lock
 node_modules
 package.json
 .vs
+*.diagsession
 bin
 obj
 **/BenchmarkDotNet.Artifacts/*.log
