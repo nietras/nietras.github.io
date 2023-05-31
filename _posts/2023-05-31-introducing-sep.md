@@ -850,7 +850,8 @@ pretty good compared to CsvHelper regardless of allocating a lot of strings.
 At the core of the SepReader is code for finding the special `char`'s that are
 used to structure the separated values data. That is, `,`, `\n`, `\r`, `"`.
 Depending on the separator used. Sep contains several SIMD-vectorized approaches
-to this (`ISepCharsFinder`s). On x64 the currently fastest is an [AVX2
+to find these (implementations of `ISepCharsFinder`). On x64 the currently
+fastest is an [AVX2
 approach](https://github.com/nietras/Sep/blob/main/src/Sep/Internals/SepCharsFinderAvx2PackCmpOrMoveMaskTzcnt.cs)
 which is JIT'ed to something like the following tight assembly (with comments
 added here):
@@ -888,8 +889,8 @@ G_M000_IG03:                ;; offset=0070H
        // Get a 32-bit mask via move mask with 1-bit per byte
        // indicating if that position has any special char.
        C5FDD7FD             vpmovmskb edi, ymm5
-       85FF                 test     edi, edi
        // If there are no special chars, jump to continuation
+       85FF                 test     edi, edi
        7450                 je       SHORT G_M000_IG10
 
 G_M000_IG04:                ;; offset=00A3H
@@ -944,8 +945,8 @@ G_M000_IG08:                ;; offset=00C9H
        75DC                 jne      SHORT G_M000_IG08
 
 G_M000_IG09:                ;; offset=00EDH
+       // Check if room for more in char+position array
        483BC6               cmp      rax, rsi
-       // Finish if done
        7213                 jb       SHORT G_M000_IG12
 
 G_M000_IG10:                ;; offset=00F2H
