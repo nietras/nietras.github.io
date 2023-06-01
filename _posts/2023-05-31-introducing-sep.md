@@ -847,17 +847,30 @@ pretty good compared to CsvHelper regardless of allocating a lot of strings.
 ---
 
 ## SepReader Deep Dive
-At the core of the SepReader is code for finding the special `char`'s that are
+At the core of the `SepReader` is code for finding the special `char`'s that are
 used to structure the separated values data. That is, `,`, `\n`, `\r`, `"`.
-Depending on the separator used. Sep contains several SIMD-vectorized approaches
-to find these (implementations of `ISepCharsFinder`). On x64 the currently
-fastest is an [AVX2
+Depending on the separator used. Here it's comma. Sep contains several
+SIMD-vectorized approaches to find these (implementations of `ISepCharsFinder`).
+On x64 the currently fastest is an [AVX2
 approach](https://github.com/nietras/Sep/blob/main/src/Sep/Internals/SepCharsFinderAvx2PackCmpOrMoveMaskTzcnt.cs)
-which is JIT'ed to something like the following tight assembly (with comments
-added here):
+which is JIT'ed to something like the fairly tight assembly shown below. With
+comments added here.
+
+The finders basically get a `char[]` as input and outputs new packed `char` (as
+byte) and position in an `int[]`. That is if `c` defines character and `p`
+defines position this is packed as:
+```
+0bcccc_cccc_pppp_pppp_pppp_pppp_pppp_pppp
+```
+This limits both the special chars supported to < 255 and the maximum row length
+to 2^24 = 16 MB, which is considered a design choice.
+
+I don't know if this packing is especially beneficial but the idea is to reduce
+memory and hence cache usage. This char+position "index" is then used to parse
+one row (and it's columns) at a time.
 
 ```asm
-       // Load registers filled with the 4 different special chars a bytes
+       // Load registers filled with the 4 different special chars as bytes
        C5FD104128           vmovupd  ymm0, ymmword ptr[rcx+28H]
        C5FD104948           vmovupd  ymm1, ymmword ptr[rcx+48H]
        C5FD105168           vmovupd  ymm2, ymmword ptr[rcx+68H]
@@ -897,7 +910,7 @@ G_M000_IG04:                ;; offset=00A3H
        // Check if all special chars are separators
        C5FDD7DC             vpmovmskb ebx, ymm4
        3BDF                 cmp      ebx, edi
-       // If not jump handling of any special char, otherwise 
+       // If not jump to handling of any special char, otherwise 
        // continue with specific handling of separators only.
        751E                 jne      SHORT G_M000_IG07
        // Prepare packed representation of found separator
@@ -907,9 +920,9 @@ G_M000_IG04:                ;; offset=00A3H
 
 G_M000_IG05:                ;; offset=00B0H
        33ED                 xor      ebp, ebp
-       // Trailing zero count for first bit for separator in mask
+       // Trailing zero count for first bit offset in mask
        F30FBCEB             tzcnt    ebp, ebx
-       // Flip the first bit
+       // Reset the first bit
        C4E260F3CB           blsr     ebx, ebx
        // Add found offset to packed representation
        03EF                 add      ebp, edi
