@@ -11,7 +11,7 @@ and [`ISpanFormattable`
 been working on a new CSV library for .NET. The library is called
 [Sep](https://github.com/nietras/Sep), short for separator. In this blog post I
 will introduce Sep `v0.1.0` with a copy of
-[README.md](https://github.com/nietras/Sep/blob/main/README.md)  file on GitHub
+[README.md](https://github.com/nietras/Sep/blob/main/README.md)  file from GitHub
 (slightly edited) and then follow up with a deep dive into the SIMD assembly
 that is part of what makes Sep fast. And a look at CPU usage based on profiling
 data, so please be sure to stick around or just jump to [SepReader Deep
@@ -133,7 +133,7 @@ public readonly record struct Sep(char Separator);
 ```
 The separator `char` is validated upon construction and is guaranteed to be
 within a limited range and not being a `char` like `"` (quote) or similar. This
-can be seen in [src/Sep/Sep.cs](https://github.com/nietras/Sep/blob/v0.1.0/src/Sep/Sep.cs). The separator is constrained
+can be seen in [Sep.cs](https://github.com/nietras/Sep/blob/v0.1.0/src/Sep/Sep.cs). The separator is constrained
 also for internal optimizations, so you cannot use any `char` as a separator.
 
 ⚠ Note that all types are within the namespace `nietras.SeparatedValues` and not
