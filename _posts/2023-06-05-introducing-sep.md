@@ -18,7 +18,10 @@ data, so please be sure to stick around or just jump to [SepReader Deep
 Dive](#sepreader-deep-dive).
 
 The README-file will be updated as the library (hopefulyl) matures, so please be
-sure to check that out on GitHub for the latest information.
+sure to check that out on GitHub for the latest information or follow below.
+
+[![Build Status](https://github.com/nietras/Sep/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/nietras/Sep/actions/workflows/dotnet.yml) [![codecov](https://codecov.io/gh/nietras/Sep/branch/main/graph/badge.svg?token=WN56CR3X0D)](https://codecov.io/gh/nietras/Sep) [![NuGet](https://img.shields.io/nuget/v/Sep.svg)](https://www.nuget.org/packages/Sep/)
+
 
 ---
 ## Sep
