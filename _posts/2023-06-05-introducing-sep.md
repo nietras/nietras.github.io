@@ -24,7 +24,7 @@ sure to check that out on GitHub for the latest information or follow below.
 
 
 ---
-## Sep
+## Sep (v0.1.0)
 
 Modern, minimal, fast, zero allocation, reading and writing of separated values
 (`csv`, `tsv` etc.). Cross-platform, trimmable and AOT/NativeAOT compatible.
