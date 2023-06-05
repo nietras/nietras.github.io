@@ -10,11 +10,15 @@ and [`ISpanFormattable`
 ](https://learn.microsoft.com/en-us/dotnet/api/system.ispanformattable), I have
 been working on a new CSV library for .NET. The library is called
 [Sep](https://github.com/nietras/Sep), short for separator. In this blog post I
-will introduce Sep with excerpts (slightly edited) from the
-[README.md](https://github.com/nietras/Sep/blob/main/README.md) file on GitHub
-and then follow up with a deep dive into the SIMD assembly that is part of what
-makes Sep fast. The README-file will be updated as the library matures, so
-please be sure to check it out for the latest information.
+will introduce Sep `v0.1.0` with a copy of
+[README.md](https://github.com/nietras/Sep/blob/main/README.md)  file on GitHub
+(slightly edited) and then follow up with a deep dive into the SIMD assembly
+that is part of what makes Sep fast. And a look at CPU usage based on profiling
+data, so please be sure to stick around or just jump to [SepReader Deep
+Dive](#sepreader-deep-dive).
+
+The README-file will be updated as the library (hopefulyl) matures, so please be
+sure to check that out on GitHub for the latest information.
 
 ---
 ## Sep
@@ -32,7 +36,7 @@ machine learning use cases.
 struct`](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/ref-struct),
 [`ArrayPool<T>`](https://learn.microsoft.com/en-us/dotnet/api/system.buffers.arraypool-1)
 and similar from [.NET 7+ and C#
-11+]({{ site.baseurl }}/2022/02/13/2022/11/26/dotnet-and-csharp-versions/) for a modern
+11+]({{ site.baseurl }}/2022/11/26/dotnet-and-csharp-versions/) for a modern
 and highly efficient implementation.
 * **🔎 Minimal** - a succinct yet expressive API with few options and no hidden
 changes to input or output. What you read/write is what you get. This means
@@ -104,11 +108,11 @@ Assert.AreEqual(expected, writer.ToString());
 ```
 
 ## Naming and Terminology
-Sep uses naming and terminology that is not based on [RFC-4180](#rfc-4180), but
-is more tailored to usage in machine learning or similar. Additionally, Sep
-takes a pragmatic approach towards names by using short names and abbreviations
-where it makes sense and there should be no ambiguity given the context. That
-is, using `Sep` for `Separator` and `Col` for `Column` to keep code succinct.
+Sep uses naming and terminology that is not based on RFC-4180, but is more
+tailored to usage in machine learning or similar. Additionally, Sep takes a
+pragmatic approach towards names by using short names and abbreviations where it
+makes sense and there should be no ambiguity given the context. That is, using
+`Sep` for `Separator` and `Col` for `Column` to keep code succinct.
 
 |Term | Description |
 |-----|-------------|
@@ -129,7 +133,7 @@ public readonly record struct Sep(char Separator);
 ```
 The separator `char` is validated upon construction and is guaranteed to be
 within a limited range and not being a `char` like `"` (quote) or similar. This
-can be seen in [src/Sep/Sep.cs](src/Sep/Sep.cs). The separator is constrained
+can be seen in [src/Sep/Sep.cs](https://github.com/nietras/Sep/blob/v0.1.0/src/Sep/Sep.cs). The separator is constrained
 also for internal optimizations, so you cannot use any `char` as a separator.
 
 ⚠ Note that all types are within the namespace `nietras.SeparatedValues` and not
@@ -174,7 +178,7 @@ using var writer = Sep.New(',').Writer().ToFile("titanic.csv");
 ```
 where you have to specify a valid separator, since it cannot be inferred. To
 fascillitate easy flow of the separator and `CultureInfo` both `SepReader` and
-`SepWriter` expose a `Spec` property of type [`SepSpec`](src/Sep/SepSpec.cs) that simply defines those
+`SepWriter` expose a `Spec` property of type [`SepSpec`](https://github.com/nietras/Sep/blob/v0.1.0/src/Sep/SepSpec.cs) that simply defines those
 two. This means you can write:
 ```csharp
 using var reader = Sep.Reader().FromFile("titanic.csv");
@@ -194,12 +198,14 @@ where each continuation flows fluently from the preceding type. For example,
 `SepReaderOptions`. Similarly, `Writer()` is an extension method to `Sep` or
 `SepSpec` that returns a `SepWriterOptions`.
 
-[`SepReaderOptions`](src/Sep/SepReaderOptions.cs)  and
-[`SepWriterOptions`](src/Sep/SepWriterOptions.cs) are optionally configurable.
-That and the APIs for reader and writer is covered in the following sections.
+[`SepReaderOptions`](https://github.com/nietras/Sep/blob/v0.1.0/src/Sep/SepReaderOptions.cs)
+and
+[`SepWriterOptions`](https://github.com/nietras/Sep/blob/v0.1.0/src/Sep/SepWriterOptions.cs)
+are optionally configurable. That and the APIs for reader and writer is covered
+in the following sections.
 
 For a complete example, see the [example](#example) above or the
-[ReadMeTest.cs](src/Sep.Test/ReadMeTest.cs).
+[ReadMeTest.cs](https://github.com/nietras/Sep/blob/v0.1.0/src/Sep.Test/ReadMeTest.cs).
 
 ⚠ Note that it is important to understand that Sep `Row`/`Col`/`Cols` are [`ref
 struct`](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/ref-struct)s
@@ -422,7 +428,7 @@ static IEnumerable<(string Key, double Value)> Enumerate(SepReader reader)
 This does not take significantly longer to write and is a lot more efficient
 (also avoids allocating a string for key for each row) and is easier to debug
 and perhaps even read. All examples above can be seen in
-[ReadMeTest.cs](src/Sep.Test/ReadMeTest.cs).
+[ReadMeTest.cs](https://github.com/nietras/Sep/blob/v0.1.0/src/Sep.Test/ReadMeTest.cs).
 
 ### SepWriter API
 `SepWriter` API has the following structure (in pseudo-C# code):
@@ -605,7 +611,9 @@ this specific scenario. Given Sylvan is the fastest of those it is used as the
 one to beat here, while CsvHelper is used to compare to the most commonly used
 library.
 
-The source used for this benchmark [PackageAssetsBench.cs](src/Sep.ComparisonBenchmarks/PackageAssetsBench.cs) is a
+The source used for this benchmark
+[PackageAssetsBench.cs](https://github.com/nietras/Sep/blob/v0.1.0/src/Sep.ComparisonBenchmarks/PackageAssetsBench.cs)
+is a
 [PackageAssets.csv](https://raw.githubusercontent.com/joelverhagen/NCsvPerf/main/NCsvPerf/TestData/PackageAssets.csv)
 with NuGet package information in 25 columns with rows like:
 ```
@@ -616,9 +624,10 @@ with NuGet package information in 25 columns with rows like:
 75fcf875-017d-4579-bfd9-791d3e6767f0,2020-11-28T01:50:41.2449947+00:00,Akinzekeel.BlazorGrid,0.9.1-preview,2020-11-27T22:42:54.3100000+00:00,AvailableAssets,MSBuildFiles,,,any,,,,,,build/Akinzekeel.BlazorGrid.props,Akinzekeel.BlazorGrid.props,.props,build,any,Any,0.0.0.0,,,0.0.0.0
 ```
 For `Scope = Asset` the columns are parsed into a
-[`PackageAsset`](src/Sep.ComparisonBenchmarks/PackageAsset.cs) class, which
-consists of 25 properties of which 22 are `string`s. Each asset is accumulated
-into a `List<PackageAsset>`. Each column is accessed as a `string` regardless.
+[`PackageAsset`](https://github.com/nietras/Sep/blob/v0.1.0/src/Sep.ComparisonBenchmarks/PackageAsset.cs)
+class, which consists of 25 properties of which 22 are `string`s. Each asset is
+accumulated into a `List<PackageAsset>`. Each column is accessed as a `string`
+regardless.
 
 This means this benchmark is dominated by turning columns into `string`s for the
 decently fast parsers. Hence, the fastest libraries in this test employ string
@@ -655,6 +664,7 @@ csv-parsing itself, since that is not a big part of the time consumed. At least
 not for a decently fast csv-parser.
 
 ###### `AMD 5950X` - PackageAssets Benchmark Results (Sep 0.1.0)
+
 |    Method | Scope |    Rows |        Mean | Ratio |  MB |   MB/s | ns/row |     Allocated |  Alloc Ratio |
 |---------- |------ |-------- |------------:|------:|----:|-------:|-------:|--------------:|-------------:|
 | **Sep______** |   **Row** | **1000000** |    **79.59 ms** |  **1.00** | **583** | **7335.3** |   **79.6** |       **1.71 KB** |         **1.00** |
@@ -673,6 +683,7 @@ not for a decently fast csv-parser.
 | CsvHelper | Asset | 1000000 | 2,006.48 ms |  2.66 | 583 |  290.9 | 2006.5 |  266838.11 KB |         1.00 |
 
 ###### `Snapdragon® 8cx Gen 3` - PackageAssets Benchmark Results (Sep 0.1.0)
+
 |    Method | Scope |    Rows |       Mean | Ratio |  MB |   MB/s | ns/row |     Allocated |  Alloc Ratio |
 |---------- |------ |-------- |-----------:|------:|----:|-------:|-------:|--------------:|-------------:|
 | **Sep______** |   **Row** | **1000000** |   **190.8 ms** |  **1.00** | **583** | **3060.4** |  **190.8** |        **1.5 KB** |         **1.00** |
@@ -744,7 +755,7 @@ triple the total to 76.
 
 
 #### Floats Reader Comparison Benchmarks
-The [FloatsReaderBench.cs](src/Sep.ComparisonBenchmarks/FloatsReaderBench.cs)
+The [FloatsReaderBench.cs](https://github.com/nietras/Sep/blob/v0.1.0/src/Sep.ComparisonBenchmarks/FloatsReaderBench.cs)
 benchmark demonstrates what Sep is built for. Namely parsing 32-bit floating
 points or features as in machine learning. Here a simple CSV-file is randomly
 generated with `N` ground truth values, `N` predicted result values and some
@@ -808,6 +819,7 @@ It is a testament to how good the .NET and the .NET GC is that the ReadLine is
 pretty good compared to CsvHelper regardless of allocating a lot of strings. 
 
 ##### `AMD 5950X` - Floats Benchmark Results (Sep 0.1.0)
+
 |    Method |  Scope |   Rows |      Mean | Ratio |  MB |   MB/s | ns/row |    Allocated | Alloc Ratio |
 |---------- |------- |------- |----------:|------:|----:|-------:|-------:|-------------:|------------:|
 | **Sep______** |    **Row** | **100000** |  **15.22 ms** |  **1.00** | **109** | **7160.5** |  **152.2** |      **1.49 KB** |        **1.00** |
@@ -847,11 +859,11 @@ pretty good compared to CsvHelper regardless of allocating a lot of strings.
 ---
 
 ## SepReader Deep Dive
-At the core of the `SepReader` is code for finding the special `char`'s that are
-used to structure the separated values data. That is, `,`, `\n`, `\r`, `"`.
-Depending on the separator used. Here it's comma. Sep contains several
-SIMD-vectorized approaches to find these (implementations of `ISepCharsFinder`).
-On x64 the currently fastest is an [AVX2
+At the core of `SepReader` is code for finding the special `char`'s that are
+used to structure the separated values. That is, `,`, `\n`, `\r`, `"`. Depending
+on the separator used. Here it's comma. Sep contains several SIMD-vectorized
+approaches to find these (implementations of `ISepCharsFinder`). On x64 the
+currently fastest is an [AVX2
 approach](https://github.com/nietras/Sep/blob/main/src/Sep/Internals/SepCharsFinderAvx2PackCmpOrMoveMaskTzcnt.cs)
 which is JIT'ed to something like the fairly tight assembly shown below. With
 comments added here.
@@ -866,10 +878,10 @@ This limits both the special chars supported to < 255 and the maximum row length
 to 2^24 = 16 MB, which is considered a design choice.
 
 I don't know if this packing is especially beneficial but the idea is to reduce
-memory and hence cache usage. This char+position "index" is then used to parse
+memory and, hence, cache usage. This char+position "index" is then used to parse
 one row (and it's columns) at a time.
 
-```asm
+```nasm
        // Load registers filled with the 4 different special chars as bytes
        C5FD104128           vmovupd  ymm0, ymmword ptr[rcx+28H]
        C5FD104948           vmovupd  ymm1, ymmword ptr[rcx+48H]
@@ -969,3 +981,26 @@ G_M000_IG10:                ;; offset=00F2H
        453BC1               cmp      r8d, r9d
        0F8C6DFFFFFF         jl       G_M000_IG03
 ```
+If one looks at the [PackageAssets
+Benchmark](#ncsvperf-packageassets-reader-comparison-benchmarks) above and the
+full `Asset` load with Visual Studio's profiler, the SIMD-code accounts for
+5.51% of total CPU usage. Below shows CPU usage sorted by **Self CPU**. Compare
+this to `StringReader.Read` at 3.72%, which is copying from the `StringReader`
+`string` to the internal `char[]` in the `SepReader`. Overall, most time here is
+spent on the string pooling (getting hash, looking up string) and the allocation
+and creation of the `PackageAsset` instances.
+
+![Package Assets Asset Profile]({{ site.baseurl }}/images/2023-06-sep/package-assets-asset-profile.png)
+
+Below one can see the CPU usage but for just parsing the `Row`s for the same.
+Here you will see the SIMD-code accounts for about 39% of the CPU usage. A bit
+more than the `StringReader` memory copying, hence the SIMD-code is close to
+being just as fast as memory copying. `MoveNext` is pretty much the rest of what
+Sep has to do to parse a row. I.e. use the char+position index to find
+separators to mark column ends and line endings to mark end of a row. 
+
+![Package Assets Row Profile]({{ site.baseurl }}/images/2023-06-sep/package-assets-row-profile.png)
+
+For any real work load, however, most CPU usage will be related to the actual
+"user" code, not the CSV parsing, that's what you get with the world's fastest
+.NET CSV parser 🚀
