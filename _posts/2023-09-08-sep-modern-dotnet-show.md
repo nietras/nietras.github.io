@@ -180,10 +180,12 @@ Below are edited notes I made before the recording of the podcast.
 
 ## Socials, Websites and Services
 * Sep on [nietras.com](https://nietras.com):
-  * [Introducing Sep - Possibly the World's Fastest .NET CSV
-    Parser](https://nietras.com/2023/06/05/introducing-sep/)
-  * [Sep 0.2.0 - Even Faster Parsing (~10 GB/s on Zen 3) and
-    More](https://nietras.com/2023/08/07/sep-0-2-0/)
+  * [Introducing Sep - Possibly the World's Fastest .NET CSV Parser]({{
+    site.baseurl }}/2023/06/05/introducing-sep/)
+  * [Sep 0.2.0 - Even Faster Parsing (~10 GB/s on Zen 3) and More]({{
+    site.baseurl }}/2023/08/07/sep-0-2-0/)
+  * [Sep 0.2.3 - .NET 8 and AVX-512 Preview]({{
+    site.baseurl }}/2023/09/05/sep-0-2-3/)
 * Other:
   * [Preview Features in .NET 6 – Generic
     Math](https://devblogs.microsoft.com/dotnet/preview-features-in-net-6-generic-math/)
