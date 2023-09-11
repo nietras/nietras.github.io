@@ -1,6 +1,6 @@
 ﻿---
 layout: post
-title: Bending .NET - Native Libraries - Series
+title: Bending .NET - Native Libraries - Packaging, Deploying, Resolving
 ---
 
 ## Contents
@@ -8,7 +8,7 @@ title: Bending .NET - Native Libraries - Series
 * Windows only
 * Transitive vs direct dependencies
 * Deploying
-* Loading (search order/resolve)
+* Resolving (search order/loading)
   * Approaches
 
 
