@@ -6,11 +6,21 @@ On July 11th, 2023 I was a guest on [The Modern .NET
 Show](https://dotnetcore.show/) and had a great time talking to Jamie Taylor
 ([twitter](https://twitter.com/podcasterJay),
 [fediverse](https://mastodon.social/@gaprogman@hachyderm.io)) about
-[Sep](https://github.com/nietras/Sep) (the world's fastest .NET CSV library) and
-in particular performance and optimizations. The podcast has just been released
-and you can listen to it and read the show notes I made below.
+[Sep (the world's fastest .NET CSV library)](https://github.com/nietras/Sep)  and
+in particular performance and optimizations. The [podcast has just been
+released](https://dotnetcore.show/season-6/from-atari-to-sep-unleashing-the-power-of-performance-in-programming-with-niels-rassmussen/)
+and you can listen to it and read the show notes I made below. Please consider
+subscribing to the podcast and supporting it and follow the link below.
 
-TODO INSERT LINK TO PODCAST
+#### [06E07 - From Atari to Sep: Unleashing the Power of Performance in Programming![](https://dotnetcore.show/header-images/607-Niels-Rassmussen-Sep.jpg)](https://dotnetcore.show/season-6/from-atari-to-sep-unleashing-the-power-of-performance-in-programming-with-niels-rassmussen/)
+
+[Apple Podcasts](https://podcasts.apple.com/us/podcast/from-atari-to-sep-unleashing-the-power-of-performance/id1433496275?i=1000637907670)
+<iframe allow="encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="175" style="width:100%;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.podcasts.apple.com/us/podcast/from-atari-to-sep-unleashing-the-power-of-performance/id1433496275?i=1000637907670&amp;theme=dark"></iframe>
+
+[Spotify](https://open.spotify.com/episode/3oYJH9hRiJa6GjjtEudDYq)
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/episode/3oYJH9hRiJa6GjjtEudDYq?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+[Google Podcasts](https://podcasts.google.com/feed/aHR0cHM6Ly90aGVkb3RuZXRjb3JlcG9kY2FzdC5saWJzeW4uY29tL3Jzcw/episode/MzYyMDhiZGYtNTI2My00ZjBkLWI0MjktZGVlOTQzMjBkNzIw?sa=X&ved=0CAUQkfYCahcKEwj4xKzzxv-CAxUAAAAAHQAAAAAQAQ)
 
 # Show Notes
 Below are edited notes I made before the recording of the podcast.
@@ -68,9 +78,7 @@ Below are edited notes I made before the recording of the podcast.
     * Disclaimer: Every CSV library has its own feature set. Every use case is
       different. For example, Sep supports common line endings supported by
       .NET, that is `\r` (MacOS), `\r\n` (Windows), `\n` (Linux, new MacOS),
-      while some only support `\r\n`, `\n`. On the other hand Sep doesn’t
-      support automatic escaping/unescaping of quotes or similar since I/we have
-      no need for that. Every library is different.
+      while some only support `\r\n`, `\n`. Every library is different.
 * Did you just async all the things?
     * There is **no `async`/`await`** in Sep currently, that is not currently
       supported. async/await is more about scaling related to IO operations and
@@ -186,6 +194,8 @@ Below are edited notes I made before the recording of the podcast.
     site.baseurl }}/2023/08/07/sep-0-2-0/)
   * [Sep 0.2.3 - .NET 8 and AVX-512 Preview]({{
     site.baseurl }}/2023/09/05/sep-0-2-3/)
+  * [Sep 0.3.0 - Unescape Support (still the Most Efficient .NET CSV Parser)]({{
+    site.baseurl }}/2023/11/27/sep-0-3-0/)
 * Other:
   * [Preview Features in .NET 6 – Generic
     Math](https://devblogs.microsoft.com/dotnet/preview-features-in-net-6-generic-math/)
