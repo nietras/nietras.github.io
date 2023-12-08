@@ -243,7 +243,7 @@ img {
 .site-description {
   margin: -5px 0 0 0;
   color: $gray;
-  font-size: 16px;
+  font-size: 12px;
 
   @include mobile {
     margin: 3px 0;
@@ -251,28 +251,27 @@ img {
 }
 
 nav {
-  float: right;
-  margin-top: 23px; // @TODO: Vertically middle align
+  float: left;
+  margin-top: 2px; // @TODO: Vertically middle align
   font-family: $fontDefault;
-  font-size: 18px;
+  font-size: 16px;
 
   @include mobile {
     float: none;
     margin-top: 9px;
     display: block;
-    font-size: 16px;
+    font-size: 14px;
   }
 
   a {
-    margin-left: 20px;
-    color: $darkGray;
-    text-align: right;
+    margin-right: 16px;
+    color: $blue;
+    text-align: left;
     font-weight: 300;
-    letter-spacing: 1px;
+    letter-spacing: 0px;
 
     @include mobile {
-      margin: 0 10px;
-      color: $blue;
+      margin: 0 4px;
     }
   }
 }
