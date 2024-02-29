@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Learning Activation Functions</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 0px;
+            margin: 0px;
+            text-align: left;
+            vertical-align: top;
+            width: 50%;            
+        }
+    </style>
+</head>
+<body>
+    <div id="plots-container"></div>
+
+    <script>
+        // Define activation functions
+        const activationFunctions = {
+            'Sigmoid': tf.sigmoid,
+            'Tanh': tf.tanh,
+            'ReLU': tf.relu,
+            'Leaky ReLU': x => tf.leakyRelu(x, 0.2),
+            'Softmax': tf.softmax
+        };
+
+        // Create data for plotting
+        const xValues = tf.linspace(-5, 5, 100).arraySync();
+
+        // Create table dynamically
+        const plotsContainer = document.getElementById('plots-container');
+        const table = document.createElement('table');
+
+        let index = 0;
+        let xaxisRange, yaxisRange;
+        for (const [name, activationFunction] of Object.entries(activationFunctions)) {
+            if (index % 2 === 0) {
+                // Create a new row for every two plots
+                var row = table.insertRow();
+            }
+            const cell = row.insertCell();
+            const divId = 'plot' + (index + 1);
+            const div = document.createElement('div');
+            div.id = divId;
+            cell.appendChild(div);
+
+            index++;
+        }
+
+        plotsContainer.appendChild(table);
+
+        index = 1;
+        // Now that the divs are created, create the plots
+        for (const [name, activationFunction] of Object.entries(activationFunctions)) {
+            const divId = 'plot' + index;
+            const yValues = tf.tidy(() => activationFunction(tf.tensor1d(xValues))).arraySync();
+            Plotly.newPlot(divId, [{
+                x: xValues,
+                y: yValues,
+                type: 'scatter',
+                mode: 'lines',
+                name: name
+            }], {
+                title: name,
+                xaxis: { title: 'x' },
+                yaxis: { title: 'y' },
+                margin: { t: 40, r: 40, b: 40, l: 40 }, // Set margin to zero
+                padding: { t: 0, r: 0, b: 0, l: 0 } // Set padding to zero
+            });
+
+            index++;
+        }
+    </script>
+</body>
+</html>
