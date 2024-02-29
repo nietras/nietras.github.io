@@ -24,15 +24,13 @@
 </head>
 <body>
     <div id="plots-container"></div>
-
     <script>
-        // Define activation functions
+        // Define activation functions and their derivatives
         const activationFunctions = {
-            'Sigmoid': tf.sigmoid,
-            'Tanh': tf.tanh,
-            'ReLU': tf.relu,
-            'Leaky ReLU': x => tf.leakyRelu(x, 0.2),
-            'Softmax': tf.softmax
+            'Sigmoid': { fn: tf.sigmoid, derivative: x => tf.sigmoid(x).mul(tf.sigmoid(x).neg().add(1)) },
+            'Tanh': { fn: tf.tanh, derivative: x => tf.tanh(x).pow(2).neg().add(1) },
+            'ReLU': { fn: tf.relu, derivative: x => tf.where(x.greater(0), tf.onesLike(x), tf.zerosLike(x)) },
+            'Leaky ReLU': { fn: x => tf.leakyRelu(x, 0.2), derivative: x => tf.where(x.greater(0), tf.onesLike(x), tf.fill(x.shape, 0.2)) }
         };
 
         // Create data for plotting
@@ -42,45 +40,52 @@
         const plotsContainer = document.getElementById('plots-container');
         const table = document.createElement('table');
 
-        let index = 0;
-        let xaxisRange, yaxisRange;
-        for (const [name, activationFunction] of Object.entries(activationFunctions)) {
-            if (index % 2 === 0) {
-                // Create a new row for every two plots
-                var row = table.insertRow();
-            }
-            const cell = row.insertCell();
-            const divId = 'plot' + (index + 1);
-            const div = document.createElement('div');
-            div.id = divId;
-            cell.appendChild(div);
+        for (const [name, functions] of Object.entries(activationFunctions)) {
+            const row = table.insertRow();
+            const cellFn = row.insertCell();
+            const cellDerivative = row.insertCell();
+            const divFn = document.createElement('div');
+            const divDerivative = document.createElement('div');
+            divFn.className = 'plot';
+            divDerivative.className = 'plot';
+            cellFn.appendChild(divFn);
+            cellDerivative.appendChild(divDerivative);
 
-            index++;
-        }
-
-        plotsContainer.appendChild(table);
-
-        index = 1;
-        // Now that the divs are created, create the plots
-        for (const [name, activationFunction] of Object.entries(activationFunctions)) {
-            const divId = 'plot' + index;
-            const yValues = tf.tidy(() => activationFunction(tf.tensor1d(xValues))).arraySync();
-            Plotly.newPlot(divId, [{
+            // Plot the activation function
+            const yValuesFn = tf.tidy(() => functions.fn(tf.tensor1d(xValues))).arraySync();
+            Plotly.newPlot(divFn, [{
                 x: xValues,
-                y: yValues,
+                y: yValuesFn,
                 type: 'scatter',
                 mode: 'lines',
                 name: name
             }], {
                 title: name,
                 xaxis: { title: 'x' },
-                yaxis: { title: 'y' },
-                margin: { t: 40, r: 40, b: 40, l: 40 }, // Set margin to zero
-                padding: { t: 0, r: 0, b: 0, l: 0 } // Set padding to zero
+                yaxis: { title: 'f(x)' }, // Changed label to f(x)
+                margin: { t: 40, r: 40, b: 40, l: 40 }, // Set margin to 40
             });
 
-            index++;
+            // Plot the derivative function if available
+            if (functions.derivative) {
+                const yValuesDerivative = tf.tidy(() => functions.derivative(tf.tensor1d(xValues))).arraySync();
+                Plotly.newPlot(divDerivative, [{
+                    x: xValues,
+                    y: yValuesDerivative,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: `Derivative of ${name}`
+                }], {
+                    title: `Derivative of ${name}`,
+                    xaxis: { title: 'x' },
+                    yaxis: { title: "f'(x)" }, // Changed label to f'(x)
+                    margin: { t: 40, r: 40, b: 40, l: 40 }, // Set margin to 40
+                });
+            }
+
         }
+
+        plotsContainer.appendChild(table);
     </script>
 </body>
 </html>
