@@ -4,6 +4,7 @@
 \usepackage[a4paper,margin=0cm]{geometry}
 
 % Common parameters
+\def\samples{1000} % Number of samples for domain resolution
 \def\domain{-5:5} % Domain for x values
 \def\ymin{-1} % Minimum value for y axis
 \def\ymax{6} % Maximum value for y axis
@@ -23,7 +24,7 @@
                 grid=both,
                 title={Sigmoid},
             ]
-            \addplot[blue, domain=\domain] {1/(1 + exp(-x))};
+            \addplot[blue, domain=\domain, samples=\samples] {1/(1 + exp(-x))};
             \addlegendentry{$\frac{1}{1 + e^{-x}}$}
             \end{axis}
         \end{tikzpicture}
@@ -36,7 +37,7 @@
                 grid=both,
                 title={Derivative of Sigmoid},
             ]
-            \addplot[blue, domain=\domain] {1/(1 + exp(-x))*(1-1/(1 + exp(-x)))};
+            \addplot[blue, domain=\domain, samples=\samples] {1/(1 + exp(-x))*(1-1/(1 + exp(-x)))};
             \addlegendentry{$\frac{e^{-x}}{(1 + e^{-x})^2}$}
             \end{axis}
         \end{tikzpicture} \\
@@ -48,7 +49,7 @@
                 grid=both,
                 title={ReLU},
             ]
-            \addplot[green, domain=\domain] {max(0,x)};
+            \addplot[green, domain=\domain, samples=\samples] {max(0,x)};
             \addlegendentry{$\max(0,x)$}
             \end{axis}
         \end{tikzpicture}
@@ -61,7 +62,7 @@
                 grid=both,
                 title={Derivative of ReLU},
             ]
-            \addplot[green, domain=\domain] {x < 0 ? 0 : 1};
+            \addplot[green, domain=\domain, samples=\samples] {x < 0 ? 0 : 1};
             \addlegendentry{$0$ if $x < 0$, $1$ if $x \geq 0$}
             \end{axis}
         \end{tikzpicture}
