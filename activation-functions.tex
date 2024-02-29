@@ -1,28 +1,26 @@
 \documentclass{article}
 \usepackage{pgfplots}
 \usepackage{amsmath}
+\usepackage[a4paper,margin=0cm]{geometry}
 
 % Common parameters
 \def\domain{-5:5} % Domain for x values
 \def\ymin{-1} % Minimum value for y axis
 \def\ymax{6} % Maximum value for y axis
-\def\legendstyle{legend pos=outer north east} % Legend position
+\def\dymin{-0.5} % Minimum value for y axis of derivatives
+\def\dymax{1.5} % Maximum value for y axis of derivatives
 
 \begin{document}
 
 \begin{table}[htbp]
     \centering
-    \begin{tabular}{|c|c|}
-        \hline
-        Activation Function & Derivative \\
-        \hline
+    \begin{tabular}{p{0.45\linewidth} p{0.45\linewidth}}
         \begin{tikzpicture}
             \begin{axis}[
                 xlabel={$x$},
                 ylabel={$f(x)$},
                 ymin=\ymin, ymax=\ymax,
                 grid=both,
-                \legendstyle,
                 title={Sigmoid},
             ]
             \addplot[blue, domain=\domain] {1/(1 + exp(-x))};
@@ -34,23 +32,20 @@
             \begin{axis}[
                 xlabel={$x$},
                 ylabel={$f'(x)$},
-                ymin=-0.5, ymax=1.5,
+                ymin=\dymin, ymax=\dymax,
                 grid=both,
-                \legendstyle,
                 title={Derivative of Sigmoid},
             ]
             \addplot[blue, domain=\domain] {1/(1 + exp(-x))*(1-1/(1 + exp(-x)))};
             \addlegendentry{$\frac{e^{-x}}{(1 + e^{-x})^2}$}
             \end{axis}
         \end{tikzpicture} \\
-        \hline
         \begin{tikzpicture}
             \begin{axis}[
                 xlabel={$x$},
                 ylabel={$f(x)$},
                 ymin=\ymin, ymax=\ymax,
                 grid=both,
-                \legendstyle,
                 title={ReLU},
             ]
             \addplot[green, domain=\domain] {max(0,x)};
@@ -62,18 +57,15 @@
             \begin{axis}[
                 xlabel={$x$},
                 ylabel={$f'(x)$},
-                ymin=-0.5, ymax=1.5,
+                ymin=\dymin, ymax=\dymax,
                 grid=both,
-                \legendstyle,
                 title={Derivative of ReLU},
             ]
             \addplot[green, domain=\domain] {x < 0 ? 0 : 1};
             \addlegendentry{$0$ if $x < 0$, $1$ if $x \geq 0$}
             \end{axis}
-        \end{tikzpicture} \\
-        \hline
+        \end{tikzpicture}
     \end{tabular}
-    \caption{Activation Functions and Their Derivatives}
 \end{table}
 
 \end{document}
