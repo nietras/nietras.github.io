@@ -8,17 +8,18 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         table {
+            margin-left: auto;
+            margin-right: auto;
             border-collapse: collapse;
-            width: 100%;
+            width: 80%;
         }
 
         th, td {
             border: 1px solid black;
             padding: 0px;
             margin: 0px;
-            text-align: left;
-            vertical-align: top;
-            width: 50%;            
+            text-align: center;
+            vertical-align: middle;
         }
     </style>
 </head>
@@ -34,7 +35,7 @@
         };
 
         // Create data for plotting
-        const xValues = tf.linspace(-5, 5, 100).arraySync();
+        const xValues = tf.linspace(-5, 5, 1000).arraySync();
 
         // Create table dynamically
         const plotsContainer = document.getElementById('plots-container');
@@ -47,7 +48,9 @@
             const divFn = document.createElement('div');
             const divDerivative = document.createElement('div');
             divFn.className = 'plot';
+            divFn.style = 'background-color: red;';
             divDerivative.className = 'plot';
+            divDerivative.style = 'background-color: blue;';
             cellFn.appendChild(divFn);
             cellDerivative.appendChild(divDerivative);
 
@@ -62,9 +65,10 @@
             }], {
                 title: name,
                 xaxis: { title: 'x' },
-                yaxis: { title: 'f(x)' }, // Changed label to f(x)
+                yaxis: { title: 'f(x)', range: [-1, 6] }, // Changed label to f(x)
                 margin: { t: 40, r: 40, b: 40, l: 40 }, // Set margin to 40
-            });
+                autosize: true
+            }, { responsive: true });
 
             // Plot the derivative function if available
             if (functions.derivative) {
@@ -78,9 +82,10 @@
                 }], {
                     title: `Derivative of ${name}`,
                     xaxis: { title: 'x' },
-                    yaxis: { title: "f'(x)" }, // Changed label to f'(x)
+                    yaxis: { title: "f'(x)", range: [-0.5, 1.5] }, // Changed label to f'(x)
                     margin: { t: 40, r: 40, b: 40, l: 40 }, // Set margin to 40
-                });
+                    autosize: true
+                }, { responsive: true });
             }
 
         }
