@@ -21,8 +21,9 @@ while (true)
     {
         generator.ComputeLogits();
         generator.GenerateNextToken();
-        var newTokens = generator.GetSequence(0);
-        var output = tokenizer.Decode(newTokens.Slice(newTokens.Length - 1, 1));
+        var outputTokens = generator.GetSequence(0);
+        var newToken = outputTokens.Slice(outputTokens.Length - 1, 1);
+        var output = tokenizer.Decode(newToken);
         Console.Write(output);
     }
     Console.WriteLine();

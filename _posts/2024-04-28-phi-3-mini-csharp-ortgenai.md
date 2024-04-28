@@ -2,8 +2,8 @@
 layout: post
 title: Phi-3-mini in <30 lines of C# with ONNX Runtime GenAI
 ---
-As part of the Phi-3 launch ([Introducing Phi-3: Redefining what’s possible with
-SLMs](https://azure.microsoft.com/en-us/blog/introducing-phi-3-redefining-whats-possible-with-slms/))
+As part of the [Phi-3
+launch](https://azure.microsoft.com/en-us/blog/introducing-phi-3-redefining-whats-possible-with-slms/)
 Microsoft has released optimized ONNX models as detailed in [ONNX Runtime
 supports Phi-3 mini models across platforms and
 devices](https://onnxruntime.ai/blogs/accelerating-phi-3) and published the
@@ -54,14 +54,15 @@ Create a new console app with `dotnet new console -n OnnxRuntimeGenAiDemo` and c
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.ML.OnnxRuntimeGenAI.Cuda" Version="0.2.0-rc4" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntimeGenAI.Cuda" 
+                      Version="0.2.0-rc4" />
   </ItemGroup>
 </Project>
 ```
 Then change `Program.cs` to:
 ```csharp
 using Microsoft.ML.OnnxRuntimeGenAI;
-var modelDirectory = args.Length == 1 ? args[0] :
+var modelDirectory = args.Length == 2 ? args[1] :
     @"C:\git\oss\Phi-3-mini-4k-instruct-onnx\cuda\cuda-int4-rtn-block-32";
 using var model = new Model(modelDirectory);
 using var tokenizer = new Tokenizer(model);
@@ -83,8 +84,9 @@ while (true)
     {
         generator.ComputeLogits();
         generator.GenerateNextToken();
-        var newTokens = generator.GetSequence(0);
-        var output = tokenizer.Decode(newTokens.Slice(newTokens.Length - 1, 1));
+        var outputTokens = generator.GetSequence(0);
+        var newToken = outputTokens.Slice(outputTokens.Length - 1, 1);
+        var output = tokenizer.Decode(newToken);
         Console.Write(output);
     }
     Console.WriteLine();
@@ -116,15 +118,17 @@ in a quick trial of that.
 Generally ONNX runtime and GenAI packaging and modularization of these is
 lacking, despite the architecture and design of ONNX runtime being highly
 modular and extensible. Ideally you should be able to pick and choose one or
-multiple execution providers and run on whatever provider is available. This is
-what we do for our ML computer vision needs but it has required us to custom
-built and custom package native packages for the ONNX Runtime. This is part of
-the `NtvLibs` packages I have published on nuget and for which I created a .NET
-tool to create. Something I have yet to detail in a blog post. If I'll ever find
-the time.
+multiple execution providers and run on whatever provider is available **at
+runtime**. This is what we do for our ML computer vision needs but it has
+required us to custom built and custom package native packages for the ONNX
+Runtime. This is part of the [NtvLibs](https://www.nuget.org/packages?q=NtvLibs)
+packages I have published on nuget and for which I created a .NET tool to create
+such packages. Including support for splitting large native library files across
+multiple nuget packages similar to how TorchSharp does this. Something I have
+yet to detail in a blog post. If I'll ever find the time.
 
 It's fairly easy to get Phi-3-mini to output garbage or loop forever. Some of
 this can be controlled via various parameters (via
 `generatorParams.SetSearchOption`) of which some are detailed in the [Python
 example
-code](https://github.com/microsoft/onnxruntime-genai/blob/main/examples/python/model-qa.py);
+code](https://github.com/microsoft/onnxruntime-genai/blob/main/examples/python/model-qa.py).
