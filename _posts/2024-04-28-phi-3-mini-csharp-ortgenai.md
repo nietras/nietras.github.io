@@ -137,3 +137,6 @@ prompt `test` for example. Some of this can be controlled via various parameters
 (via `generatorParams.SetSearchOption`) of which some are detailed in the
 [Python example
 code](https://github.com/microsoft/onnxruntime-genai/blob/main/examples/python/model-qa.py).
+
+Full solution and project can be downloaded as 
+![OnnxRuntimeGenAiDemo.zip]({{ site.baseurl }}/images/2024-04-28-phi-3-mini-ortgenai/2024-04-28-phi-3-mini-ortgenai.zip)
