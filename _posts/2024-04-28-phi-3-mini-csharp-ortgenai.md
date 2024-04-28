@@ -1,6 +1,6 @@
 ﻿---
 layout: post
-title: Phi-3-mini in <30 lines of C# with ONNX Runtime GenAI
+title: Phi-3-mini in 30 lines of C# with ONNX Runtime GenAI
 ---
 As part of the [Phi-3
 launch](https://azure.microsoft.com/en-us/blog/introducing-phi-3-redefining-whats-possible-with-slms/)
