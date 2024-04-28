@@ -95,8 +95,13 @@ while (true)
 And you are good to go and can run it with `dotnet run
 .\OnnxRuntimeGenAiDemo.csproj`, which may output something like:
 ```
-[0;93m2024-04-28 09:30:55.0208088 [W:onnxruntime:onnxruntime-genai, session_state.cc:1166 onnxruntime::VerifyEachNodeIsAssignedToAnEp] Some nodes were not assigned to the preferred execution providers which may or may not have an negative impact on performance. e.g. ORT explicitly assigns shape related ops to CPU to improve perf.[m
-[0;93m2024-04-28 09:30:55.0262077 [W:onnxruntime:onnxruntime-genai, session_state.cc:1168 onnxruntime::VerifyEachNodeIsAssignedToAnEp] Rerunning with verbose output on a non-minimal build will show node assignments.[m
+[0;93m2024-04-28 09:30:55.0208088 
+[W:onnxruntime:onnxruntime-genai, session_state.cc:1166 onnxruntime::VerifyEachNodeIsAssignedToAnEp] 
+Some nodes were not assigned to the preferred execution providers which may or may not have an negative 
+impact on performance. e.g. ORT explicitly assigns shape related ops to CPU to improve perf.
+[0;93m2024-04-28 09:30:55.0262077 
+[W:onnxruntime:onnxruntime-genai, session_state.cc:1168 onnxruntime::VerifyEachNodeIsAssignedToAnEp] 
+Rerunning with verbose output on a non-minimal build will show node assignments.
 Prompt: What is the capital of Denmark?
 
  The capital of Denmark is Copenhagen.
@@ -127,8 +132,8 @@ such packages. Including support for splitting large native library files across
 multiple nuget packages similar to how TorchSharp does this. Something I have
 yet to detail in a blog post. If I'll ever find the time.
 
-It's fairly easy to get Phi-3-mini to output garbage or loop forever. Some of
-this can be controlled via various parameters (via
-`generatorParams.SetSearchOption`) of which some are detailed in the [Python
-example
+It's fairly easy to get Phi-3-mini to output garbage or loop forever. Just
+prompt `test` for example. Some of this can be controlled via various parameters
+(via `generatorParams.SetSearchOption`) of which some are detailed in the
+[Python example
 code](https://github.com/microsoft/onnxruntime-genai/blob/main/examples/python/model-qa.py).
