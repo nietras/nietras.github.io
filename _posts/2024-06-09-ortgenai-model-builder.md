@@ -1,39 +1,23 @@
 ﻿---
 layout: post
-<<<<<<< HEAD
 title: Export and Quantize Models like Llama-3-8B-Instruct with Model Builder for ONNX Runtime GenAI
-=======
-title: Export (and Quantize) Llama-3-8B-Instruct with Model Builder for ONNX Runtime GenAI
->>>>>>> 4d6d8271e2301cd60e3516bc3e78863e670d0206
 ---
 Previously in [Phi-3-mini in 30 lines of C# with ONNX Runtime GenAI]({{
 site.baseurl }}/2024/04/28/phi-3-mini-csharp-ortgenai/) and [Phi-3-vision in 50
 lines of C# with ONNX Runtime GenAI]({{ site.baseurl
 }}/2024/06/05/phi-3-vision-csharp-ortgenai/) I showed how easy it was to run
 small Phi-3 models locally in just a few lines of C#. In this blog post I show
-<<<<<<< HEAD
 how you can export another model, in this case [Meta's
 Llama-3-8B-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct),
 with Model Builder for ONNX Runtime GenAI.
-=======
-how you can export another model, in this case Meta's Llama-3-8B-Instruct, with
-Model Builder for ONNX Runtime GenAI.
->>>>>>> 4d6d8271e2301cd60e3516bc3e78863e670d0206
 
 This basically follows the guide [Generate models using Model
 Builder](https://onnxruntime.ai/docs/genai/howto/build-model.html) that details
 how to use the Python script
-<<<<<<< HEAD
 [builder.py](https://github.com/microsoft/onnxruntime-genai/blob/main/src/python/py/models/builder.py)
 to export models to ONNX format.
 
 Ensure Python is installed:
-=======
-[`builder.py`](https://github.com/microsoft/onnxruntime-genai/blob/main/src/python/py/models/builder.py)
-to export models to ONNX format.
-
-Ensure Python is installed like below:
->>>>>>> 4d6d8271e2301cd60e3516bc3e78863e670d0206
 ```
 python --version
 Python 3.12.0
@@ -62,23 +46,13 @@ huggingface-cli login
 ```
 This will ask for token:
 ```
-<<<<<<< HEAD
 To login, `huggingface_hub` requires a token generated 
-=======
-    To login, `huggingface_hub` requires a token generated 
->>>>>>> 4d6d8271e2301cd60e3516bc3e78863e670d0206
 from https://huggingface.co/settings/tokens .
 ```
 Which can be created at the link given above with a screenshot shown below:
 
-<<<<<<< HEAD
 ![Huggingface Token]({{ site.baseurl
 }}/images/2024-06-ortgenai-model-builder/huggingface-token.png)
-=======
-FIX LINK
-![Huggingface
-Token](../images/2024-06-ortgenai-model-builder/huggingface-token.png)
->>>>>>> 4d6d8271e2301cd60e3516bc3e78863e670d0206
 
 Paste the token and perhaps add it to git credentials.
 ```
@@ -95,12 +69,7 @@ Login successful
 
 Now you can run the builder. Initially I wanted to try out the new
 [Qwen2](https://github.com/QwenLM/Qwen2) SLMs. However, the model builder only
-<<<<<<< HEAD
 works for a predefined list of model architectures and names as detailed at
-=======
-works for a predefined list of model architectures and names as detailed at in
-the
->>>>>>> 4d6d8271e2301cd60e3516bc3e78863e670d0206
 [builder.py#L2239-L2264](https://github.com/microsoft/onnxruntime-genai/blob/7c369417907d52f62dc2b8aa6b691b695aa5fc16/src/python/py/models/builder.py#L2239-L2264).
 Instead, I though I'd try the Llama-3-8B-Instruct model from Meta. You have to
 ask for access to it so I did that.
@@ -123,7 +92,6 @@ This takes a while to run. For full log details see bottom of this post. The
 result is a directory `Meta-Llama-3-8B-Instruct-onnx-cuda-int4` with the ONNX
 model and quantized weights:
 ```
-<<<<<<< HEAD
     Length Name
     ------ ----
       1747 genai_config.json
@@ -135,17 +103,12 @@ model and quantized weights:
 ```
 Hence, the 8B parameter model (~16 GB data for f16) has been quantized to ~5.3GB
 in size, so a bit larger than the theoretical 4x smaller going from f16 to int4.
-=======
-TO DO ADD LISTING OF THE FILES
-```
->>>>>>> 4d6d8271e2301cd60e3516bc3e78863e670d0206
 
 Based on the code in my previous blog post [Phi-3-mini in 30 lines of C# with
 ONNX Runtime GenAI]({{ site.baseurl }}/2024/04/28/phi-3-mini-csharp-ortgenai/)
 you can now run the model with ONNX Runtime GenAI by simply pointing at that
 directory. For example:
 ```
-<<<<<<< HEAD
 dotnet run -- Meta-Llama-3-8B-Instruct-onnx-cuda-int4
 Prompt: Who are you?
 Processing...
@@ -168,12 +131,6 @@ much same blocks repeated.
 }}/images/2024-06-ortgenai-model-builder/llama-3-8B-model-start.png)
 
 PPS: Full log of model builder run:
-=======
-TODO EXAMPLE
-```
-
-Full log of model builder run:
->>>>>>> 4d6d8271e2301cd60e3516bc3e78863e670d0206
 ```
 python -m onnxruntime_genai.models.builder -m "meta-llama/Meta-Llama-3-8B-Instruct" -o Meta-Llama-3-8B-Instruct-onnx-cuda-int4 -p int4 -e cuda -c cache
 Valid precision + execution provider combinations are: FP32 CPU, FP32 CUDA, FP16 CUDA, FP16 DML, INT4 CPU, INT4 CUDA, INT4 DML
