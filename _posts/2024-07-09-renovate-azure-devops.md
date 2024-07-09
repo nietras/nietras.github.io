@@ -32,7 +32,8 @@ to avoid since this would require manual steps to keep that active or updating
 it.
 
 ## Setting Up Renovate
-First, a few definitions. Replace these with your own.
+First, a few definitions. Replace these with your own. You may have to replace
+`visualstudio.com` too.
 
 * `<ORG>` - used as a placeholder for your organization in Azure DevOps e.g.
   `https://<ORG>.visualstudio.com`
