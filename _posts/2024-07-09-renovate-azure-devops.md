@@ -136,7 +136,8 @@ steps:
       VSS_NUGET_ACCESSTOKEN: $(VSS_NUGET_ACCESSTOKEN)
       LOG_LEVEL: debug
 ```
-
+Note that this specifies a specific version of Renovate with `npx
+renovate@37.412.2`, and that you then have to manually update this.
 
 `config.js` is shown below. This contains our centrally defined configuration
 for Renovate, which includes enabling nuget package management and notable also
