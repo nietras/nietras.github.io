@@ -6,7 +6,7 @@ title: Digest - Microsoft Build 2021
 Digest of the free virtual event at 
 [https://mybuild.microsoft.com/home](https://mybuild.microsoft.com/home)
 held May 25-27, 2021 plus a bit more. Previous year digest can be found at 
-[Digest - Microsoft Build 2020]({{ site.baseurl }}/2020/06/07/Microsoft-build-2020/)
+[Digest - Microsoft Build 2020]({{ site.baseurl }}/2020/06/07/microsoft-build-2020/)
 for more content 😁. Be sure to check out the accompanying blog post on
 [C# 10 - `record struct` Deep Dive & Performance Implications]({{ site.baseurl }}/2021/06/14/csharp-10-record-struct/) 
 too!

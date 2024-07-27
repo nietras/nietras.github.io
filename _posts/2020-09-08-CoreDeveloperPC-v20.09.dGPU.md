@@ -73,8 +73,8 @@ not a lot of choice if you are doing deep learning. This is mostly a software
 question. 
 
 ## Prices
-Prices below are either from [www.newegg.com](www.newegg.com) (US) or 
-[www.edbpriser.dk](www.edbpriser.dk)/[www.pricerunner.dk](www.pricerunner.dk) (DK)
+Prices below are either from [www.newegg.com](https://www.newegg.com) (US) or 
+[www.edbpriser.dk](https://www.edbpriser.dk)/[www.pricerunner.dk](https://www.pricerunner.dk) (DK)
 for both my American and Danish friends.
 Prices are approximate and from the time of writing.
 Danish prices incl. 25% VAT.
@@ -292,7 +292,7 @@ training/inference. I haven't seen confirmation of this yet, though.
 
 |Component      |Selection           |USD    |DKK    |
 |----------|:-------------------|------:|-------:|
-|[CPU]() | [AMD Ryzen™ 7 3700X](https://www.amd.com/en/products/cpu/amd-ryzen-7-3700x) | [(a) 290](https://www.newegg.com/amd-ryzen-7-3700x/p/N82E16819113567)| [2300](https://www.edbpriser.dk/produkt/amd-ryzen-7-3700x-3-6-ghz-processor/?searched=3700X)|
+|[CPU]() | [AMD Ryzen™ 7 3700X](https://www.amd.com/en/product/8446) | [(a) 290](https://www.newegg.com/amd-ryzen-7-3700x/p/N82E16819113567)| [2300](https://www.edbpriser.dk/produkt/amd-ryzen-7-3700x-3-6-ghz-processor/?searched=3700X)|
 |[Motherboard]() | [Gigabyte B550M DS3H](https://www.gigabyte.com/Motherboard/B550M-DS3H-rev-10#kf) | [95](https://www.newegg.com/gigabyte-b550m-ds3h/p/N82E16813145210)| [730](https://www.edbpriser.dk/produkt/gigabyte-b550m-ds3h)|
 |**Total** |-|**385**|**3030**|
 
@@ -330,7 +330,7 @@ This includes fan stop if temperatures are low. Fans will last longer if they do
 spin when not needed.
 
 Note you cannot buy AMD Zen 2 APUs (that is CPU with integrated GPU), 
-like the [4700G](https://www.amd.com/en/products/apu/amd-ryzen-7-4700g) 
+like the [4700G](https://www.amd.com/en/support/downloads/drivers.html/processors/ryzen/ryzen-4000-series/amd-ryzen-7-4700g.html#amd_support_product_spec) 
 for do-it-yourself PCs yet. These are only OEM, so if you don't really 
 need a high-end GPU you still have to buy some form of GPU to connect displays. 
 As you can see below the motherboard does have DVI and HDMI connectors, 
@@ -365,7 +365,7 @@ but those only work if the CPU has an integrated GPU.
 
 To be fair we should be using the [i7-10700F](https://ark.intel.com/content/www/us/en/ark/products/199318/intel-core-i7-10700f-processor-16m-cache-up-to-4-80-ghz.html)
 without [iGPU](https://en.wikipedia.org/wiki/Graphics_processing_unit#Integrated_graphics) when comparing to
-the AMD 3700X but this I could not find on [newegg](newegg.com) and 
+the AMD 3700X but this I could not find on [newegg](https://www.newegg.com) and 
 the price difference isn't that big, it would reduce the 
 price difference between AMD and Intel by about $15/DKK 100,-
 
@@ -490,7 +490,7 @@ I recommend the AMD Ryzen 7 3700X based system due to it being more future proof
 |[SSD](https://en.wikipedia.org/wiki/Solid-state_drive) [NVMe](https://en.wikipedia.org/wiki/NVM_Express) | [ADATA XPG SX8200 Pro 1 TB](https://www.xpg.com/us/feature/583/) | [140](https://www.newegg.com/xpg-sx8200-pro-1tb/p/0D9-0017-000W4)| [1030](https://www.edbpriser.dk/produkt/adata-xpg-sx8200-pro/)|
 |[GPU]() | [Gigabyte GeForce RTX 2060 SUPER WINDFORCE OC 8G](https://www.gigabyte.com/Graphics-Card/GV-N206SWF2OC-8GD-rev-20#kf)| [400](https://www.newegg.com/gigabyte-geforce-rtx-2060-super-gv-n206swf2oc-8gd/p/N82E16814932174) | [3200](https://www.edbpriser.dk/produkt/gigabyte-geforce-rtx-2060-super-windforce-oc-8g/)|
 |**Common** |-|**650**|**5080**|
-|[CPU]() | [AMD Ryzen™ 7 3700X](https://www.amd.com/en/products/cpu/amd-ryzen-7-3700x) | [290](https://www.newegg.com/amd-ryzen-7-3700x/p/N82E16819113567)| [2300](https://www.edbpriser.dk/produkt/amd-ryzen-7-3700x-3-6-ghz-processor/?searched=3700X)|
+|[CPU]() | [AMD Ryzen™ 7 3700X](https://www.amd.com/en/product/8446) | [290](https://www.newegg.com/amd-ryzen-7-3700x/p/N82E16819113567)| [2300](https://www.edbpriser.dk/produkt/amd-ryzen-7-3700x-3-6-ghz-processor/?searched=3700X)|
 |[Motherboard]() | [Gigabyte B550M DS3H](https://www.gigabyte.com/Motherboard/B550M-DS3H-rev-10#kf) | [95](https://www.newegg.com/gigabyte-b550m-ds3h/p/N82E16813145210)| [730](https://www.edbpriser.dk/produkt/gigabyte-b550m-ds3h)|
 |**AMD** |-|**385**|**3030**|
 |**AMD Full** |-|**1300**|**10050**|

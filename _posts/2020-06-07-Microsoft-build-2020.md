@@ -25,7 +25,7 @@ System.Console.WriteLine(r);
 public data struct Point2D(nint X, nint Y);
 ```
 Maybe! This doesn't compile using the build 2020 demo compiler on 
-the awesome [sharplab.io](sharplab.io) see [example](https://sharplab.io/#v2:EYLgJgpgtg9gzgWmAVwJYBswIEwAY8A0YIA1AD4BuAhgE4AEADnQLx0B2EA7nQAoypsALtgAidAN50AGizoBGAnQCas7HQC+AbgCwAKGr0AjrKadUggBYTpsgMwaduvgOEiA/HXqtDAOgCihshU6HAAFAwAlHQeTCDsyOjojgACcj6pAJyhNBGOesn2YFSCVHRwgjTIAMaCvPxCoqFsLtKKzULKuUA==). 
+the awesome [sharplab.io](https://sharplab.io) see [example](https://sharplab.io/#v2:EYLgJgpgtg9gzgWmAVwJYBswIEwAY8A0YIA1AD4BuAhgE4AEADnQLx0B2EA7nQAoypsALtgAidAN50AGizoBGAnQCas7HQC+AbgCwAKGr0AjrKadUggBYTpsgMwaduvgOEiA/HXqtDAOgCihshU6HAAFAwAlHQeTCDsyOjojgACcj6pAJyhNBGOesn2YFSCVHRwgjTIAMaCvPxCoqFsLtKKzULKuUA==). 
 `Main` code comes between any 
 `using`s and type/method declarations. 
 Everything is early and syntax and naming can still change.
@@ -46,7 +46,7 @@ be great for that. Below a list of potential C# 9 features:
  * Top-level programs
  * Improved pattern matching
 
-Current proposals considered for C# 9 can be found at [csharplang/milestone/15](https://github.com/dotnet/csharplang/milestone/15).
+Current proposals considered for C# 9 can be found at [proposals/csharp-9.0](https://github.com/dotnet/csharplang/tree/main/proposals/csharp-9.0).
 
 ***
 ### [Announcing .NET 5 Preview 4 and our journey to one .NET](https://devblogs.microsoft.com/dotnet/announcing-net-5-preview-4-and-our-journey-to-one-net/)
