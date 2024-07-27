@@ -604,14 +604,13 @@ There are lots of great features coming!
 
 
 ## Appendix: Source code and benchmark results
-[Source code]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/) can be found at:
+Source code can be found at:
  * [RecordStructBenchmark.sln]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/RecordStructBenchmark.sln)
  * [RecordStructBenchmark.csproj]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/RecordStructBenchmark.csproj)
  * [Program.cs]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/Program.cs)
  * [nuget.config]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/nuget.config)
 
-[Benchmark results]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/BenchmarkDotNet.Artifacts/results/)
- can be found at:
+Benchmark results can be found at:
  * [EqualsBench-report.html]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/BenchmarkDotNet.Artifacts/results/EqualsBench-report.html),
    [EqualsBench-asm]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/BenchmarkDotNet.Artifacts/results/EqualsBench-asm)
  * [GetHashCodeBench-report.html]({{ site.baseurl }}/images/2021-06-csharp-10-record-struct/BenchmarkDotNet.Artifacts/results/GetHashCodeBench-report.html),

@@ -298,7 +298,7 @@ Must watch!
 ### [Increase your .NET Productivity with Visual Studio](https://youtu.be/Ok-csh6FLL0)
 [![Increase your .NET Productivity with Visual Studio](https://img.youtube.com/vi/Ok-csh6FLL0/0.jpg)](https://youtu.be/Ok-csh6FLL0)
 
-**Summary:** [Kendra Havens](@gotheap) and [Mika Dumont](@mika_dumont)
+**Summary:** [Kendra Havens](https://twitter.com/gotheap) and [Mika Dumont](https://twitter.com/mika_dumont)
 give a quick talk about some great additions to Visual Studio 
 to boost your .NET productivity. Covering such things as:
 
@@ -363,7 +363,7 @@ And while we are at it [Rich Lander](https://twitter.com/runfaster2000) has a
 series of [conversations about .NET](https://devblogs.microsoft.com/dotnet/category/conversations/).
 
 ## Download Videos for Offline Viewing
-[dayngo.com](dayngo.com) doesn't appear to have the event listed yet but you can try checking at:
+[dayngo.com](https://dayngo.com) doesn't appear to have the event listed yet but you can try checking at:
 
 [https://dayngo.com/channel9/](https://dayngo.com/channel9/)
 
