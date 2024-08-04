@@ -1,6 +1,6 @@
 ﻿---
 layout: post
-title: Sep 0.5.3 vs ML.NET 3.0.1 - Up to 2.7x faster & 8.9x bytes less allocated
+title: Sep 0.5.3 vs ML.NET 3.0.1 - Up to 2.7x faster & 8.9x less bytes allocated
 ---
 
 Since my last post on Sep ([Sep 0.4.0-0.5.2 - Insanely Fast Single- &
@@ -73,14 +73,10 @@ public List<float[]> MLNET()
     var context = new MLContext();
     var dataView = context.Data.LoadFromTextFile<Features>(
         _filePath, separatorChar: ';', hasHeader: true);
-    var featuresEnumerable = context.Data
-        .CreateEnumerable<Features>(dataView, reuseRowObject: false);
-
-    var featuresList = new List<float[]>();
-    foreach (var features in featuresEnumerable)
-    {
-        featuresList.Add(features.FeaturesVector);
-    }
+    var featuresList = context.Data
+        .CreateEnumerable<Features>(dataView, reuseRowObject: false)
+        .Select(f => f.FeaturesVector)
+        .ToList();
     return featuresList;
 }
 
@@ -214,14 +210,10 @@ public class Bench
         var context = new MLContext();
         var dataView = context.Data.LoadFromTextFile<Features>(
             _filePath, separatorChar: ';', hasHeader: true);
-        var featuresEnumerable = context.Data
-            .CreateEnumerable<Features>(dataView, reuseRowObject: false);
-
-        var featuresList = new List<float[]>();
-        foreach (var features in featuresEnumerable)
-        {
-            featuresList.Add(features.FeaturesVector);
-        }
+        var featuresList = context.Data
+            .CreateEnumerable<Features>(dataView, reuseRowObject: false)
+            .Select(f => f.FeaturesVector)
+            .ToList();
         return featuresList;
     }
 
