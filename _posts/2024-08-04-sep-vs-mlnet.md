@@ -21,13 +21,13 @@ the same target usage scenario namely machine learning.
 ## CSV Data
 The benchmark case is pretty simple. It compares parsing a CSV file with 1000,
 10000 and 100000 rows and 1000 columns of random floating point values from a
-file as detailed in table below.
+file as detailed in the table below.
 
-| Rows   | Cols | Total Floats | File Size [MB] |
-|------- |----- |----------:|-----:|
-| 1000   | 1000 |   1000000 |   10 |
-| 10000  | 1000 |  10000000 |  101 |
-| 100000 | 1000 | 100000000 | 1013 |
+| Rows    | Cols | Total Floats | File Size [MB] |
+|--------:|----- |-------------:|------:|
+|   1,000 | 1000 |    1,000,000 |    10 |
+|  10,000 | 1000 |   1,000,0000 |   101 |
+| 100,000 | 1000 |  10,000,0000 | 1,013 |
 
 Below exemplifies the file contents. 
 
@@ -42,10 +42,10 @@ C0;C1;C2;C3;C4;C5;C6...
 Note that this contains a header but this is not actually used in the benchmark.
 This is because ML.NET requires a class with a `LoadColumnName` attribute to map
 the columns to a class property, and Sep does not require this. Using attributes
-for this kind of mapping is very constrained as it attributes have to be
-statically defined (`const`). This is bad for many reasons, it entirely couples
-code to dynamically changing data. Maybe there are ways around this in ML.NET
-but I have not found them.
+for this kind of mapping is very constrained as attributes have to be statically
+defined (`const`). This is problematic for many reasons e.g. it couples code to
+dynamically changing data. Maybe there are ways around this in ML.NET but I have
+not found them.
 
 ## Code
 This will be more concrete when looking at the code needed to parse the file.
@@ -57,7 +57,7 @@ public List<float[]> Sep__()
 {
     using var reader = Sep.Reader().FromFile(_filePath);
     var featuresList = reader.ParallelEnumerate(
-        r => r[..].ParseToArray<float>()).ToList();
+        row => row[..].ParseToArray<float>()).ToList();
     return featuresList;
 }
 ```
@@ -98,16 +98,17 @@ Again keep in mind ML.NET has a lot of features related to data loading and
 management in the context of the ML pipeline it is used.
 
 Often, we would want to dynamically load two float arrays e.g. ground truth and
-actual results or similar. And often we would want that to be done dynamically
-based on header column names and similar. I am not sure how one would do that
-with ML.NET. With Sep this is easy.
+actual results or similar and we would want that to be done dynamically based on
+header column names. I am not sure how one would do that with ML.NET. With Sep
+this is easy as one can simply access multiple columns with a string array
+defining column names or similar.
 
 ## Benchmarks
 Results using [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet) are
 shown below. Sep is about 2.7x faster and allocates 8.9x less bytes than ML.NET
-for 1000 rows and 1000 columns. As more there are more rows the difference
-becomes less, but Sep is still significantly faster and allocates a lot less
-memory for 1 million rows and a 1GB file.
+for 1000 rows and 1000 columns. As there are more rows the difference becomes
+less, but Sep is still significantly faster and allocates a lot less memory for
+100 thousand rows and a 1GB file.
 
 ```text
 BenchmarkDotNet v0.13.12, Windows 10 (10.0.19044.3086/21H2)
@@ -116,18 +117,16 @@ AMD Ryzen 9 5950X, 1 CPU, 32 logical and 16 physical cores
   [Host]     : .NET 8.0.7 (8.0.724.31311), X64 RyuJIT AVX2
   Job-DEFUWP : .NET 8.0.7 (8.0.724.31311), X64 RyuJIT AVX2
 
-MaxIterationCount=9  MinIterationCount=3
-
-| Method | Rows   | Cols | Mean         | Ratio | RatioSD | Allocated  | Alloc Ratio |
-|------- |------- |----- |-------------:|------:|--------:|-----------:|------------:|
-| Sep__  | 1000   | 1000 |     9.393 ms |  1.00 |    0.00 |    4.19 MB |        1.00 |
-| MLNET  | 1000   | 1000 |    25.543 ms |  2.73 |    0.08 |   37.12 MB |        8.85 |
-|        |        |      |              |       |         |            |             |
-| Sep__  | 10000  | 1000 |   103.041 ms |  1.00 |    0.00 |   39.35 MB |        1.00 |
-| MLNET  | 10000  | 1000 |   200.062 ms |  1.97 |    0.14 |  269.51 MB |        6.85 |
-|        |        |      |              |       |         |            |             |
-| Sep__  | 100000 | 1000 |   950.624 ms |  1.00 |    0.00 |   389.9 MB |        1.00 |
-| MLNET  | 100000 | 1000 | 1,715.758 ms |  1.80 |    0.14 | 2446.85 MB |        6.28 |
+| Method | Rows   | Cols | Mean [ms] | Ratio | Alloc [MB]| Alloc Ratio |
+|------- |------- |----- |----------:|------:|----------:|------------:|
+| Sep__  |   1000 | 1000 |     9.393 |  1.00 |      4.19 |        1.00 |
+| MLNET  |   1000 | 1000 |    25.543 |  2.73 |     37.12 |        8.85 |
+|        |        |      |           |       |           |             |
+| Sep__  |  10000 | 1000 |   103.041 |  1.00 |     39.35 |        1.00 |
+| MLNET  |  10000 | 1000 |   200.062 |  1.97 |    269.51 |        6.85 |
+|        |        |      |           |       |           |             |
+| Sep__  | 100000 | 1000 |   950.624 |  1.00 |     389.9 |        1.00 |
+| MLNET  | 100000 | 1000 | 1,715.758 |  1.80 |   2446.85 |        6.28 |
 ```
 
 ## Full Source Code
@@ -175,7 +174,8 @@ public class Bench
     [GlobalSetup]
     public void GlobalSetup()
     {
-        var colNames = Enumerable.Range(0, Cols).Select(i => $"C{i}").ToArray();
+        var colNames = Enumerable.Range(0, Cols)
+            .Select(i => $"C{i}").ToArray();
         _filePath = @$"B:/Features_{Rows}_{Cols}.csv";
         if (!File.Exists(_filePath))
         {
