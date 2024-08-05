@@ -7,7 +7,7 @@ Since my last post on Sep ([Sep 0.4.0-0.5.2 - Insanely Fast Single- &
 Multi-threaded .NET CSV Parsing (up to 35x faster than CsvHelper)]({{
 site.baseurl }}/2024/05/05/sep-0-4-0-0-5-2/)) not much has happened with Sep,
 besides a minor [0.5.3](https://github.com/nietras/Sep/releases/tag/v0.5.3)
-release adding a simple ` SepReaderHeader.TryIndexOf`.
+release adding a simple `SepReaderHeader.TryIndexOf` method.
 
 In this post I wanted to compare Sep to
 [ML.NET](https://github.com/dotnet/machinelearning) an open source and
