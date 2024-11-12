@@ -11,6 +11,7 @@ package.json
 .vs
 bin
 obj
+*.bkp
 **/BenchmarkDotNet.Artifacts/*.log
 /images/2021-11-bendingdotnet-common-flat-build-output/build
 /images/2022-01-bendingdotnet-move-native-libraries-to-sub-directory/build
