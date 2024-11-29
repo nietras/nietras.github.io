@@ -16,6 +16,7 @@ Source: [pixabay](https://pixabay.com/photos/spoon-spoon-bending-bent-1717469/)
 * [Corrected Common Flat Build Output]({{ site.baseurl }}/2022/01/15/bendingdotnet-corrected-common-flat-build-output)
 * [Improved Common Flat Build Output]({{ site.baseurl }}/2022/01/24/bendingdotnet-improved-common-flat-build-output)
 * [Compiling 65,536 Programs with Roslyn to Find Valid Identifier Separator char's... then just use `SyntaxFacts.IsValidIdentifier` 🤦‍]({{ site.baseurl }}/2022/10/03/bendingdotnet-valid-identifier-separator-chars)
+* [ReadLine Patterns]({{ site.baseurl }}/2024/11/29/bendingdotnet-readline)
 
 
 [//]: # * []({{ site.baseurl }}/)
