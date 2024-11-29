@@ -2,18 +2,20 @@
 layout: post
 title: Bending .NET - ReadLine Patterns
 ---
-or [how to ](https://www.youtube.com/watch?v=HwhB5uCaj3Y).
+or [how to make it rain so puny humans get soaked](https://www.youtube.com/watch?v=YBQLEhzlYX8).
 
 In this post, part of the [Bending .NET]({{ site.baseurl
 }}/2021/11/18/bendingdotnet-series) series, I take a quick look at code patterns
-for reading lines from `TextReader` using
-[`ReadLine`](https://learn.microsoft.com/en-us/dotnet/api/system.io.stringreader.readline?view=net-9.0),
-which has existed from the very beginning of .NET (.NET Framework 1.1 as far as
-I can tell) based on a pattern of returning `null" when there are no more lines
-to read. 
+for reading lines from
+[`TextReader`](https://learn.microsoft.com/en-us/dotnet/api/system.io.textreader?view=net-9.0)
+using
+[`ReadLine`](https://learn.microsoft.com/en-us/dotnet/api/system.io.textreader.readline?view=net-9.0),
+which has existed from the early beginning of .NET (Framework 1.1 as far as I
+can tell) based on a pattern of returning `null` when there are no more lines to
+read. 
 
-![Old wood horizontal lines]({{ site.baseurl }}/images/2024-11-bendingdotnet-readline/Old_wood_horizontal_lines_-_Public_Domain.jpg)
-Source: [wikimedia](https://commons.wikimedia.org/wiki/File:Old_wood_horizontal_lines_-_Public_Domain.jpg)
+![Digital rain animation ala The Matrix]({{ site.baseurl }}/images/2024-11-bendingdotnet-readline/Digital_rain_animation_small_letters_clear.gif)
+Source: [wikimedia](https://upload.wikimedia.org/wikipedia/commons/1/17/Digital_rain_animation_small_letters_clear.gif)
 
 
 
