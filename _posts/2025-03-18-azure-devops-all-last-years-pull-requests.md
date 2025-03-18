@@ -65,7 +65,6 @@ foreach ($project in $projects.value) {
     $prUrl = "https://dev.azure.com/$organization/$projectName/_apis/git/pullrequests?searchCriteria.status=all&`$top=$top&api-version=7.1-preview.1"
     $prs = Invoke-RestMethod -Uri $prUrl -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)} -Method Get
 
-    # Filter PRs from the last year where createdBy.displayName contains "ntr" or "Niels T"
     $filteredPRs = $prs.value | Where-Object {
         $_.creationDate -ge $lastYear -and ( $_.createdBy.displayName -match $authorInitials -or $_.createdBy.displayName -match $fullName )
     } | ForEach-Object {
