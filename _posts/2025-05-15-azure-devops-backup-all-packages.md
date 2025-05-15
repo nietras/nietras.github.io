@@ -15,6 +15,8 @@ when no new packages found. No further details are provided here, but the script
 is available below, I thought perhaps someone might find it useful as a
 reference and the code is pretty straighforward.
 
+Note that this only works for *organization* feeds not project feeds.
+
 ```yml
 trigger: none
 
