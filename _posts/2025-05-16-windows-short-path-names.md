@@ -9,6 +9,19 @@ paths are, how they work in NTFS, the difference between local and UNC paths,
 why browsers and some tools fail with long network paths, and how to
 programmatically obtain short file names for both local and UNC files.
 
+## Use Case and Problem
+
+Machine learning pipeline with metrics, HTML reports and similar that point to
+images on network share. Long file paths (longer than 260 characters) which are
+not supported by many tools, including browsers. 
+
+[SHOWCASE BOX PLOTS WITH IMAGES]
+
+A bit more description on setup and use case and demo problem by **Copy as
+path** to notepad for example. This will the 8.3 short file names path.
+
+[Long file path handling not working on Windows](https://issues.chromium.org/issues/40134281)
+
 ## What Are Windows 8.3 Short Paths?
 
 Windows 8.3 short paths (also called "short file names" or SFN) are a legacy
