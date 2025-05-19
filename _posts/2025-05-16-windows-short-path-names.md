@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to Get Windows 8.3 Short File Names Using FindFirstFile (UNC) and GetShortPathName (local)
+title: How to Get Windows 8.3 Short File Names Using FindFirstFileW (UNC) and GetShortPathName (local)
 ---
 
 Working with files and directories on Windows, especially on network shares,
@@ -9,18 +9,95 @@ paths are, how they work in NTFS, the difference between local and UNC paths,
 why browsers and some tools fail with long network paths, and how to
 programmatically obtain short file names for both local and UNC files.
 
+First, a bit of color on why we need this for our machine learning workflow.
+
 ## Use Case and Problem
 
-Machine learning pipeline with metrics, HTML reports and similar that point to
-images on network share. Long file paths (longer than 260 characters) which are
-not supported by many tools, including browsers. 
+At work we train all our machine learning image models in house on custom build
+servers featuring GPUs like NVIDIA RTX 4090. We have a lot of data - collected
+from production sites all over the world - and this data is usually split in
+two. 
 
-[SHOWCASE BOX PLOTS WITH IMAGES]
+1. **Ground truth annotations** are typically defined in `csv`-files that are stored
+   in git repositories and published as versioned NuGet packages. These packages
+   are then consumed by different pipelines that are run as Azure Pipelines on
+   the servers. We then use [Renovate to automatically bump versions](LINK TO
+   BLOG POST) of these.
+1. **Images** are stored on a file server on a network share, and typically also
+   cached at specific downsampled resolutions locally on the servers to speed up
+   training.
 
-A bit more description on setup and use case and demo problem by **Copy as
-path** to notepad for example. This will the 8.3 short file names path.
+At the same time the path to and file name of the images usually follow a schema
+so the path alone contains information relevant to a given image. This means
+paths can get quite long. Certainly above 260 characters on the file server.
 
-[Long file path handling not working on Windows](https://issues.chromium.org/issues/40134281)
+Example path schema for directory:
+```
+\\fileserver\Pipelines\<PROJECTNAME>\<SETDATETIME>_<SETNAME>_<SITE>\<STATION>\
+```
+Example file name schema:
+```
+<DATETIME>_Camera=<CAMERANAME>_Id=<ID>_<DETAILS>.png
+```
+For example:
+```
+20250102.123456.789_Camera=Primary_Id=9999999_x=0123_y=0234_w=1234_h=2345.png
+```
+
+
+This is a simple pragmatic setup that works very well and a setup we have
+iterated on over many years and runs very smoothly. Each pipeline is a separate
+git repo that is easy to get started with by simply cloning and hitting F5 in
+Visual Studio or similar for local running.
+
+As part of the output of the pipelines we generate a lot of data either as
+simple `csv`-files, plots `png`-files or interactive reports in the form of
+`html`-files with inline JavaScript and data.
+
+Below is an example showing box plots including all samples as dots for a
+regression model with different "levels". The box plots are interactive and when
+pointing on a singular dot the image for that sample will be shown on the right,
+usually, but not here since if the path is too long (> 260 chars) the browser
+won't show it. 
+
+![]({{ site.baseurl }}/images/2025-05-windows-short-path-names/example-boxplot-outlier-image.png)
+
+This is where there can be issues since browsers do not support showing long
+file paths, e.g. see [chromium: Long file path handling not working on
+Windows](https://issues.chromium.org/issues/40134281). And browsers do not
+support extended length prefix `\\?\` that one can otherwise use to escape the
+`MAX_PATH`/260 char limit in Win32 APIs.
+
+Now if you SHIFT right click on a file in Windows Explorer and click **Copy as
+path** you will get the 8.3 short file name path if the file path is longer than
+`MAX_PATH`, as shown below both for a UNC file path and a local path name.
+
+Copy as path for a local file resulting in
+`C:\Temp\LONGFI~1\VERYLO~1\202501~1.PNG`: 
+
+![]({{ site.baseurl
+}}/images/2025-05-windows-short-path-names/verylongpath-local-copy-as-path.png)
+
+Copy as path for a network share file resulting in
+`\\files\Pipelines\LXF59T~G\V1WO8N~7\290O13~C.PNG`: 
+![]({{ site.baseurl }}/images/2025-05-windows-short-path-names/verylongpath-unc-copy-as-path.png)
+
+Similarly, if you right click and select **Open with...** and select a browser
+like Chrome then it will use the short path name for long file paths.
+
+Hence, to fix the above interactive box plots we need to get the short path name
+in C#, as this is what we use to generate the `html`-files. This has the added
+benefit of reducing the amount of data we have to store in the `html`-file since
+the path name is shorter (we already do some custom path compression on this
+using a simple common prefix algorithm). Our data sets can have hundreds of
+thousands of images so every byte counts.
+
+Incidentally, it would have been nice if the browsers would support loading
+gzip'ed html e.g. files directly, but as far as I know they do not, and spinning
+up a web server just for this just seemed overkill.
+
+So let's take a quick look at Windows 8.3 short paths and some example code on
+how get them in C# for both local and UNC paths.
 
 ## What Are Windows 8.3 Short Paths?
 
@@ -55,17 +132,16 @@ rules to ensure uniqueness.
 
 **Key differences:**
 - Local paths are handled directly by the local file system.
-- UNC paths are resolved over the network, and some Windows APIs behave differently or have limitations with UNC paths.
-
-**Authoritative source:**  
-- [Microsoft Docs: UNC Paths](https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats#unc-paths)
+- [UNC Paths](https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats#unc-paths) 
+  are resolved over the network, and some Windows APIs behave differently or 
+  have limitations with UNC paths.
 
 ## Why Browsers and Some Tools Fail with Long Network Paths
 
 Windows has a traditional `MAX_PATH` limit of 260 characters for file paths.
 While modern Windows versions and .NET can support longer paths (with
-configuration), many tools—including browsers—do not support long UNC paths due
-to:
+configuration), many tools—including browsers — do not support long UNC paths
+due to:
 
 - Lack of support for the `\\?\` extended-length path prefix.
 - Network shares (UNC) are not always handled with the same APIs as local paths.
@@ -117,16 +193,17 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 
-public static class Win32ShortPath
+public static partial class Win32ShortPath
 {
     const int MaxPathLength = 260;
     const int UncPrefixPartCount = 2;
     static readonly char DirectorySeparator = Path.DirectorySeparatorChar;
     const string UncPrefix = @"\\";
+    const string ExtendedLengthPrefix = @"\\?\";
 
     /// <summary>
-    /// Returns the short (8.3) path for any file or directory if available,
-    /// covering both local and UNC paths.
+    /// Returns the short (8.3) path for any file or directory if 
+    /// available, covering both local and UNC paths.
     /// </summary>
     public static string GetShortPath(string longPath)
     {
@@ -140,10 +217,33 @@ public static class Win32ShortPath
         { throw new FileNotFoundException("Path not found", longPath); }
 
         var isUnc = longPath.StartsWith(UncPrefix, StringComparison.Ordinal);
-        return isUnc ? GetByFindFirstFile(longPath) : GetByGetShortPathName(longPath);
+        if (isUnc) { return GetByFindFirstFile(longPath); }
+
+        var isLong = longPath.Length > MaxPathLength;
+        if (isLong)
+        {
+            // Ensure starts with extended length prefix
+            var extendedPrefix = longPath.StartsWith(ExtendedLengthPrefix,
+                StringComparison.Ordinal);
+            if (!extendedPrefix)
+            {
+                longPath = ExtendedLengthPrefix + longPath;
+            }
+            var shortPathName = GetByGetShortPathName(longPath);
+            // Remove the extended length prefix if added
+            if (!extendedPrefix)
+            {
+                shortPathName = shortPathName[ExtendedLengthPrefix.Length..];
+            }
+            return shortPathName;
+        }
+        else
+        {
+            return GetByGetShortPathName(longPath);
+        }
     }
 
-    // Local drive (C:\…), use GetShortPathName directly
+    // Local drive (C:\…), use GetShortPathName directly, for long prefix with \\?\
     static string GetByGetShortPathName(string longPath)
     {
         var sb = new StringBuilder(MaxPathLength);
@@ -155,15 +255,16 @@ public static class Win32ShortPath
     // UNC path: \\server\share\…\file.ext, use FindFirstFile iteratively
     static string GetByFindFirstFile(string longPath)
     {
-        // Rebuild segment by segment, use FindFirstFile for the 8.3 name of
-        // each.
-        var parts = longPath.TrimStart(DirectorySeparator).Split(DirectorySeparator);
+        // Rebuild segment by segment, use FindFirstFile for the 
+        // 8.3 name of each.
+        var parts = longPath.TrimStart(DirectorySeparator)
+                            .Split(DirectorySeparator);
         if (parts.Length < UncPrefixPartCount)
         { throw new ArgumentException($"Invalid UNC path '{longPath}'", nameof(longPath)); }
 
         var sb = new StringBuilder(MaxPathLength);
 
-        // Re-prefix with \\server\share
+        // Re‑prefix with \\server\share
         sb.Append(UncPrefix)
           .Append(parts[0])
           .Append(DirectorySeparator)
@@ -174,75 +275,8 @@ public static class Win32ShortPath
         return sb.ToString();
     }
 
-    /// <summary>
-    /// Shortens the path parts in-place by using the 8.3 name format.
-    /// </summary>
-    /// <param name="sb"><see cref="StringBuilder"/> for building path, can be
-    /// pre-appended with initial base path.</param>
-    public static void ShortenPartsByFindFirstFile(Span<string> parts, StringBuilder sb)
-    {
-        foreach (ref var currentPart in parts)
-        {
-            sb.Append(Path.DirectorySeparatorChar);
-            sb.Append(currentPart);
-            var findHandle = FindFirstFileW(sb, out var findData);
-            if (findHandle != IntPtr.Zero)
-            {
-                FindClose(findHandle);
-                var alternatePart = findData.cAlternateFileName;
-                // If there's an alternate (8.3) name, use it
-                if (!string.IsNullOrEmpty(alternatePart))
-                {
-                    // Replace part with short path
-                    sb.Remove(sb.Length - currentPart.Length, currentPart.Length);
-                    sb.Append(alternatePart);
-                    currentPart = alternatePart;
-                }
-            }
-        }
-    }
-
-    public static string GetByFindFirstFileReverse(string longPath)
-    {
-        if (string.IsNullOrWhiteSpace(longPath))
-        { throw new ArgumentNullException(nameof(longPath)); }
-
-        // Normalize
-        longPath = Path.GetFullPath(longPath);
-
-        if (!File.Exists(longPath) && !Directory.Exists(longPath))
-        { throw new FileNotFoundException("Path not found", longPath); }
-
-        var parts = longPath.TrimStart(DirectorySeparator).Split(DirectorySeparator);
-        if (parts.Length < UncPrefixPartCount)
-        { throw new ArgumentException($"Invalid UNC path '{longPath}'", nameof(longPath)); }
-
-        var sb = new StringBuilder(MaxPathLength);
-
-        // Start from the end and rebuild the path in reverse
-        for (int i = parts.Length - 1; i >= UncPrefixPartCount; i--)
-        {
-            var currentPart = parts[i];
-            var pathToQuery = $"{UncPrefix}{string.Join(DirectorySeparator, parts.Take(i + 1))}";
-            var findHandle = FindFirstFileW(pathToQuery, out var findData);
-            if (findHandle != IntPtr.Zero)
-            {
-                FindClose(findHandle);
-                // If there's an alternate (8.3) name, use it
-                var alternatePart = findData.cAlternateFileName;
-                currentPart = string.IsNullOrEmpty(alternatePart)
-                    ? currentPart : alternatePart;
-            }
-            sb.Insert(0, $"{DirectorySeparator}{currentPart}");
-        }
-
-        // Re-prefix with \\server\share
-        sb.Insert(0, $"{UncPrefix}{parts[0]}{DirectorySeparator}{parts[1]}");
-
-        return sb.ToString();
-    }
-
-    static void AppendPartsByFindFirstFile(string[] parts, int partStart, StringBuilder sb)
+    static void AppendPartsByFindFirstFile(string[] parts, int partStart,
+                                           StringBuilder sb)
     {
         for (int i = partStart; i < parts.Length; i++)
         {
@@ -298,13 +332,15 @@ public static class Win32ShortPath
 }
 ```
 
-## Further Reading
+## Links and Further Reading
 
 - [Naming Files, Paths, and Namespaces (Microsoft Docs)](https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file)
 - [How to get the short path for a UNC path (Stack Overflow)](https://stackoverflow.com/questions/214858/getting-short-filename-in-net-for-unc-path)
 - [Maximum Path Length Limitation (Microsoft Docs)](https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation)
 - [GetShortPathName function (Microsoft Docs)](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getshortpathnamew)
 - [FindFirstFileW function (Microsoft Docs)](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstfilew)
+- [Long Filename Specification](https://web.archive.org/web/20181025124257/home.teleport.com/~brainy/lfn.htm)
+- [The Definitive Guide on Win32 to NT Path Conversion](https://googleprojectzero.blogspot.com/2016/02/the-definitive-guide-on-win32-to-nt.html)
 
 ## Summary
 
@@ -315,11 +351,6 @@ on each segment. This can help applications and scripts work with long paths
 that would otherwise be inaccessible, especially in environments where browser
 or tool support is limited.
 
-
-
-
-
-[Long Filename Specification](https://web.archive.org/web/20181025124257/home.teleport.com/~brainy/lfn.htm)
 
 
 ## How to Get the Windows Short Path Name for Very Long File Paths (Local and UNC)
