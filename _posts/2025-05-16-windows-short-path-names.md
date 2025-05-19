@@ -314,3 +314,62 @@ local paths, use `GetShortPathName`. For UNC/network paths, use `FindFirstFileW`
 on each segment. This can help applications and scripts work with long paths
 that would otherwise be inaccessible, especially in environments where browser
 or tool support is limited.
+
+
+
+
+
+[Long Filename Specification](https://web.archive.org/web/20181025124257/home.teleport.com/~brainy/lfn.htm)
+
+
+## How to Get the Windows Short Path Name for Very Long File Paths (Local and UNC)
+
+When working with very long file or directory paths in Windows-especially those
+exceeding the traditional `MAX_PATH` (260 characters)-obtaining the short (8.3)
+path name can be tricky. This guide explains how to reliably get the short path
+name for both local and UNC paths, and how to handle common pitfalls.
+
+---
+
+### Why Use the Short Path Name?
+
+The Windows short path (8.3) format is sometimes required for legacy
+applications, scripting, or compatibility reasons. However, not all files or
+directories have short names, and support depends on the file system and volume
+settings.
+
+---
+
+## Step-by-Step Solution
+
+### 1. Use the Correct API
+
+The recommended method is the
+[`GetShortPathNameW`](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getshortpathnamew)
+function, which retrieves the short path form of a given file or directory.
+
+### 2. Handle Long Paths with Prefixes
+
+By default, Windows APIs limit paths to `MAX_PATH`. To support longer paths (up
+to 32,767 characters):
+
+- **Local paths:** Prepend with `\\?\`
+- **UNC (network) paths:** Prepend with `\\?\UNC\`
+
+**Examples:**
+- Local: `\\?\C:\very\long\path\to\file.txt`
+- UNC: `\\?\UNC\server\share\very\long\path\file.txt`
+
+> ?? **Tip:** The
+[`\\?\`](https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file#maximum-path-length-limitation)
+prefix enables extended-length path support in Windows.
+
+### 3. Check Short Name Availability
+
+- Not all files/folders have short names. If the volume disables short name generation or the file system doesn’t support it (e.g., ReFS, some SMB shares), the function may return the original long path.
+- [NTFS and FAT32](https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation) generally support short names, but this can be disabled per-volume.
+
+### 4. Avoid Common Pitfalls
+
+- [`FindFirstFileW`](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstfilew) does **not** reliably return the short name for long paths or for components without short names.
+- If you omit the `\\?\` or `\\?\UNC\` prefix, `GetShortPathNameW` will fail for paths longer than `MAX_PATH`.
