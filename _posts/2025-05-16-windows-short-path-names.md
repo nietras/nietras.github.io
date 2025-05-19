@@ -140,7 +140,7 @@ rules to ensure uniqueness.
 Windows has a [traditional `MAX_PATH` limit of 260
 characters](https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation)
 for file paths. While modern Windows versions and .NET can support longer paths
-(with configuration), many tools—including browsers — do not support long UNC
+(with configuration), many tools - including browsers - do not support long UNC
 paths due to:
 
 - Lack of support for the `\\?\` extended-length path prefix.
