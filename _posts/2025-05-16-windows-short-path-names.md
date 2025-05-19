@@ -27,9 +27,10 @@ two.
    cached at specific downsampled resolutions locally on the servers to speed up
    training.
 
-At the same time the path to and file name of the images usually follow a schema
-so the path alone contains information relevant to a given image. This means
-paths can get quite long. Certainly above 260 characters on the file server.
+At the same time the path to and file name of the images usually follows a
+schema so the path alone contains information relevant to a given image. This
+means paths can get quite long. Certainly above 260 characters on the file
+server.
 
 Example path schema for directory:
 ```
@@ -43,7 +44,6 @@ For example:
 ```
 20250102.123456.789_Camera=Primary_Id=9999999_x=0123_y=0234_w=1234_h=2345.png
 ```
-
 
 This is a simple pragmatic setup that works very well and a setup we have
 iterated on over many years and runs very smoothly. Each pipeline is a separate
@@ -183,8 +183,8 @@ See the `Win32ShortPath` class in the code below for a full example implementati
 
 | Path Type   | API to Use           | Notes                                 |
 |-------------|----------------------|---------------------------------------|
-| Local       | GetShortPathName     | Direct, simple                        |
-| UNC/Network | FindFirstFileW       | Iterate segments, use cAlternateFileName |
+| Local       | `GetShortPathName`   | Direct, simple                        |
+| UNC/Network | `FindFirstFileW`     | Iterate segments, use cAlternateFileName |
 
 ## Win32ShortPath Class
 
