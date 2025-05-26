@@ -430,5 +430,6 @@ file deletions and recreations — even if the long file name remains the same.
 - [FindFirstFileW function (Microsoft Docs)](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstfilew)
 - [Long Filename Specification](https://web.archive.org/web/20181025124257/home.teleport.com/~brainy/lfn.htm)
 - [The Definitive Guide on Win32 to NT Path Conversion](https://googleprojectzero.blogspot.com/2016/02/the-definitive-guide-on-win32-to-nt.html)
+- [Why Disabling the Creation of 8.3 DOS File Names Will Not Improve Performance. Or Will It?](https://helgeklein.com/blog/why-disabling-the-creation-of-83-dos-file-names-will-not-improve-performance-or-will-it/)
 
 That's all!
