@@ -21,8 +21,8 @@ two.
 1. **Ground truth annotations** are typically defined in `csv`-files that are stored
    in git repositories and published as versioned NuGet packages. These packages
    are then consumed by different pipelines that are run as Azure Pipelines on
-   the servers. We then use [Renovate to automatically bump versions](LINK TO
-   BLOG POST) of these.
+   the servers. We then use [Renovate to automatically bump versions]({{
+   site.baseurl }}/2024/07/09/renovate-azure-devops/) of these.
 1. **Images** are stored on a file server on a network share, and typically also
    cached at specific resolutions locally on the servers to speed up training.
 
@@ -55,11 +55,11 @@ simple `csv`-files, plots `png`-files or interactive reports in the form of
 
 Below is an example showing box plots including all samples as dots for a
 regression model with different "levels". The box plots are interactive and when
-pointing on a singular dot (an "minimum" outlier) the image for that sample will
-be shown on the right, usually, but not here since if the path is too long (>
-260 chars) the browser won't show it. 
+pointing on a singular dot (e.g. a "minimum" outlier) the image for that sample
+will be shown on the right. Usually, but not here since if the path is too long
+(> 260 chars) the browser won't show it.
 
-![]({{ site.baseurl }}/images/2025-05-windows-short-path-names/example-boxplot-outlier-image.png)
+![Box plot and outlier selected but image not shown]({{ site.baseurl }}/images/2025-05-windows-short-path-names/example-boxplot-outlier-image.png)
 
 This is where there can be issues since browsers do not support showing long
 file paths, e.g. see [chromium: Long file path handling not working on
@@ -200,7 +200,8 @@ methods.
     `FindFirstFileW` to get the short name (cAlternateFileName) if available.
 
 Note that it does not handle all edge cases including using `/` as directory
-separator or similar.
+separator or similar. It is also not the version we use internally as here we
+already have the path defined as parts (typically) matching CSV-columns.
 
 ```csharp
 using System.ComponentModel;
@@ -405,6 +406,21 @@ File Exists: True
 Short Path: 'C:\Temp\LONGFI~1\NotLong\202501~1.PNG'
 PASSED
 ```
+
+## Considerations
+
+8.3 short path names on Windows are not guaranteed to be stable across repeated
+file deletions and recreations — even if the long file name remains the same.
+
+- 8.3 short names are dynamically assigned by the Windows file system (usually
+  NTFS) and are not deterministic. If you delete a file and create a new one
+  with the same long name, the 8.3 name might:
+  - Remain the same (if no name conflict occurs),
+  - Change (if the name was reused or reclaimed for another file),
+  - Or not be created at all (if 8.3 name generation is disabled or restricted).
+- Name conflicts are resolved by appending a numeric suffix (e.g., `LONGFI~1.TXT`,
+  `LONGFI~2.TXT`), and the exact suffix depends on what already exists in the
+  directory at the time of file creation.
 
 ## Links and Further Reading
 
