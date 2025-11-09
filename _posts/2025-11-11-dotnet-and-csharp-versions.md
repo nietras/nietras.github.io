@@ -1,9 +1,9 @@
 ﻿---
 layout: post
-title: .NET and C# Versions - 10/14 Update
+title: .NET and C# Versions - .NET Framework 1.0 to .NET 10 & C# 1.0 to C# 14 (10/14 Update)
 ---
 
-![.NET and C# versions - .NET 10.0/C# 14 Update]({{ site.baseurl }}/images/2025-11-dotnet-versions/dotnet-versions-export.png)
+![.NET and C# versions - .NET Framework 1.0 to .NET 10 & C# 1.0 to C# 14]({{ site.baseurl }}/images/2025-11-dotnet-versions/dotnet-versions-export.png)
 
 Above [png]({{ site.baseurl
 }}/images/2025-11-dotnet-versions/dotnet-versions-export.png) is very high
