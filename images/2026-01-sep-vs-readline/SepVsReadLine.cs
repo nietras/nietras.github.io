@@ -23,7 +23,7 @@ public class Bench
         m_text = GenerateLargeText();
     }
 
-    [Benchmark]
+    //[Benchmark]
     public void Sep______()
     {
         using var reader = Sep
@@ -70,6 +70,132 @@ public class Bench
 
 
 
+    public static Vector512LineEnumerable EnumerateLinesVector512Masked(string text)
+        => new(text);
+
+    public readonly struct Vector512LineEnumerable
+    {
+        private readonly string _text;
+
+        public Vector512LineEnumerable(string text) => _text = text;
+
+        public Vector512LineEnumerator GetEnumerator() => new(_text);
+    }
+
+    public ref struct Vector512LineEnumerator
+    {
+        private ReadOnlySpan<char> _span;
+        private int _lineStart;
+        private int _position;
+        private long _mask;
+        private int _currentStart;
+        private int _currentLength;
+
+        internal Vector512LineEnumerator(string text)
+        {
+            _span = text.AsSpan();
+            _lineStart = 0;
+            _position = 0;
+            _mask = 0;
+            _currentStart = 0;
+            _currentLength = 0;
+        }
+
+        public ReadOnlySpan<char> Current => _span.Slice(_currentStart, _currentLength);
+
+        public bool MoveNext()
+        {
+            var span = _span;
+            if (_lineStart >= span.Length)
+            {
+                _currentLength = 0;
+                return false;
+            }
+
+            var start = _lineStart;
+            var newlineIndex = -1;
+
+            while (true)
+            {
+                if (_mask != 0)
+                {
+                    var bit = BitOperations.TrailingZeroCount((ulong)_mask);
+                    newlineIndex = (_position - s_vectorCharCount) + bit;
+                    _mask &= ~(1L << bit);
+                    break;
+                }
+
+                if (_position <= span.Length - s_vectorCharCount)
+                {
+                    var chunk = MemoryMarshal.Cast<char, Vector512<ushort>>(span.Slice(_position, s_vectorCharCount))[0];
+                    var matches = Vector512.BitwiseOr(
+                        Vector512.Equals(chunk, s_newlineVector),
+                        Vector512.Equals(chunk, s_carriageVector));
+                    _mask = (long)Vector512.ExtractMostSignificantBits(matches);
+                    _position += s_vectorCharCount;
+
+                    if (_mask != 0)
+                    {
+                        continue;
+                    }
+
+                    continue;
+                }
+
+                break;
+            }
+
+            if (newlineIndex == -1)
+            {
+                for (; _position < span.Length; _position++)
+                {
+                    var ch = span[_position];
+                    if (ch == '\n' || ch == '\r')
+                    {
+                        newlineIndex = _position;
+                        _position++;
+                        break;
+                    }
+                }
+            }
+
+            if (newlineIndex == -1)
+            {
+                if (start >= span.Length)
+                {
+                    _lineStart = span.Length + 1;
+                    _currentLength = 0;
+                    return false;
+                }
+
+                _currentStart = start;
+                _currentLength = span.Length - start;
+                _lineStart = span.Length + 1;
+                _mask = 0;
+                _position = span.Length;
+                return true;
+            }
+
+            var stride = 1;
+            var newlineChar = span[newlineIndex];
+            if (newlineChar == '\r' && newlineIndex + 1 < span.Length && span[newlineIndex + 1] == '\n')
+            {
+                stride = 2;
+            }
+
+            _currentStart = start;
+            _currentLength = newlineIndex - start;
+            _lineStart = newlineIndex + stride;
+
+            if (_lineStart > _position)
+            {
+                _position = _lineStart;
+            }
+
+            return true;
+        }
+    }
+
     public static string GenerateLargeText(int totalLength = 1024 * 1024, int maxLineLength = 100)
     {
         var rnd = new Random(42);
@@ -88,74 +214,6 @@ public class Bench
             count += lineLength + 1;
         }
         return sb.ToString();
-    }
-
-    public static IEnumerable<ReadOnlyMemory<char>> EnumerateLinesVector512Masked(string text)
-    {
-        var memory = text.AsMemory();
-        var start = 0;
-        while (start < memory.Length)
-        {
-            if (!TryFindLineEnding(text, start, out var newlineIndex))
-            {
-                yield return memory[start..];
-                yield break;
-            }
-
-            var nextStart = newlineIndex + 1;
-            var newlineChar = text[newlineIndex];
-            if (newlineChar == '\r' && nextStart < memory.Length && text[nextStart] == '\n')
-            {
-                nextStart++;
-            }
-
-            yield return memory.Slice(start, newlineIndex - start);
-            start = nextStart;
-        }
-    }
-
-    private static bool TryFindLineEnding(string text, int start, out int lineEnd)
-    {
-        var span = text.AsSpan();
-        var length = span.Length;
-        var limit = length - s_vectorCharCount;
-        var i = start;
-        Span<ushort> laneResults = stackalloc ushort[s_vectorCharCount];
-        while (i <= limit)
-        {
-            var chunk = MemoryMarshal.Cast<char, Vector512<ushort>>(span.Slice(i, s_vectorCharCount))[0];
-            var matches = Vector512.BitwiseOr(
-                Vector512.Equals(chunk, s_newlineVector),
-                Vector512.Equals(chunk, s_carriageVector));
-            matches.CopyTo(laneResults);
-            long mask = 0;
-            for (var lane = 0; lane < s_vectorCharCount; lane++)
-            {
-                mask |= (long)((laneResults[lane] != 0 ? 1L : 0L) << lane);
-            }
-
-            if (mask != 0)
-            {
-                lineEnd = i + BitOperations.TrailingZeroCount((ulong)mask);
-                return true;
-            }
-
-            i += s_vectorCharCount;
-        }
-
-        while (i < length)
-        {
-            var ch = span[i];
-            if (ch == '\n' || ch == '\r')
-            {
-                lineEnd = i;
-                return true;
-            }
-            i++;
-        }
-
-        lineEnd = -1;
-        return false;
     }
 
     private static readonly Vector512<ushort> s_newlineVector = Vector512.Create((ushort)'\n');
