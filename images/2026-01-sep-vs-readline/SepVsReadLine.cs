@@ -125,6 +125,8 @@ public class Bench
                     break;
                 }
 
+                var s_newlineVector = Vector512.Create((ushort)'\n');
+                var s_carriageVector = Vector512.Create((ushort)'\r');
                 if (_position <= span.Length - s_vectorCharCount)
                 {
                     var chunk = MemoryMarshal.Cast<char, Vector512<ushort>>(span.Slice(_position, s_vectorCharCount))[0];
@@ -216,8 +218,6 @@ public class Bench
         return sb.ToString();
     }
 
-    private static readonly Vector512<ushort> s_newlineVector = Vector512.Create((ushort)'\n');
-    private static readonly Vector512<ushort> s_carriageVector = Vector512.Create((ushort)'\r');
     private static readonly int s_vectorCharCount = Vector512<ushort>.Count;
 }
 
