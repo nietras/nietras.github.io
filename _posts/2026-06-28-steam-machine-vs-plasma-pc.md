@@ -14,7 +14,7 @@ NVidia 2060 Super]({{ site.baseurl }}/2020/09/08/CoreDeveloperPC-v20.09.dGPU/),
 but there I also took the long term view with high quality base components, here
 I'll focus more on getting better value, but I'll note that Core Developer PCs
 spec'ed in that blog post hit exactly the price point of around ~10000 DKK that
-I look at here too.
+I look at here too, almost 6 years ago.
 
 ## Steam Machine Specifications
 
@@ -52,54 +52,52 @@ based on the 2 TB model, since no one should be buying a gaming console/PC with
 just 512 GB given just a single game can take up to 435 GB of space (cough, ARK,
 cough). This means the budged is around ~10000 DKK with no controller.
 
-## Plasma PC Components and Specifications
+## **Plasma PC™** Components
 
-|Component      |Selection           |USD    |DKK    |
-|----------|:-------------------|------:|-------:|
-|[Case](https://en.wikipedia.org/wiki/Computer_case) |[Fractal Design Define Mini C](https://www.fractal-design.com/products/cases/define/define-mini-c/black/) | [85](https://www.newegg.com/black-fractal-design-define-mini-c-micro-atx-mini-tower/p/N82E16811352064)| [600](https://www.pricerunner.dk/pl/186-3663561/Kabinetter/Fractal-Design-Define-Mini-C-Sammenlign-Priser)|
-|[PSU](https://en.wikipedia.org/wiki/ATX#Power_supply) |[Corsair RM650x 650W](https://www.corsair.com/eu/en/Categories/Products/Power-Supply-Units/Power-Supply-Units-Advanced/RMx-Series/p/CP-9020178-EU) | [115](https://www.newegg.com/corsair-rmx-series-rm650x-2018-cp-9020178-na-650w/p/N82E16817139232)| [900](https://www.edbpriser.dk/produkt/corsair-rmx-series-rm650x-3149708/?searched=rm650x)|
-|[CPU Cooler](https://en.wikipedia.org/wiki/Computer_cooling) |[Noctua NH-12S](https://noctua.at/en/nh-u12s)|[65](https://www.newegg.com/noctua-nh-u12s/p/N82E16835608040)|[440](https://www.pricerunner.dk/pl/184-3500421/Computer-koeling/Noctua-NH-U12S-Sammenlign-Priser)|
-|**Total** |-|**265**|**1940**|
+As shown below you can hit the same price point with current generation
+components (Zen 5, RX 9000 series) compared to last gen components in Valve
+Steam Machine.
 
-|Component      |Selection           |USD    |DKK    |
-|----------|:-------------------|------:|-------:|
-|[CPU]() | [AMD Ryzen™ 7 3700X](https://www.amd.com/en/products/cpu/amd-ryzen-7-3700x) | [(a) 290](https://www.newegg.com/amd-ryzen-7-3700x/p/N82E16819113567)| [2300](https://www.edbpriser.dk/produkt/amd-ryzen-7-3700x-3-6-ghz-processor/?searched=3700X)|
-|[Motherboard]() | [Gigabyte B550M DS3H](https://www.gigabyte.com/Motherboard/B550M-DS3H-rev-10#kf) | [95](https://www.newegg.com/gigabyte-b550m-ds3h/p/N82E16813145210)| [730](https://www.edbpriser.dk/produkt/gigabyte-b550m-ds3h)|
-|**Total** |-|**385**|**3030**|
+| Component   | Selection                                      |                                                                                                                                        DKK w. VAT | ~EUR  |
+| ----------- | :--------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------: | ---: |
+| CPU         | AMD Ryzen 5 9600X CPU 3.9 GHz 6c/12t AM5       |       [1300](https://www.pricerunner.dk/pl/40-3327615380/CPUs/AMD-Ryzen-5-9600X-CPU-3.9-GHz-6-kerner-med-12-traade-32-MB-cache-Sammenlign-Priser) |  ~174 |
+| GPU         | ASUS Dual Radeon RX 9060 XT 16GB GDDR6         |                                   [3000](https://www.pricerunner.dk/pl/37-3427553432/Grafikkort/ASUS-16GB-GDDR6-Grafikkort-RAM-Sammenlign-Priser) |  ~402 |
+| Motherboard | Asrock B850M Pro-A WiFi Micro-ATX              |                                   [900](https://www.pricerunner.dk/pl/35-3391569627/Bundkort/Asrock-B850M-Pro-A-WiFi-Micro-ATX-Sammenlign-Priser) |  ~121 |
+| RAM         | Kingston Fury Beast Black DDR5 6000MHz 2x8GB   | [1850](https://www.pricerunner.dk/pl/38-3204693407/RAM/Kingston-Fury-Beast-Black-DDR5-6000MHz-2x8GB-ECC-%28KF560C36BBEK2-16%29-Sammenlign-Priser) |  ~248 |
+| SSD         | SanDisk Black SN7100 SSD 2TB                   |                                 [2000](https://www.pricerunner.dk/pl/36-3381548698/Harddiske/SanDisk-Black-SN7100-2TB-NVMe-SSD-Sammenlign-Priser) |  ~268 |
+| Case        | Zalman S3 Tempered Glass incl. 3 x 120 mm fans |                                         [280](https://www.pricerunner.dk/pl/186-3200124333/Kabinetter/Zalman-S3-Tempered-Glass-Sammenlign-Priser) |   ~38 |
+| PSU         | Corsair RM650e (2025) 650W                     |                               [550](https://www.pricerunner.dk/pl/640-3391267474/Stroemforsyning/Corsair-RM650e%28-2025%29650W-Sammenlign-Priser) |   ~74 |
+| CPU Cooler  | Thermalright Peerless Assassin 120 SE          |                      [260](https://www.pricerunner.dk/pl/184-3207363733/Computer-koeling/Thermalright-Peerless-Assassin-120-SE-Sammenlign-Priser) |   ~35 |
+| **Total**   |                                                |                                                                                                                                         **10140** | **~1359** | 
 
-| Component   | Selection                                      |                                                                                                                                        DKK w. VAT |     |
-| ----------- | :--------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------: | --- |
-| CPU         | AMD Ryzen 5 9600X CPU 3.9 GHz 6c/12t AM5       |       [1300](https://www.pricerunner.dk/pl/40-3327615380/CPUs/AMD-Ryzen-5-9600X-CPU-3.9-GHz-6-kerner-med-12-traade-32-MB-cache-Sammenlign-Priser) |     |
-| GPU         | ASUS Dual Radeon RX 9060 XT 16GB GDDR6         |                                   [3000](https://www.pricerunner.dk/pl/37-3427553432/Grafikkort/ASUS-16GB-GDDR6-Grafikkort-RAM-Sammenlign-Priser) |     |
-| Motherboard | Asrock B850M Pro-A WiFi Micro-ATX              |                                   [900](https://www.pricerunner.dk/pl/35-3391569627/Bundkort/Asrock-B850M-Pro-A-WiFi-Micro-ATX-Sammenlign-Priser) |     |
-| RAM         | Kingston Fury Beast Black DDR5 6000MHz 2x8GB   | [1850](https://www.pricerunner.dk/pl/38-3204693407/RAM/Kingston-Fury-Beast-Black-DDR5-6000MHz-2x8GB-ECC-%28KF560C36BBEK2-16%29-Sammenlign-Priser) |     |
-| SSD         | SanDisk Black SN7100 SSD 2TB                   |                                 [2000](https://www.pricerunner.dk/pl/36-3381548698/Harddiske/SanDisk-Black-SN7100-2TB-NVMe-SSD-Sammenlign-Priser) |     |
-| Case        | Zalman S3 Tempered Glass incl. 3 x 120 mm fans |                                         [280](https://www.pricerunner.dk/pl/186-3200124333/Kabinetter/Zalman-S3-Tempered-Glass-Sammenlign-Priser) |     |
-| PSU         | Corsair RM650e (2025) 650W                     |                               [550](https://www.pricerunner.dk/pl/640-3391267474/Stroemforsyning/Corsair-RM650e%28-2025%29650W-Sammenlign-Priser) |     |
-| CPU Cooler  | Thermalright Peerless Assassin 120 SE          |                      [260](https://www.pricerunner.dk/pl/184-3207363733/Computer-koeling/Thermalright-Peerless-Assassin-120-SE-Sammenlign-Priser) |     |
-| **Total**   |                                                |                                                                                                                                         **10140** |     | 
+## **Plasma PC™** Specifications
 
+Turning this into specifications ala Steam Machine you get the below. Notably,
+dual channel memory so 2x higher memory bandwidth. 16 GB VRAM with full Navi 44
+GPU die.
 
-| Component                                       | Link                                                                                                                                                     | Price<br>w. VAT | Pcs | Total<br>w. VAT |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | --- | --------------- |
-| AMD Ryzen 5 9600X CPU 3.9 GHz 6c/12t AM5        | [pricerunner](https://www.pricerunner.dk/pl/40-3327615380/CPUs/AMD-Ryzen-5-9600X-CPU-3.9-GHz-6-kerner-med-12-traade-32-MB-cache-Sammenlign-Priser)       | 1300            | 1   | 1300            |
-| ASUS Dual Radeon RX 9060 XT 16GB GDDR6          | [pricerunner](https://www.pricerunner.dk/pl/37-3427553432/Grafikkort/ASUS-16GB-GDDR6-Grafikkort-RAM-Sammenlign-Priser)                                   | 3000            | 1   | 3000            |
-| Asrock B850M Pro-A WiFi Micro-ATX               | [pricerunner](https://www.pricerunner.dk/pl/35-3391569627/Bundkort/Asrock-B850M-Pro-A-WiFi-Micro-ATX-Sammenlign-Priser)                                  | 900             | 1   | 900             |
-| Kingston Fury Beast Black DDR5 6000MHz 2x8GB    | [pricerunner](https://www.pricerunner.dk/pl/38-3204693407/RAM/Kingston-Fury-Beast-Black-DDR5-6000MHz-2x8GB-ECC-%28KF560C36BBEK2-16%29-Sammenlign-Priser) | 1850            | 1   | 1850            |
-| SanDisk Black SN7100 SSD WDS200T4X0E-00CJA0 2TB | [pricerunner](https://www.pricerunner.dk/pl/36-3381548698/Harddiske/SanDisk-Black-SN7100-2TB-NVMe-SSD-Sammenlign-Priser)                                 | 2000            | 1   | 2000            |
-| Zalman S3 Tempered Glass feat. 3 x 120 mm fans  | [pricerunner](https://www.pricerunner.dk/pl/186-3200124333/Kabinetter/Zalman-S3-Tempered-Glass-Sammenlign-Priser)                                        | 280             | 1   | 280             |
-| Corsair RM650e( 2025) 650W                      | [pricerunner](https://www.pricerunner.dk/pl/640-3391267474/Stroemforsyning/Corsair-RM650e%28-2025%29650W-Sammenlign-Priser)                              | 550             | 1   | 550             |
-| Thermalright Peerless Assassin 120 SE           | [pricerunner](https://www.pricerunner.dk/pl/184-3207363733/Computer-koeling/Thermalright-Peerless-Assassin-120-SE-Sammenlign-Priser)                     | 260             | 1   | 260             |
-| Total                                           |                                                                                                                                                          |                 |     | 10140           |
+| Component | Plasma PC™ |
+|----------|:-----------|
+| CPU | AMD Ryzen 5 9600X, Zen 5, 6C/12T, 3.9 GHz base, up to 5.4 GHz boost |
+| GPU | Radeon RX 9060 XT, 16 GB GDDR6 |
+| Memory | 16 GB DDR5, 6000 MHz, dual-channel (2x8 GB) |
+| Storage | 2 TB NVMe SSD |
+| Expansion | Full desktop AM5 platform, PCIe x16 GPU, additional motherboard expansion |
+| Networking | 2.5 GB Ethernet, Wi‑Fi 6E and Bluetooth 5.2 |
+| Ports | Multiple USB-A/USB-C plus DisplayPort/HDMI from the discrete GPU |
+| Display targets | 1080p, 1440p, 4K |
+| OS | SteamOS (free) |
 
-ASUS Dual Radeon RX 9060 XT 16GB GDDR6	pricerunner	3000
-AMD Ryzen 5 9600X CPU 3.9 GHz 6c/12t AM5	pricerunner	1300
-Asrock B850M Pro-A WiFi Micro-ATX	pricerunner	900
-Kingston Fury Beast Black DDR5 6000MHz 2x8GB	pricerunner	1850
-SanDisk Black SN7100 SSD WDS200T4X0E-00CJA0 2TB	pricerunner	2000
-Thermalright Peerless Assassin 120 SE	pricerunner	260
-Zalman S3 Tempered Glass incl. 3 x 120 mm fans	pricerunner	280
-Corsair RM650e (2025) 650W	pricerunner	550
-Total		
+## Conclusion
 
-pricerunner
+I honestly don't know why you would buy the steam machine other than due to it's
+compact form factor. Which is what everyone else is saying too 😅
+
+Perhaps power consumption, which, of course, can be much higher in **Plasma
+ PC™**, hence the name. It doesn't have to be, though, as you can undervolt and
+downclock. 
+
+Most of the DIY PC components can be also re-used, even allow for upgrading to
+Zen 6 and possibly even Zen 7 as AM5 socket.
+
+That's all!
