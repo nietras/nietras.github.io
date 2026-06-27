@@ -56,7 +56,8 @@ Excellent Repairability: Steam Machine Tear-Down and Accessing RAM & SSD](https:
 ## Steam Machine pricing
 
 Official EU pricing for launch is in euro, so below I include approximate Danish
-pricing converted at about **1 EUR = 7.46 DKK**.
+pricing converted at about **1 EUR = 7.46 DKK**. I don't know if those prices
+incl. VAT but I am gussing they don't. In Denmark, that's 25%.
 
 | Model | EUR | ~DKK |
 |-------|----:|------------:|
