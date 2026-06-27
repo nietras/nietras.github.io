@@ -1,6 +1,6 @@
 ﻿---
 layout: post
-title: Steam Machine vs Plasma PC™ 
+title: Valve Steam Machine vs DIY Plasma PC™ 
 ---
 
 Valve's new 2026 **Steam Machine** has created a lot of discussion online given
@@ -8,13 +8,30 @@ it's pricing. In this quick blog post I will look at specs of the Steam Machine
 and try create a barebones equivalent or better DIY gaming PC called **Plasma
 PC**™ (obviously based on solid, liquid, gas, and plasma).
 
-My thoughts on PC component selection where also covered my old blog post from
-2020 [Core Developer PC™ v20.09.dGPU - AMD 3700X vs Intel i7-10700 8c/16t with
-NVidia 2060 Super]({{ site.baseurl }}/2020/09/08/CoreDeveloperPC-v20.09.dGPU/),
-but there I also took the long term view with high quality base components, here
-I'll focus more on getting better value, but I'll note that Core Developer PCs
-spec'ed in that blog post hit exactly the price point of around ~10000 DKK that
-I look at here too, almost 6 years ago.
+My thoughts on PC component selection where also covered in my old blog post
+from 2020 [Core Developer PC™ v20.09.dGPU - AMD 3700X vs Intel i7-10700 8c/16t
+with NVidia 2060 Super]({{ site.baseurl
+}}/2020/09/08/CoreDeveloperPC-v20.09.dGPU/), but there I also took the long term
+view with high quality base components, here I'll focus more on getting better
+value, but I'll note that Core Developer PCs spec'ed in that blog post hit
+exactly the price point of around ~10000 DKK that I look at here too, almost 6
+years ago.
+
+## Steam Machine Links
+
+There are plenty of reviews and teardowns online. Overall, quality of the Steam
+Machine looks quite good with a very good big cooler with copper base and large
+aluminum fins. It also pitch black 👍 It does have a ton of "appendage"
+components, though.
+
+* [Valve Steam Machine Review: GPU & CPU Benchmarks, SteamOS Test, Thermals, Noise, and Price](https://gamersnexus.net/pre-built-pc/valve-steam-machine-review-gpu-cpu-benchmarks-steamos-test-thermals-noise-and-price)
+* [
+Excellent Repairability: Steam Machine Tear-Down and Accessing RAM & SSD](https://www.youtube.com/watch?v=glXA3ObwSwQ)
+* [A look inside the Steam Machine](https://www.theverge.com/games/820545/a-look-inside-the-steam-machine)
+
+![Steam Machine]({{ site.baseurl }}/images/2026-06-steam-machine-vs-plasma-pc/steam-machine.png)
+
+![Steam Machine Inside]({{ site.baseurl }}/images/2026-06-steam-machine-vs-plasma-pc/steam-machine-inside.png)
 
 ## Steam Machine Specifications
 
