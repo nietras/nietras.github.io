@@ -29,9 +29,13 @@ components, though.
 Excellent Repairability: Steam Machine Tear-Down and Accessing RAM & SSD](https://www.youtube.com/watch?v=glXA3ObwSwQ)
 * [A look inside the Steam Machine](https://www.theverge.com/games/820545/a-look-inside-the-steam-machine)
 
-![Steam Machine]({{ site.baseurl }}/images/2026-06-steam-machine-vs-plasma-pc/steam-machine.png)
 
-![Steam Machine Inside]({{ site.baseurl }}/images/2026-06-steam-machine-vs-plasma-pc/steam-machine-inside.png)
+<table>
+  <tr>
+	<td align="center" width="50%"><img src="{{ site.baseurl }}/images/2026-06-steam-machine-vs-plasma-pc/steam-machine.png" alt="Steam Machine" width="100%" /></td>
+	<td align="center" width="50%"><img src="{{ site.baseurl }}/images/2026-06-steam-machine-vs-plasma-pc/steam-machine-inside.png" alt="Steam Machine Inside" width="100%" /></td>
+  </tr>
+</table>
 
 ## Steam Machine Specifications
 
