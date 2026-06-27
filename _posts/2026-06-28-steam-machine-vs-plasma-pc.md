@@ -67,21 +67,39 @@ cough). This means the budged is around ~10000 DKK with no controller.
 |[Motherboard]() | [Gigabyte B550M DS3H](https://www.gigabyte.com/Motherboard/B550M-DS3H-rev-10#kf) | [95](https://www.newegg.com/gigabyte-b550m-ds3h/p/N82E16813145210)| [730](https://www.edbpriser.dk/produkt/gigabyte-b550m-ds3h)|
 |**Total** |-|**385**|**3030**|
 
-|Component      |Selection           |USD    |DKK    |
-|----------|:-------------------|------:|-------:|
-|[Case](https://en.wikipedia.org/wiki/Computer_case) |[Fractal Design Define Mini C](https://www.fractal-design.com/products/cases/define/define-mini-c/black/) | [85](https://www.newegg.com/black-fractal-design-define-mini-c-micro-atx-mini-tower/p/N82E16811352064)| [600](https://www.pricerunner.dk/pl/186-3663561/Kabinetter/Fractal-Design-Define-Mini-C-Sammenlign-Priser)|
-|[PSU](https://en.wikipedia.org/wiki/ATX#Power_supply) |[Corsair RM650x 650W](https://www.corsair.com/eu/en/Categories/Products/Power-Supply-Units/Power-Supply-Units-Advanced/RMx-Series/p/CP-9020178-EU) | [115](https://www.newegg.com/corsair-rmx-series-rm650x-2018-cp-9020178-na-650w/p/N82E16817139232)| [900](https://www.edbpriser.dk/produkt/corsair-rmx-series-rm650x-3149708/?searched=rm650x)|
-|[CPU Cooler](https://en.wikipedia.org/wiki/Computer_cooling) |[Noctua NH-12S](https://noctua.at/en/nh-u12s)|[65](https://www.newegg.com/noctua-nh-u12s/p/N82E16835608040)|[440](https://www.pricerunner.dk/pl/184-3500421/Computer-koeling/Noctua-NH-U12S-Sammenlign-Priser)|
-|**Base** |-|**265**|**1940**|
-|[RAM](https://en.wikipedia.org/wiki/DDR4_SDRAM) |[G.SKILL Ripjaws V 2 x 16GB DDR4 3200 (PC4-25600) F4-3200C16D-32GVK](https://www.gskill.com/product/165/184/1536110922/F4-3200C16D-32GVKRipjaws-VDDR4-3200MHz-CL16-18-18-38-1.35V32GB-(2x16GB)) | [110](https://www.newegg.com/g-skill-32gb-288-pin-ddr4-sdram/p/N82E16820232091) | [850](https://www.edbpriser.dk/produkt/g-skill-ripjaws-v-ddr4-32-gb-2-x-16-gb-dimm-288-pin-3513768/) |
-|[SSD](https://en.wikipedia.org/wiki/Solid-state_drive) [NVMe](https://en.wikipedia.org/wiki/NVM_Express) | [ADATA XPG SX8200 Pro 1 TB](https://www.xpg.com/us/feature/583/) | [140](https://www.newegg.com/xpg-sx8200-pro-1tb/p/0D9-0017-000W4)| [1030](https://www.edbpriser.dk/produkt/adata-xpg-sx8200-pro/)|
-|[GPU]() | [Gigabyte GeForce RTX 2060 SUPER WINDFORCE OC 8G](https://www.gigabyte.com/Graphics-Card/GV-N206SWF2OC-8GD-rev-20#kf)| [400](https://www.newegg.com/gigabyte-geforce-rtx-2060-super-gv-n206swf2oc-8gd/p/N82E16814932174) | [3200](https://www.edbpriser.dk/produkt/gigabyte-geforce-rtx-2060-super-windforce-oc-8g/)|
-|**Common** |-|**650**|**5080**|
-|[CPU]() | [AMD Ryzen™ 7 3700X](https://www.amd.com/en/products/cpu/amd-ryzen-7-3700x) | [290](https://www.newegg.com/amd-ryzen-7-3700x/p/N82E16819113567)| [2300](https://www.edbpriser.dk/produkt/amd-ryzen-7-3700x-3-6-ghz-processor/?searched=3700X)|
-|[Motherboard]() | [Gigabyte B550M DS3H](https://www.gigabyte.com/Motherboard/B550M-DS3H-rev-10#kf) | [95](https://www.newegg.com/gigabyte-b550m-ds3h/p/N82E16813145210)| [730](https://www.edbpriser.dk/produkt/gigabyte-b550m-ds3h)|
-|**AMD** |-|**385**|**3030**|
-|**AMD Full** |-|**1300**|**10050**|
-|[CPU]() |[Intel i7-10700](https://ark.intel.com/content/www/us/en/ark/products/199316/intel-core-i7-10700-processor-16m-cache-up-to-4-80-ghz.html) | [305](https://www.newegg.com/intel-core-i7-10700-core-i7-10th-gen/p/N82E16819118126)| [2500](https://www.pricerunner.dk/pl/40-5202251/CPU/Intel-Core-i7-10700-2-9GHz-Socket-1200-Box-Sammenlign-Priser)|
-|[Motherboard]() | [Gigabyte B460M DS3H](https://www.gigabyte.com/Motherboard/B460M-DS3H-rev-10)| [80](https://www.newegg.com/gigabyte-ultra-durable-b460m-ds3h/p/N82E16813145206) | [640](https://www.pricerunner.dk/pl/35-5214751/Bundkort/Gigabyte-B460M-DS3H-Sammenlign-Priser) |
-|**Intel** |-|**385**|**3140**|
-|**Intel Full** |-|**1300**|**10160**|
+| Component   | Selection                                      |                                                                                                                                        DKK w. VAT |     |
+| ----------- | :--------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------: | --- |
+| CPU         | AMD Ryzen 5 9600X CPU 3.9 GHz 6c/12t AM5       |       [1300](https://www.pricerunner.dk/pl/40-3327615380/CPUs/AMD-Ryzen-5-9600X-CPU-3.9-GHz-6-kerner-med-12-traade-32-MB-cache-Sammenlign-Priser) |     |
+| GPU         | ASUS Dual Radeon RX 9060 XT 16GB GDDR6         |                                   [3000](https://www.pricerunner.dk/pl/37-3427553432/Grafikkort/ASUS-16GB-GDDR6-Grafikkort-RAM-Sammenlign-Priser) |     |
+| Motherboard | Asrock B850M Pro-A WiFi Micro-ATX              |                                   [900](https://www.pricerunner.dk/pl/35-3391569627/Bundkort/Asrock-B850M-Pro-A-WiFi-Micro-ATX-Sammenlign-Priser) |     |
+| RAM         | Kingston Fury Beast Black DDR5 6000MHz 2x8GB   | [1850](https://www.pricerunner.dk/pl/38-3204693407/RAM/Kingston-Fury-Beast-Black-DDR5-6000MHz-2x8GB-ECC-%28KF560C36BBEK2-16%29-Sammenlign-Priser) |     |
+| SSD         | SanDisk Black SN7100 SSD 2TB                   |                                 [2000](https://www.pricerunner.dk/pl/36-3381548698/Harddiske/SanDisk-Black-SN7100-2TB-NVMe-SSD-Sammenlign-Priser) |     |
+| Case        | Zalman S3 Tempered Glass incl. 3 x 120 mm fans |                                         [280](https://www.pricerunner.dk/pl/186-3200124333/Kabinetter/Zalman-S3-Tempered-Glass-Sammenlign-Priser) |     |
+| PSU         | Corsair RM650e (2025) 650W                     |                               [550](https://www.pricerunner.dk/pl/640-3391267474/Stroemforsyning/Corsair-RM650e%28-2025%29650W-Sammenlign-Priser) |     |
+| CPU Cooler  | Thermalright Peerless Assassin 120 SE          |                      [260](https://www.pricerunner.dk/pl/184-3207363733/Computer-koeling/Thermalright-Peerless-Assassin-120-SE-Sammenlign-Priser) |     |
+| **Total**   |                                                |                                                                                                                                         **10140** |     | 
+
+
+| Component                                       | Link                                                                                                                                                     | Price<br>w. VAT | Pcs | Total<br>w. VAT |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | --- | --------------- |
+| AMD Ryzen 5 9600X CPU 3.9 GHz 6c/12t AM5        | [pricerunner](https://www.pricerunner.dk/pl/40-3327615380/CPUs/AMD-Ryzen-5-9600X-CPU-3.9-GHz-6-kerner-med-12-traade-32-MB-cache-Sammenlign-Priser)       | 1300            | 1   | 1300            |
+| ASUS Dual Radeon RX 9060 XT 16GB GDDR6          | [pricerunner](https://www.pricerunner.dk/pl/37-3427553432/Grafikkort/ASUS-16GB-GDDR6-Grafikkort-RAM-Sammenlign-Priser)                                   | 3000            | 1   | 3000            |
+| Asrock B850M Pro-A WiFi Micro-ATX               | [pricerunner](https://www.pricerunner.dk/pl/35-3391569627/Bundkort/Asrock-B850M-Pro-A-WiFi-Micro-ATX-Sammenlign-Priser)                                  | 900             | 1   | 900             |
+| Kingston Fury Beast Black DDR5 6000MHz 2x8GB    | [pricerunner](https://www.pricerunner.dk/pl/38-3204693407/RAM/Kingston-Fury-Beast-Black-DDR5-6000MHz-2x8GB-ECC-%28KF560C36BBEK2-16%29-Sammenlign-Priser) | 1850            | 1   | 1850            |
+| SanDisk Black SN7100 SSD WDS200T4X0E-00CJA0 2TB | [pricerunner](https://www.pricerunner.dk/pl/36-3381548698/Harddiske/SanDisk-Black-SN7100-2TB-NVMe-SSD-Sammenlign-Priser)                                 | 2000            | 1   | 2000            |
+| Zalman S3 Tempered Glass feat. 3 x 120 mm fans  | [pricerunner](https://www.pricerunner.dk/pl/186-3200124333/Kabinetter/Zalman-S3-Tempered-Glass-Sammenlign-Priser)                                        | 280             | 1   | 280             |
+| Corsair RM650e( 2025) 650W                      | [pricerunner](https://www.pricerunner.dk/pl/640-3391267474/Stroemforsyning/Corsair-RM650e%28-2025%29650W-Sammenlign-Priser)                              | 550             | 1   | 550             |
+| Thermalright Peerless Assassin 120 SE           | [pricerunner](https://www.pricerunner.dk/pl/184-3207363733/Computer-koeling/Thermalright-Peerless-Assassin-120-SE-Sammenlign-Priser)                     | 260             | 1   | 260             |
+| Total                                           |                                                                                                                                                          |                 |     | 10140           |
+
+ASUS Dual Radeon RX 9060 XT 16GB GDDR6	pricerunner	3000
+AMD Ryzen 5 9600X CPU 3.9 GHz 6c/12t AM5	pricerunner	1300
+Asrock B850M Pro-A WiFi Micro-ATX	pricerunner	900
+Kingston Fury Beast Black DDR5 6000MHz 2x8GB	pricerunner	1850
+SanDisk Black SN7100 SSD WDS200T4X0E-00CJA0 2TB	pricerunner	2000
+Thermalright Peerless Assassin 120 SE	pricerunner	260
+Zalman S3 Tempered Glass incl. 3 x 120 mm fans	pricerunner	280
+Corsair RM650e (2025) 650W	pricerunner	550
+Total		
+
+pricerunner
