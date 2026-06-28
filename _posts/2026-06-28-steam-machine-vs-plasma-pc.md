@@ -130,7 +130,7 @@ Zen 6 and possibly even Zen 7 as AM5 socket.
 
 In comparison a PS5 Pro 2TB can be bought for around [6900
 DKK](https://www.pricerunner.dk/pl/52-3334077607/Spillekonsoller/Sony-Playstation-5-Pro-Console-2TB-Sammenlign-Priser)
-(incl. VAT) and with a controller.
+(incl. VAT) with a controller.
 
 So, perhaps that Steam Machine is named appropriately, it's literally an old
 overpriced steam machine.
