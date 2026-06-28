@@ -1,6 +1,6 @@
 ﻿---
 layout: post
-title: Valve Steam Machine vs DIY Plasma PC™ 
+title: Valve Steam Machine vs DIY Plasma PC™ - The Zen 5 (9600X) and RDNA 4 (9060 XT 16 GB) Alternative
 ---
 
 Valve's new 2026 **Steam Machine** has created a lot of discussion online given
@@ -53,9 +53,12 @@ Excellent Repairability: Steam Machine Tear-Down and Accessing RAM & SSD](https:
 | Size | 152 x 162.4 x 156 mm |
 | Weight | 2.6 kg |
 
+Those specs mean last generation Zen 4 CPU and last generation RDNA 3 GPU, and
+half memory bandwidth single only single-channel.
+
 ## Steam Machine pricing
 
-Official EU pricing for launch is in euro, so below I include approximate Danish
+Official EU pricing for launch is in Euro, so below I include approximate Danish
 pricing converted at about **1 EUR = 7.46 DKK**. I don't know if those prices
 incl. VAT but I am gussing they don't. In Denmark, that's 25%.
 
@@ -66,17 +69,18 @@ incl. VAT but I am gussing they don't. In Denmark, that's 25%.
 | Steam Machine 2 TB | 1359 | ~10140 |
 | Steam Machine 2 TB + Steam Controller | 1428 | ~10650 |
 
-Those prices immediately place the Steam Machine in an awkward but fascinating
-spot: materially more expensive than a mass-market console, and as many others
-have demonstrated building a DIY PC to match within same budget entirely
-feasible. Which is what I will do here too, but for European/Denmark prices, and
-based on the 2 TB model, since no one should be buying a gaming console/PC with
-just 512 GB given just a single game can take up to 435 GB of space (cough, ARK,
-cough). This means the budged is around ~10000 DKK with no controller.
+Those prices immediately place the Steam Machine in an awkward spot, by being
+materially more expensive than a mass-market console, and as many others have
+demonstrated building a DIY PC to match within same budget is entirely feasible. 
+
+Which is what I will do here too, but for European/Denmark prices, and based on
+the 2 TB model, since no one should be buying a gaming console/PC with just 512
+GB SSD given just a single game can take up to 435 GB of space (cough, ARK,
+cough). This means the budget is 10140 DKK with no controller.
 
 ## **Plasma PC™** Components
 
-As shown below you can hit the same price point with current generation
+As shown below you can hit the (exact) same price point with current generation
 components (Zen 5, RX 9000 series) compared to last gen components in Valve
 Steam Machine.
 
@@ -92,6 +96,9 @@ Steam Machine.
 | CPU Cooler  | Thermalright Peerless Assassin 120 SE          |                      [260](https://www.pricerunner.dk/pl/184-3207363733/Computer-koeling/Thermalright-Peerless-Assassin-120-SE-Sammenlign-Priser) |   ~35 |
 | **Total**   |                                                |                                                                                                                                         **10140** | **~1359** | 
 
+Most components are of good quality, the GPU has pretty bad cooler, though, and
+the case is as cheap as it gets, but you get a decent PSU, SSD and CPU cooler.
+
 ## **Plasma PC™** Specifications
 
 Turning this into specifications ala Steam Machine you get the below. Notably,
@@ -101,13 +108,12 @@ GPU die.
 | Component | Plasma PC™ |
 |----------|:-----------|
 | CPU | AMD Ryzen 5 9600X, Zen 5, 6C/12T, 3.9 GHz base, up to 5.4 GHz boost |
-| GPU | Radeon RX 9060 XT, 16 GB GDDR6 |
+| GPU | Radeon RX 9060 XT, RDNA 4, 16 GB GDDR6 |
 | Memory | 16 GB DDR5, 6000 MHz, dual-channel (2x8 GB) |
 | Storage | 2 TB NVMe SSD |
 | Expansion | Full desktop AM5 platform, PCIe x16 GPU, additional motherboard expansion |
 | Networking | 2.5 GB Ethernet, Wi‑Fi 6E and Bluetooth 5.2 |
 | Ports | Multiple USB-A/USB-C plus DisplayPort/HDMI from the discrete GPU |
-| Display targets | 1080p, 1440p, 4K |
 | OS | SteamOS (free) |
 
 ## Conclusion
@@ -121,5 +127,12 @@ downclock.
 
 Most of the DIY PC components can be also re-used, even allow for upgrading to
 Zen 6 and possibly even Zen 7 as AM5 socket.
+
+In comparison a PS5 Pro 2TB can be bought for around [6900
+DKK](https://www.pricerunner.dk/pl/52-3334077607/Spillekonsoller/Sony-Playstation-5-Pro-Console-2TB-Sammenlign-Priser)
+(incl. VAT) and with a controller.
+
+So, perhaps that Steam Machine is named appropriately, it's literally an old
+overpriced steam machine.
 
 That's all!
