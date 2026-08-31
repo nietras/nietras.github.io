@@ -6,6 +6,7 @@ title: Making Visual Studio Open Links in Chrome Instead of Edge by Repairing Le
 > **AI disclosure:** This post and its accompanying PowerShell script were
 written with assistance from AI. The procedure was validated on the environment
 described below, but should be reviewed and tested before use on other systems.
+I consider this a hack, though, but no of no better solution.
 
 ## Overview
 
@@ -25,7 +26,7 @@ applications that still depend on them.
 The issue was reproduced with:
 
 - Windows 11 25H2, build 26200
-- Visual Studio Enterprise 2026, version 18.9.2
+- Visual Studio 2026, version 18.9.2
 - Google Chrome registered as `ChromeHTML`
 
 The exact behavior may differ on other Windows or Visual Studio versions.
