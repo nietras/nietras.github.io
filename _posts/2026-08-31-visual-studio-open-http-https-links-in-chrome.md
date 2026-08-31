@@ -266,7 +266,23 @@ The expected result is:
 - Current and latest commands resolve to `chrome.exe`.
 - UCPD is running with system-start configuration.
 
-Finally, restart Visual Studio and test an external link.
+As example here output from a successful repair:
+
+```text
+Protocol CurrentProgId CurrentHash  LatestProgId LatestHash
+-------- ------------- -----------  ------------ ----------
+http     ChromeHTML    T9xYpnya5UU= ChromeHTML   5MImDzVyvvI=
+https    ChromeHTML    PRVmq3J5FoQ= ChromeHTML   sv1hY5CXXYA=
+
+
+[http] current command: "C:\Program Files\Google\Chrome\Application\chrome.exe" --single-argument %1
+[http] latest command:  "C:\Program Files\Google\Chrome\Application\chrome.exe" --single-argument %1
+[https] current command: "C:\Program Files\Google\Chrome\Application\chrome.exe" --single-argument %1
+[https] latest command:  "C:\Program Files\Google\Chrome\Application\chrome.exe" --single-argument %1
+```
+
+Finally, restart Visual Studio and test an external link e.g. **Open in
+browser** for an active pull request.
 
 ## Limitations
 
@@ -497,3 +513,5 @@ Show-State
 ```
 
 [Complete PowerShell script]({{ site.baseurl }}/images/2026-08-visual-studio-open-http-https-links-in-chrome/Set-LegacyHttpHttpsAssociations.ps1)
+
+That's all!
