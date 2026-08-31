@@ -6,7 +6,7 @@ title: Making Visual Studio Open Links in Chrome Instead of Edge by Repairing Le
 > **AI disclosure:** This post and its accompanying PowerShell script were
 written with assistance from AI. The procedure was validated on the environment
 described below, but should be reviewed and tested before use on other systems.
-I consider this a hack, though, but no of no better solution.
+I consider this a hack, though, but know of no better solution.
 
 ## Overview
 
