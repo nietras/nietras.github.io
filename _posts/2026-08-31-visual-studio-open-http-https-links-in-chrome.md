@@ -13,10 +13,12 @@ On some Windows 11 builds, the Default Apps UI can report Google Chrome as the
 default browser while applications such as Visual Studio continue to open links
 in Microsoft Edge.
 
-This occurs when Windows has different values in its current and legacy
-URL-association records. The `Set-LegacyHttpHttpsAssociations.ps1` script checks
-these records and can create valid legacy `UserChoice` entries for applications
-that still depend on them.
+This appears to occur when Windows has different values in its current and
+legacy URL-association records. The [`Set-LegacyHttpHttpsAssociations.ps1`]({{
+site.baseurl
+}}/images/2026-08-visual-studio-open-http-https-links-in-chrome/Set-LegacyHttpHttpsAssociations.ps1)
+script checks these records and can create valid legacy `UserChoice` entries for
+applications that still depend on them.
 
 ## Observed environment
 
@@ -71,7 +73,10 @@ the current record but did not create or repair the legacy record.
 
 ## Visual Studio behavior
 
-Process Monitor showed that Visual Studio read the legacy record directly during link handling:
+Process Monitor showed that Visual Studio read the legacy record directly during
+link handling:
+
+![vs-url-association-using-legacy-procmon]({{ site.baseurl }}/images/2026-08-visual-studio-open-http-https-links-in-chrome/vs-url-association-using-legacy-procmon.png)
 
 ```text
 HKCU\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice\ProgId
@@ -123,7 +128,7 @@ associations.
 
 ## Script usage
 
-Run commands from the directory containing `Set-LegacyHttpHttpsAssociations.ps1`.
+Run commands from the directory containing [`Set-LegacyHttpHttpsAssociations.ps1`]({{ site.baseurl }}/images/2026-08-visual-studio-open-http-https-links-in-chrome/Set-LegacyHttpHttpsAssociations.ps1).
 
 ### Check the current state
 
@@ -490,3 +495,5 @@ Write-Host "Legacy associations set to $ProgId."
 Write-Host "Backup: $BackupPath"
 Show-State
 ```
+
+[Complete PowerShell script]({{ site.baseurl }}/images/2026-08-visual-studio-open-http-https-links-in-chrome/Set-LegacyHttpHttpsAssociations.ps1)
