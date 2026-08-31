@@ -1,12 +1,22 @@
-# Making Visual Studio Open Links in Chrome Instead of Edge by Repairing Legacy URL Associations
+---
+layout: post
+title: Making Visual Studio Open Links in Chrome Instead of Edge by Repairing Legacy URL Associations
+---
 
-> **AI disclosure:** This post and its accompanying PowerShell script were written with assistance from AI. The procedure was validated on the environment described below, but should be reviewed and tested before use on other systems.
+> **AI disclosure:** This post and its accompanying PowerShell script were
+written with assistance from AI. The procedure was validated on the environment
+described below, but should be reviewed and tested before use on other systems.
 
 ## Overview
 
-On some Windows 11 builds, the Default Apps UI can report Google Chrome as the default browser while applications such as Visual Studio continue to open links in Microsoft Edge.
+On some Windows 11 builds, the Default Apps UI can report Google Chrome as the
+default browser while applications such as Visual Studio continue to open links
+in Microsoft Edge.
 
-This occurs when Windows has different values in its current and legacy URL-association records. The `Set-LegacyHttpHttpsAssociations.ps1` script checks these records and can create valid legacy `UserChoice` entries for applications that still depend on them.
+This occurs when Windows has different values in its current and legacy
+URL-association records. The `Set-LegacyHttpHttpsAssociations.ps1` script checks
+these records and can create valid legacy `UserChoice` entries for applications
+that still depend on them.
 
 ## Observed environment
 
@@ -54,7 +64,10 @@ For example:
 
 The current format stores the ProgID in a child key and uses a separate hash.
 
-In the observed state, Default Apps had correctly written `ChromeHTML` to `UserChoiceLatest`, but the legacy `UserChoice` either still contained `MSEdgeHTM` or was absent. Repeatedly selecting Chrome in Default Apps updated the current record but did not create or repair the legacy record.
+In the observed state, Default Apps had correctly written `ChromeHTML` to
+`UserChoiceLatest`, but the legacy `UserChoice` either still contained
+`MSEdgeHTM` or was absent. Repeatedly selecting Chrome in Default Apps updated
+the current record but did not create or repair the legacy record.
 
 ## Visual Studio behavior
 
@@ -70,15 +83,21 @@ When that value was `MSEdgeHTM`, Visual Studio resolved:
 HKCR\MSEdgeHTM\shell\open\command
 ```
 
-It then launched Microsoft Edge with the requested HTTP or HTTPS URL. Visual Studio did not consult `UserChoiceLatest` in the observed lookup sequence.
+It then launched Microsoft Edge with the requested HTTP or HTTPS URL. Visual
+Studio did not consult `UserChoiceLatest` in the observed lookup sequence.
 
-When the legacy `UserChoice` key was absent, Visual Studio could no longer resolve a browser and did not open the link.
+When the legacy `UserChoice` key was absent, Visual Studio could no longer
+resolve a browser and did not open the link.
 
-This is a compatibility issue between Visual Studio's legacy association lookup and the newer Windows user-choice format. It is not caused by Chrome being incorrectly selected in the Default Apps UI.
+This is a compatibility issue between Visual Studio's legacy association lookup
+and the newer Windows user-choice format. It is not caused by Chrome being
+incorrectly selected in the Default Apps UI.
 
 ## Why the values cannot simply be copied
 
-Both formats contain protected hashes. The hash is derived from association-specific context, including the protocol, ProgID, user, and registry timing information.
+Both formats contain protected hashes. The hash is derived from
+association-specific context, including the protocol, ProgID, user, and registry
+timing information.
 
 Consequently:
 
@@ -90,11 +109,17 @@ A legacy hash must be generated specifically for the legacy `UserChoice` record.
 
 ## UserChoice Protection Driver
 
-Windows uses the UserChoice Protection Driver (`UCPD.sys`) to block unauthorized writes to protected associations such as HTTP, HTTPS, and PDF.
+Windows uses the UserChoice Protection Driver (`UCPD.sys`) to block unauthorized
+writes to protected associations such as HTTP, HTTPS, and PDF.
 
-The script reports the UCPD state. It intentionally refuses to set legacy associations while UCPD is running, and it does not disable the driver automatically.
+The script reports the UCPD state. It intentionally refuses to set legacy
+associations while UCPD is running, and it does not disable the driver
+automatically.
 
-Disabling UCPD reduces a Windows protection boundary and requires administrative privileges and a restart. Only do this when the behavior and security implications are understood. Restore UCPD after creating the required associations.
+Disabling UCPD reduces a Windows protection boundary and requires administrative
+privileges and a restart. Only do this when the behavior and security
+implications are understood. Restore UCPD after creating the required
+associations.
 
 ## Script usage
 
@@ -121,7 +146,8 @@ The output includes:
 - Resolved browser command for each ProgID
 - UCPD service state and startup configuration
 
-A repaired Chrome configuration should show `ChromeHTML` for both `CurrentProgId` and `LatestProgId` for HTTP and HTTPS.
+A repaired Chrome configuration should show `ChromeHTML` for both
+`CurrentProgId` and `LatestProgId` for HTTP and HTTPS.
 
 ### Prepare for changing the legacy choices
 
@@ -163,11 +189,14 @@ To use another registered browser, supply its ProgID:
 .\Set-LegacyHttpHttpsAssociations.ps1 -Action Set -ProgId <RegisteredProgId>
 ```
 
-The script verifies that the ProgID has a registered shell-open command before modifying the association.
+The script verifies that the ProgID has a registered shell-open command before
+modifying the association.
 
 ## Hash-generation dependency
 
-Set mode uses the open-source PS-SFTA implementation to generate legacy `UserChoice` hashes. The script downloads a pinned source revision rather than an arbitrary latest version:
+Set mode uses the open-source PS-SFTA implementation to generate legacy
+`UserChoice` hashes. The script downloads a pinned source revision rather than
+an arbitrary latest version:
 
 ```text
 Repository: DanysysTeam/PS-SFTA
@@ -181,13 +210,18 @@ The downloaded file is stored under:
 %LOCALAPPDATA%\LegacyUrlChoice
 ```
 
-The SHA-256 value is verified before the script loads or executes the dependency. A hash mismatch stops execution.
+The SHA-256 value is verified before the script loads or executes the
+dependency. A hash mismatch stops execution.
 
-The older PS-SFTA implementation is run with PowerShell strict mode temporarily disabled because it performs dynamic registry-property access that is incompatible with `Set-StrictMode -Version Latest`. Strict mode is restored immediately afterward.
+The older PS-SFTA implementation is run with PowerShell strict mode temporarily
+disabled because it performs dynamic registry-property access that is
+incompatible with `Set-StrictMode -Version Latest`. Strict mode is restored
+immediately afterward.
 
 ## Backups and rollback
 
-Before Set mode writes an association, it exports the existing URL-association registry tree to:
+Before Set mode writes an association, it exports the existing URL-association
+registry tree to:
 
 ```text
 %LOCALAPPDATA%\LegacyUrlChoice\Backups
@@ -201,11 +235,13 @@ Restore a backup with:
 .\Set-LegacyHttpHttpsAssociations.ps1 -Action Restore -BackupPath '<path-to-backup.reg>'
 ```
 
-Restoring imports the complete URL-association tree captured in that backup, not only HTTP and HTTPS.
+Restoring imports the complete URL-association tree captured in that backup, not
+only HTTP and HTTPS.
 
 ## Restore UCPD
 
-After verifying that Visual Studio opens links in Chrome, restore the UCPD startup configuration from an elevated PowerShell window:
+After verifying that Visual Studio opens links in Chrome, restore the UCPD
+startup configuration from an elevated PowerShell window:
 
 ```powershell
 Set-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Services\UCPD' -Name Start -Value 1
