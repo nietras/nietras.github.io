@@ -22,6 +22,7 @@ resolution, but you can also download a [pdf]({{ site.baseurl
 * [What's new in the SDK and tooling for .NET 11](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/sdk)
 * [What's new in C# 15](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-15)
 * [Breaking Changes in .NET 11](https://learn.microsoft.com/en-us/dotnet/core/compatibility/11)
+* [Process API Improvements in .NET 11](https://devblogs.microsoft.com/dotnet/process-api-improvements-in-dotnet-11/)
 
 ### Changes
 * Add .NET 11.0 and C# 15.0
